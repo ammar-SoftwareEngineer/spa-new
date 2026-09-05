@@ -1,0 +1,40 @@
+{
+  "metadata": {
+    "title": {
+      "default": "S&PA | مقاولات MEP"
+    },
+    "description": {
+      "default": "تصمم S&PA وتورد وتركب وتصون الأعمال الكهروميكانيكية — مقاولات MEP وإدارة مرافق وICT والبنية التحتية في مصر."
+    }
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "about": "عن الشركة",
+    "whoWeAre": "من نحن",
+    "meetOurTeam": "تعرّف على فريقنا",
+    "services": "خدماتنا",
+    "projects": "مشاريعنا",
+    "products": "منتجاتنا",
+    "allProducts": "كل المنتجات",
+    "americanAfc": "American AFC",
+    "honeywell": "Honeywell",
+    "spaProducts": "منتجات S&PA",
+    "portfolio": "البورتفوليو",
+    "profile": "الملف التعريفي",
+    "partners": "شركاؤنا",
+    "contact": "اتصل بنا",
+    "language": "اللغة"
+  },
+  "footer": {
+    "about": "تأسست S&PA عام 2014 لتقديم مقاولات MEP وإدارة المرافق وبنية ICT بجودة عالية، مع رضا العميل في المقدمة.",
+    "links": "روابط سريعة",
+    "contact": "التواصل",
+    "newsletter": "ابدأ مشروعاً",
+    "emailPlaceholder": "أدخل بريدك الإلكتروني",
+    "subscribeBtn": "إرسال",
+    "rights": "جميع الحقوق محفوظة. S&PA",
+    "developedBy": "تصميم BeGroup Agency",
+    "address": "١٣٦ شارع عثمان بن عفان، الأكاديمية العسكرية، مصر الجديدة، القاهرة، مصر",
+    "fax": "فاكس"
+  }
+}

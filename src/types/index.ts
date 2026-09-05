@@ -1,0 +1,154 @@
+export type AppLocale = "en" | "ar";
+
+export type LocalizedText = Record<AppLocale, string>;
+
+export type NavItem = {
+  key: string;
+  href: string;
+  /** If true, the link downloads a file instead of opening a page */
+  download?: boolean;
+  children?: NavItem[];
+};
+
+export type SocialLink = {
+  name: string;
+  href: string;
+};
+
+export type SiteData = {
+  branding: {
+    name: string;
+    logo: string;
+  };
+  contact: {
+    phone: string;
+    fax?: string;
+    email: string;
+  };
+  social: SocialLink[];
+  media: {
+    heroVideo: string;
+    whoWeAreImage: string;
+    missionImage: string;
+    visionImage: string;
+    teamBannerImage: string;
+    isoBannerImage: string;
+    pageHeroImage: string;
+    servicesPattern: string;
+  };
+};
+
+export type ServiceItem = {
+  slug: string;
+  icon: string;
+  titleKey: string;
+  descKey: string;
+  detailKey: string;
+  image: string;
+  featureKeys: string[];
+};
+
+export type ProductLineItem = {
+  titleKey: string;
+  descKey: string;
+  image: string;
+};
+
+export type ProductItem = {
+  slug: string;
+  icon: string;
+  titleKey: string;
+  descKey: string;
+  detailKey: string;
+  image: string;
+  website?: string;
+  featureKeys: string[];
+  lines: ProductLineItem[];
+};
+
+export type ProjectItem = {
+  slug: string;
+  titleKey: string;
+  descKey: string;
+  locationKey: string;
+  image: string;
+  categorySlugs: string[];
+  serviceSlugs: string[];
+  sectorSlugs: string[];
+  date: string;
+  featured?: boolean;
+  clientKey: string;
+  consultantKey: string;
+  statusKey: string;
+  overviewTitleKey: string;
+  overviewBodyKey: string;
+  scopeTitleKey: string;
+  scopeBodyKey: string;
+  gallery: string[];
+  videoUrl?: string;
+};
+
+export type CategoryItem = {
+  slug: string;
+  badgeKey: string;
+  titleKey: string;
+  descKey: string;
+  image: string;
+  link: string;
+};
+
+export type SectorItem = {
+  slug: string;
+  icon: string;
+  titleKey: string;
+  descKey: string;
+};
+
+export type PartnerItem = {
+  name: string;
+  logo: string;
+};
+
+export type IsoCertificate = {
+  id: number;
+  code: LocalizedText;
+  title: LocalizedText;
+  image: string;
+};
+
+export type BlogPost = {
+  id: number;
+  date: LocalizedText;
+  readTime: LocalizedText;
+  category: LocalizedText;
+  title: LocalizedText;
+  excerpt: LocalizedText;
+  href: string;
+  image: string;
+};
+
+export type AboutCounter = {
+  value: number;
+  suffix: string;
+  key: string;
+  icon: string;
+};
+
+export type WhyMetric = {
+  id: number;
+  titleKey: string;
+  descKey: string;
+  rawNumber: number;
+  textValKey?: string;
+  suffix?: string;
+  icon?: string;
+  isHighlight?: boolean;
+  isCta?: boolean;
+};
+
+export type TeamMember = {
+  id: number;
+  nameKey: string;
+  roleKey: string;
+  image: string;
+};

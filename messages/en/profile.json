@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "title": "Company Profile | S&PA",
+    "description": "View and download the S&PA company profile PDF."
+  },
+  "hero": {
+    "eyebrow": "Company Profile",
+    "title": "S&PA Profile",
+    "description": "Preview the full company profile below, or download the PDF."
+  },
+  "document": {
+    "badge": "2026 Edition",
+    "title": "S&PA Company Profile",
+    "description": "Browse the document online, or save a copy to your device.",
+    "download": "Download PDF"
+  }
+}
