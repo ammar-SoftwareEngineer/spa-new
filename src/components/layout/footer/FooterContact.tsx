@@ -2,7 +2,6 @@
  * FooterContact — contact details column.
  */
 import { Phone, Mail, MapPin, type LucideIcon } from "lucide-react";
-import type { SiteData } from "@/types";
 
 function ContactRow({
   icon: Icon,
@@ -23,33 +22,39 @@ function ContactRow({
 
 type FooterContactProps = {
   title: string;
-  site: SiteData;
-  address: string;
+  contact: { phone: string; email: string; address?: string; fax?: string };
+  addressFallback: string;
   faxLabel: string;
 };
 
 export default function FooterContact({
   title,
-  site,
-  address,
+  contact,
+  addressFallback,
   faxLabel,
 }: FooterContactProps) {
+  const address = contact.address || addressFallback;
+
   return (
     <div className="flex flex-col gap-5">
       <h3 className="relative pb-3 text-[1.15rem] font-bold text-text-primary after:absolute after:bottom-0 after:start-0 after:h-0.5 after:w-10 after:bg-brand dark:text-white">
         {title}
       </h3>
       <ul className="flex list-none flex-col gap-4">
-        <ContactRow icon={MapPin}>{address}</ContactRow>
-        <ContactRow icon={Phone} dir="ltr">
-          {site.contact.phone}
-        </ContactRow>
-        {site.contact.fax ? (
+        {address ? <ContactRow icon={MapPin}>{address}</ContactRow> : null}
+        {contact.phone ? (
           <ContactRow icon={Phone} dir="ltr">
-            {faxLabel}: {site.contact.fax}
+            {contact.phone}
           </ContactRow>
         ) : null}
-        <ContactRow icon={Mail}>{site.contact.email}</ContactRow>
+        {contact.fax ? (
+          <ContactRow icon={Phone} dir="ltr">
+            {faxLabel}: {contact.fax}
+          </ContactRow>
+        ) : null}
+        {contact.email ? (
+          <ContactRow icon={Mail}>{contact.email}</ContactRow>
+        ) : null}
       </ul>
     </div>
   );

@@ -1,35 +1,38 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import Reveal from "@/components/ui/Reveal";
-import { getIcon } from "@/lib/icons";
-import type { ProductItem } from "@/types";
+import { getIcon } from "@/components/ui/icons";
 
 type ProductCardProps = {
-  product: ProductItem;
+  slug: string;
+  image: string;
   title: string;
   description: string;
+  icon?: string;
   index?: number;
   delay?: number;
 };
 
 export default function ProductCard({
-  product,
+  slug,
+  image,
   title,
   description,
+  icon = "Package",
   index = 0,
   delay = 0,
 }: ProductCardProps) {
   const number = String(index + 1).padStart(2, "0");
-  const Icon = getIcon(product.icon);
+  const Icon = getIcon(icon);
 
   return (
     <Reveal delay={delay} className="h-full w-full">
       <Link
-        href={`/products/${product.slug}`}
+        href={`/products/${slug}`}
         className="group relative flex h-full min-h-[320px] w-full flex-col overflow-hidden rounded-[24px] outline-none transition-[transform,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 sm:min-h-[380px] shadow-[0_14px_40px_rgba(13,59,77,0.14)] hover:shadow-[0_24px_56px_rgba(33,118,149,0.22)]"
       >
         <Image
-          src={product.image}
+          src={image || "/img/pattern.png"}
           alt={title}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

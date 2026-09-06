@@ -6,7 +6,7 @@ import Image from "next/image";
 import { CheckCircle2, ExternalLink } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
-import { getIcon } from "@/lib/icons";
+import { getIcon } from "@/components/ui/icons";
 import type { ProductItem } from "@/types";
 
 type ProductOverviewProps = {

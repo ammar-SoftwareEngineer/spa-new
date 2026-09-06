@@ -7,17 +7,23 @@ import FooterBrand from "@/components/layout/footer/FooterBrand";
 import FooterLinks from "@/components/layout/footer/FooterLinks";
 import FooterContact from "@/components/layout/footer/FooterContact";
 import FooterNewsletter from "@/components/layout/footer/FooterNewsletter";
-import { getFooterQuickLinks } from "@/lib/api/navbar";
-import type { SiteData } from "@/types";
+import type { NavItem, SocialLink } from "@/types";
 
-type FooterProps = {
-  site: SiteData;
+export type FooterData = {
+  branding: { name: string; logo: string };
+  contact: { phone: string; email: string; address?: string; fax?: string };
+  social: SocialLink[];
+  footerLinks: NavItem[];
+  copyright?: string | null;
 };
 
-export default async function Footer({ site }: FooterProps) {
+type FooterProps = {
+  data: FooterData;
+};
+
+export default async function Footer({ data }: FooterProps) {
   const tNav = await getTranslations("nav");
   const t = await getTranslations("footer");
-  const quickLinks = await getFooterQuickLinks();
 
   return (
     <footer
@@ -26,12 +32,20 @@ export default async function Footer({ site }: FooterProps) {
     >
       <Container className="relative z-[1] flex flex-col gap-[50px]">
         <div className="grid grid-cols-1 gap-[30px] sm:grid-cols-2 lg:grid-cols-[1.2fr_0.8fr_1fr_1fr] lg:gap-10">
-          <FooterBrand site={site} about={t("about")} />
-          <FooterLinks title={t("links")} links={quickLinks} label={tNav} />
+          <FooterBrand
+            branding={data.branding}
+            social={data.social}
+            about={t("about")}
+          />
+          <FooterLinks
+            title={t("links")}
+            links={data.footerLinks}
+            label={tNav}
+          />
           <FooterContact
             title={t("contact")}
-            site={site}
-            address={t("address")}
+            contact={data.contact}
+            addressFallback={t("address")}
             faxLabel={t("fax")}
           />
           <FooterNewsletter />
@@ -39,7 +53,11 @@ export default async function Footer({ site }: FooterProps) {
 
         <div className="flex flex-col items-center gap-4 border-t border-border pt-[25px] text-center text-[0.85rem] opacity-80 md:flex-row md:justify-between md:text-start dark:border-white/5">
           <div>
-            &copy; {new Date().getFullYear()} {t("rights")}
+            {data.copyright || (
+              <>
+                &copy; {new Date().getFullYear()} {t("rights")}
+              </>
+            )}
           </div>
           <div>{t("developedBy")}</div>
         </div>

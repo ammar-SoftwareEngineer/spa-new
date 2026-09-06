@@ -9,13 +9,18 @@ import ProjectFilters from "@/components/Projects/ProjectFilters";
 import ProjectGrid from "@/components/Projects/ProjectGrid";
 import { useProjectFilters } from "@/components/Projects/useProjectFilters";
 import type { ProjectListItem } from "@/components/Projects/types";
-import type { CategoryItem, SectorItem } from "@/types";
+import type { SectorItem } from "@/types";
 
 export type { ProjectListItem };
 
+type FilterCategory = {
+  slug: string;
+  title?: string;
+};
+
 type ProjectsExplorerProps = {
   projects: ProjectListItem[];
-  categories: CategoryItem[];
+  categories: FilterCategory[];
   sectors: SectorItem[];
   alwaysShowProjects?: boolean;
   initialScope?: string;

@@ -32,6 +32,8 @@
     "newsletter": "Start a Project",
     "emailPlaceholder": "Enter your email address",
     "subscribeBtn": "Send",
+    "subscribeSuccess": "Thanks — we received your request.",
+    "subscribeError": "Something went wrong. Please try again.",
     "rights": "All Rights Reserved. S&PA",
     "developedBy": "Designed by BeGroup Agency",
     "address": "136 Othman Ibn Afan St. Military Academy, Heliopolis, Cairo, Egypt",

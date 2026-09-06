@@ -1,17 +1,28 @@
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import PageHero from "@/components/ui/PageHero";
 import Section from "@/components/ui/Section";
-import HeaderSection from "@/components/ui/HeaderSection";
 import Reveal from "@/components/ui/Reveal";
-import { getPartners } from "@/lib/api/partners";
+import { fetchPartnersData } from "@/api/partnersService";
+import { isApiError } from "@/types/layoutTypes";
+import type { ApiPartner } from "@/types/contentTypes";
 
 export default async function PartnersPageView() {
-  const [partners, t, tNav] = await Promise.all([
-    getPartners(),
+  const [t, tNav, locale] = await Promise.all([
     getTranslations("partners"),
     getTranslations("nav"),
+    getLocale(),
   ]);
+
+  const response = await fetchPartnersData(locale);
+  const partners = isApiError(response)
+    ? []
+    : ((response as { data: ApiPartner[] }).data ?? [])
+        .map((p) => ({
+          name: p.name || p.title || "Partner",
+          logo: p.image || p.logo || "",
+        }))
+        .filter((p) => Boolean(p.logo));
 
   return (
     <>
@@ -23,11 +34,9 @@ export default async function PartnersPageView() {
       />
 
       <Section className="overflow-x-clip py-20 md:py-28">
-       
-
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 md:grid-cols-4 lg:grid-cols-5 md:gap-6">
           {partners.map((partner, index) => (
-            <Reveal key={partner.name} delay={Math.min(index * 0.04, 0.4)}>
+            <Reveal key={`${partner.logo}-${index}`} delay={Math.min(index * 0.04, 0.4)}>
               <article className="group flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-border/70  px-4 py-6 shadow-[var(--card-shadow)] transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-brand/40 hover:shadow-[0_16px_36px_rgba(33,118,149,0.18)] md:px-5 md:py-7 bg-[#0b1220]">
                 <div className="flex h-16 w-full items-center justify-center md:h-20 ">
                   <Image
@@ -39,7 +48,6 @@ export default async function PartnersPageView() {
                     style={{ width: "auto" }}
                   />
                 </div>
-              
               </article>
             </Reveal>
           ))}

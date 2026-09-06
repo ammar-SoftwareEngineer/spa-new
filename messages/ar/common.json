@@ -32,6 +32,8 @@
     "newsletter": "ابدأ مشروعاً",
     "emailPlaceholder": "أدخل بريدك الإلكتروني",
     "subscribeBtn": "إرسال",
+    "subscribeSuccess": "شكراً — استلمنا طلبك.",
+    "subscribeError": "حدث خطأ. حاول مرة أخرى.",
     "rights": "جميع الحقوق محفوظة. S&PA",
     "developedBy": "تصميم BeGroup Agency",
     "address": "١٣٦ شارع عثمان بن عفان، الأكاديمية العسكرية، مصر الجديدة، القاهرة، مصر",

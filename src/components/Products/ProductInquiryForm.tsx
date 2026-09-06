@@ -13,7 +13,7 @@ import InquiryFields, {
   type ProductInquiryValues,
 } from "@/components/Products/InquiryFields";
 import InquirySuccess from "@/components/Products/InquirySuccess";
-import { submitProductInquiry } from "@/lib/api/forms";
+import { contactAction } from "@/actions/contact";
 
 type ProductInquiryFormProps = {
   productTitle: string;
@@ -24,6 +24,7 @@ export default function ProductInquiryForm({ productTitle }: ProductInquiryFormP
   const locale = useLocale();
   const isRtl = locale === "ar";
   const [submitted, setSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
 
   const {
     register,
@@ -45,12 +46,26 @@ export default function ProductInquiryForm({ productTitle }: ProductInquiryFormP
   // Sync fields when the user picks another line from the gallery
   useEffect(() => {
     setSubmitted(false);
+    setSubmitError(false);
     setValue("product", productTitle);
     setValue("message", t("messageDefault", { product: productTitle }));
   }, [productTitle, setValue, t]);
 
   const onSubmit = handleSubmit(async (data) => {
-    await submitProductInquiry(data);
+    setSubmitError(false);
+    const result = await contactAction({
+      name: data.name,
+      email: data.email,
+      phone: data.phone || undefined,
+      subject: `Product inquiry: ${data.product}`,
+      message: data.message,
+    });
+
+    if (!result.ok) {
+      setSubmitError(true);
+      return;
+    }
+
     setSubmitted(true);
   });
 
@@ -135,10 +150,13 @@ export default function ProductInquiryForm({ productTitle }: ProductInquiryFormP
         }}
       />
 
-      <div className="relative z-[1] mt-8">
+      <div className="relative z-[1] mt-8 flex flex-col gap-3">
         <Button type="submit" size="lg" rtl={isRtl} className={isSubmitting ? "opacity-70" : ""}>
           {isSubmitting ? t("submitting") : t("submit")}
         </Button>
+        {submitError ? (
+          <p className="m-0 text-[0.9rem] text-red-500">{t("errors.submitFailed")}</p>
+        ) : null}
       </div>
     </form>
   );

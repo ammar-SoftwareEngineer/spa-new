@@ -1,6 +1,6 @@
 /**
  * ContactForm — contact page form.
- * Submits via submitContact (backend-ready).
+ * Submits through a Server Action (validated with Zod).
  */
 "use client";
 
@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import Reveal from "@/components/ui/Reveal";
 import { Button } from "@/components/ui/Button";
-import { submitContact } from "@/lib/api/forms";
+import { contactAction } from "@/actions/contact";
 
 const fieldClass =
   "w-full rounded-[14px] border border-border bg-bg-secondary/60 px-5 py-3.5 text-[0.95rem] text-text-primary outline-none transition-all duration-300 placeholder:text-text-muted focus:border-brand focus:bg-bg-primary focus:shadow-[0_0_0_3px_rgba(33,118,149,0.12)]";
@@ -18,6 +18,7 @@ export default function ContactForm() {
   const locale = useLocale();
   const isRtl = locale === "ar";
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
+  const [errorKey, setErrorKey] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -25,19 +26,37 @@ export default function ContactForm() {
     const data = new FormData(form);
 
     setStatus("loading");
-    try {
-      await submitContact({
-        name: String(data.get("name") ?? ""),
-        email: String(data.get("email") ?? ""),
-        phone: String(data.get("phone") ?? ""),
-        subject: String(data.get("subject") ?? ""),
-        message: String(data.get("message") ?? ""),
-      });
-      setStatus("done");
-      form.reset();
-    } catch {
+    setErrorKey(null);
+
+    const result = await contactAction({
+      name: String(data.get("name") ?? ""),
+      email: String(data.get("email") ?? ""),
+      phone: String(data.get("phone") ?? "") || undefined,
+      subject: String(data.get("subject") ?? "") || undefined,
+      message: String(data.get("message") ?? ""),
+    });
+
+    if (!result.ok) {
       setStatus("error");
+      setErrorKey(result.error);
+      return;
     }
+
+    setStatus("done");
+    form.reset();
+  }
+
+  function errorMessage(key: string | null) {
+    if (!key) return t("errors.generic");
+    const map: Record<string, string> = {
+      name_min: t("errors.nameMin"),
+      email_invalid: t("errors.emailInvalid"),
+      subject_min: t("errors.subjectMin"),
+      message_min: t("errors.messageMin"),
+      invalid_form: t("errors.generic"),
+      generic_error: t("errors.generic"),
+    };
+    return map[key] ?? t("errors.generic");
   }
 
   return (
@@ -45,6 +64,7 @@ export default function ContactForm() {
       <form
         className="relative flex h-full flex-col overflow-hidden rounded-[28px] border border-border/70 bg-bg-primary p-6 shadow-[0_16px_48px_rgba(13,59,77,0.1)] md:p-8 lg:p-10"
         onSubmit={handleSubmit}
+        noValidate
       >
         <div className="pointer-events-none absolute -end-20 -top-20 h-48 w-48 rounded-full bg-brand/10 blur-3xl" />
 
@@ -119,13 +139,13 @@ export default function ContactForm() {
 
         <div className="relative z-[1] mt-8 flex flex-col gap-3">
           <Button type="submit" size="lg" rtl={isRtl} disabled={status === "loading"}>
-            {t("submit")}
+            {status === "loading" ? t("submitting") : t("submit")}
           </Button>
           {status === "done" ? (
-            <p className="m-0 text-[0.9rem] text-brand">✓</p>
+            <p className="m-0 text-[0.9rem] font-medium text-brand">{t("success")}</p>
           ) : null}
           {status === "error" ? (
-            <p className="m-0 text-[0.9rem] text-red-500">Error</p>
+            <p className="m-0 text-[0.9rem] text-red-500">{errorMessage(errorKey)}</p>
           ) : null}
         </div>
       </form>

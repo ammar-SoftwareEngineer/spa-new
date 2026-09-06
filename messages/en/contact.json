@@ -31,7 +31,16 @@
     "subjectPlaceholder": "How can we help?",
     "message": "Message",
     "messagePlaceholder": "Tell us more about your project...",
-    "submit": "Send Message"
+    "submit": "Send Message",
+    "submitting": "Sending...",
+    "success": "Thanks — your message was sent successfully.",
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "nameMin": "Name must be at least 2 characters.",
+      "emailInvalid": "Please enter a valid email address.",
+      "subjectMin": "Subject must be at least 2 characters.",
+      "messageMin": "Message must be at least 10 characters."
+    }
   },
   "map": {
     "eyebrow": "Visit Us",

@@ -1,9 +1,7 @@
 import HeroScroll from "@/components/hero/HeroScroll";
-import { getSiteData } from "@/lib/api/site";
 
-export default async function HeroSection() {
-  const site = await getSiteData();
-
+/** Hero video — home.hero is empty in API for now, so local fallback. */
+export default function HeroSection() {
   return (
     <section className="relative flex h-screen w-screen items-end justify-center overflow-hidden px-6 pb-[150px] text-white">
       <div className="absolute inset-0 z-0">
@@ -14,7 +12,7 @@ export default async function HeroSection() {
           muted
           playsInline
           preload="metadata"
-          src={site.media.heroVideo}
+          src="/img/SPA-Mansoura.mp4"
         />
       </div>
 

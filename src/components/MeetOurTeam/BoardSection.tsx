@@ -2,13 +2,24 @@ import { getTranslations } from "next-intl/server";
 import Section from "@/components/ui/Section";
 import HeaderSection from "@/components/ui/HeaderSection";
 import TeamMemberCard from "@/components/MeetOurTeam/TeamMemberCard";
-import { getBoardMembers } from "@/lib/api/team";
 
-export default async function BoardSection() {
-  const [board, t] = await Promise.all([
-    getBoardMembers(),
-    getTranslations("team"),
-  ]);
+type Member = {
+  id: number;
+  name: string;
+  role: string;
+  image: string;
+};
+
+type BoardSectionProps = {
+  members?: Member[];
+};
+
+export default async function BoardSection({ members = [] }: BoardSectionProps) {
+  const t = await getTranslations("team");
+
+  if (!members.length) {
+    return null;
+  }
 
   return (
     <Section variant="alt" className="overflow-x-clip py-24 md:py-32">
@@ -20,12 +31,12 @@ export default async function BoardSection() {
       />
 
       <div className="grid grid-cols-12 gap-6 md:gap-7">
-        {board.map((member, index) => (
+        {members.map((member, index) => (
           <TeamMemberCard
             key={member.id}
-            member={member}
-            name={t(member.nameKey)}
-            role={t(member.roleKey)}
+            member={{ id: member.id, nameKey: "", roleKey: "", image: member.image }}
+            name={member.name}
+            role={member.role}
             index={index}
             delay={index * 0.08}
             variant="board"

@@ -2,53 +2,92 @@ import { getTranslations } from "next-intl/server";
 import { WhyCtaCard, WhyMetricCard } from "@/components/why/WhyCards";
 import HeaderSection from "@/components/ui/HeaderSection";
 import Section from "@/components/ui/Section";
-import { getWhyMetrics } from "@/lib/api/why";
-import { getSiteData } from "@/lib/api/site";
+import { Link } from "@/i18n/navigation";
+import { stripHtml } from "@/lib/utils";
+import type { HomeSection, HomeStat } from "@/types/homeTypes";
+import type { WhyMetric } from "@/types";
 
-export default async function Why() {
-  const [metrics, t, site] = await Promise.all([
-    getWhyMetrics(),
-    getTranslations("home.whyChooseUs"),
-    getSiteData(),
-  ]);
+type WhyProps = {
+  section: HomeSection & { values?: HomeStat[] };
+};
+
+/** Map API title like "12+" into CountUp number + suffix, or plain text. */
+function parseTopValue(title: string): {
+  rawNumber: number;
+  suffix?: string;
+  textValue?: string;
+} {
+  const trimmed = title.trim();
+  const match = trimmed.match(/^(\d+)(.*)$/);
+  if (match) {
+    return {
+      rawNumber: Number(match[1]),
+      suffix: match[2] || undefined,
+    };
+  }
+  return { rawNumber: 0, textValue: trimmed };
+}
+
+export default async function Why({ section }: WhyProps) {
+  const t = await getTranslations("home.whyChooseUs");
+  const values = section.values ?? [];
 
   return (
-    <Section id="metrics" className="py-32" containerClassName="relative z-[2]"
-    style={{
-      backgroundImage: `url(${site.media.servicesPattern})`,
-      backgroundSize: "contain",
-      backgroundPosition: "top right",
-      backgroundRepeat: "no-repeat",
-    }}>
+    <Section
+      id="metrics"
+      className="py-32"
+      containerClassName="relative z-[2]"
+      style={{
+        backgroundImage: "url(/img/pattern.png)",
+        backgroundSize: "contain",
+        backgroundPosition: "top right",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
       <HeaderSection
-        subtitle={t("title")}
-        title={t("header")}
-        description={t("subtitle")}
+        subtitle={section.sub_title || t("title")}
+        title={section.title || t("header")}
+        description={stripHtml(section.text) || undefined}
         className="mb-[55px]"
       />
 
       <div className="grid grid-cols-12 gap-8">
-        {metrics.map((item, index) =>
-          item.isCta ? (
-            <div key={item.titleKey} className="col-span-12 md:col-span-6 lg:col-span-4 ">
-              <WhyCtaCard
-                staggerIndex={index}
-                title={t(item.titleKey)}
-                description={t(item.descKey)}
-              />
-            </div>
-          ) : (
-            <div key={item.titleKey} className="col-span-12 md:col-span-6 lg:col-span-4">
+        {values.map((item, index) => {
+          const { rawNumber, suffix, textValue } = parseTopValue(item.title);
+          const isHighlight = index === 0;
+          const metric: WhyMetric = {
+            id: item.id,
+            titleKey: "",
+            descKey: "",
+            rawNumber,
+            suffix,
+            isHighlight,
+            icon: isHighlight ? "ShieldCheck" : undefined,
+          };
+
+          return (
+            <div key={item.id} className="col-span-12 md:col-span-6 lg:col-span-4">
               <WhyMetricCard
-                item={item}
+                item={metric}
                 staggerIndex={index}
-                title={t(item.titleKey)}
-                description={t(item.descKey)}
-                textValue={item.textValKey ? t(item.textValKey) : undefined}
+                title={item.sub_title}
+                description={stripHtml(item.text)}
+                textValue={textValue}
               />
             </div>
-          ),
-        )}
+          );
+        })}
+
+        {/* CTA card — same layout as old design */}
+        <div className="col-span-12 md:col-span-6 lg:col-span-4">
+          <Link href="/profile" className="block h-full no-underline">
+            <WhyCtaCard
+              staggerIndex={values.length}
+              title={t("metric6Title")}
+              description={t("metric6Desc")}
+            />
+          </Link>
+        </div>
       </div>
     </Section>
   );

@@ -1,16 +1,23 @@
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import PageHero from "@/components/ui/PageHero";
 import Section from "@/components/ui/Section";
-import HeaderSection from "@/components/ui/HeaderSection";
 import ServiceCard from "@/components/Services/ServiceCard";
-import { getServices } from "@/lib/api/services";
+import { fetchServicesData } from "@/api/servicesService";
+import { isApiError } from "@/types/layoutTypes";
+import { pickSlug } from "@/lib/localized-slug";
+import type { ApiService } from "@/types/contentTypes";
 
 export default async function ServicesPageView() {
-  const [services, t, tNav] = await Promise.all([
-    getServices(),
+  const [t, tNav, locale] = await Promise.all([
     getTranslations("services"),
     getTranslations("nav"),
+    getLocale(),
   ]);
+
+  const response = await fetchServicesData(locale);
+  const services = isApiError(response)
+    ? []
+    : ((response as { data: ApiService[] }).data ?? []);
 
   return (
     <>
@@ -22,20 +29,24 @@ export default async function ServicesPageView() {
       />
 
       <Section className="overflow-x-clip py-20 md:py-28">
-    
-
         <div className="grid grid-cols-12 gap-6 md:gap-7">
-          {services.map((service, index) => (
-            <ServiceCard
-              key={service.slug}
-              service={service}
-              title={t(service.titleKey)}
-              description={t(service.descKey)}
-              cta={t("list.readMore")}
-              index={index}
-              delay={index * 0.08}
-            />
-          ))}
+          {services.map((service, index) => {
+            const slug = pickSlug(service.slug, locale);
+            return (
+              <ServiceCard
+                key={slug || index}
+                slug={slug}
+                image={service.image || ""}
+                title={service.title || service.name || ""}
+                description={
+                  service.short_text || service.description || service.text || ""
+                }
+                cta={t("list.readMore")}
+                index={index}
+                delay={index * 0.08}
+              />
+            );
+          })}
         </div>
       </Section>
     </>

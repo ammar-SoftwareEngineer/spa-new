@@ -1,13 +1,25 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 import ProductDetailView from "@/components/Products/ProductDetailView";
-import { getProductBySlug, getProductSlugs } from "@/lib/api/products";
-
+import {
+  fetchProductDetailsData,
+  fetchProductsData,
+} from "@/api/productsService";
+import { isApiError } from "@/types/layoutTypes";
+import { pickSlug } from "@/lib/localized-slug";
+import type { ApiProduct } from "@/types/contentTypes";
 
 export async function generateStaticParams() {
-  const slugs = await getProductSlugs();
-  return slugs.map((slug) => ({ slug }));
+  const response = await fetchProductsData("en");
+  const products = isApiError(response)
+    ? []
+    : ((response as { data: ApiProduct[] }).data ?? []);
+
+  return products
+    .map((product) => pickSlug(product.slug, "en"))
+    .filter(Boolean)
+    .map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -16,17 +28,23 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const product = await getProductBySlug(slug);
+  const response = await fetchProductDetailsData(slug, locale);
+  const product = isApiError(response)
+    ? null
+    : (response as { data: ApiProduct }).data ?? null;
 
   if (!product) {
     return { title: "Product Not Found" };
   }
 
-  const t = await getTranslations({ locale, namespace: "products" });
-
   return {
-    title: `${t(product.titleKey)} | S&PA`,
-    description: t(product.descKey),
+    title: `${product.title || product.name || "Product"} | S&PA`,
+    description:
+      product.short_text ||
+      product.short_description ||
+      product.description ||
+      product.text ||
+      "",
   };
 }
 
@@ -40,7 +58,11 @@ export default async function ProductDetailsPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
-  const product = await getProductBySlug(slug);
+  const response = await fetchProductDetailsData(slug, locale);
+  const product = isApiError(response)
+    ? null
+    : (response as { data: ApiProduct }).data ?? null;
+
   if (!product) {
     notFound();
   }
@@ -49,5 +71,5 @@ export default async function ProductDetailsPage({
   const rawPage = Array.isArray(q.page) ? q.page[0] : q.page;
   const page = Number(rawPage) || 1;
 
-  return <ProductDetailView product={product} page={page} />;
+  return <ProductDetailView product={product} locale={locale} page={page} />;
 }

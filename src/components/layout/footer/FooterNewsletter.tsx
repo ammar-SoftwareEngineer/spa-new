@@ -1,19 +1,18 @@
 /**
  * FooterNewsletter — newsletter signup form.
- * Wired to submitNewsletter in lib/api/forms.
  */
 "use client";
 
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
-import { submitNewsletter } from "@/lib/api/forms";
+import { contactAction } from "@/actions/contact";
 
 export default function FooterNewsletter() {
   const t = useTranslations("footer");
   const locale = useLocale();
   const isRtl = locale === "ar";
-  const [status, setStatus] = useState<"idle" | "loading" | "done">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -22,7 +21,18 @@ export default function FooterNewsletter() {
     if (typeof email !== "string" || !email) return;
 
     setStatus("loading");
-    await submitNewsletter({ email });
+    const result = await contactAction({
+      name: "Newsletter",
+      email,
+      subject: "Newsletter signup",
+      message: "Newsletter signup request",
+    });
+
+    if (!result.ok) {
+      setStatus("error");
+      return;
+    }
+
     setStatus("done");
     form.reset();
   }
@@ -43,6 +53,12 @@ export default function FooterNewsletter() {
         <Button type="submit" className="w-full" rtl={isRtl} disabled={status === "loading"}>
           {t("subscribeBtn")}
         </Button>
+        {status === "done" ? (
+          <p className="m-0 text-[0.85rem] text-brand">{t("subscribeSuccess")}</p>
+        ) : null}
+        {status === "error" ? (
+          <p className="m-0 text-[0.85rem] text-red-500">{t("subscribeError")}</p>
+        ) : null}
       </form>
     </div>
   );

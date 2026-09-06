@@ -6,8 +6,13 @@
 
 import { useTranslations } from "next-intl";
 import { Search, X } from "lucide-react";
-import type { CategoryItem, SectorItem } from "@/types";
+import type { SectorItem } from "@/types";
 import type { SortOption } from "@/components/Projects/types";
+
+type FilterCategory = {
+  slug: string;
+  title?: string;
+};
 
 export type ProjectFiltersState = {
   scope: string;
@@ -25,7 +30,7 @@ export type ProjectFiltersState = {
 };
 
 type ProjectFiltersProps = {
-  categories: CategoryItem[];
+  categories: FilterCategory[];
   sectors: SectorItem[];
   filters: ProjectFiltersState;
 };
@@ -39,7 +44,6 @@ export default function ProjectFilters({
   filters,
 }: ProjectFiltersProps) {
   const t = useTranslations("projects");
-  const tHome = useTranslations("home.projects");
   const tSectors = useTranslations("home.sectors");
 
   return (
@@ -58,7 +62,7 @@ export default function ProjectFilters({
               <option value="">{t("filters.scopeAll")}</option>
               {categories.map((category) => (
                 <option key={category.slug} value={category.slug}>
-                  {tHome(category.titleKey)}
+                  {category.title || category.slug}
                 </option>
               ))}
             </select>

@@ -1,24 +1,23 @@
-import { ArrowRight } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
 import HeaderSection from "@/components/ui/HeaderSection";
 import { Button } from "@/components/ui/Button";
-import { getServices } from "@/lib/api/services";
-import { getSiteData } from "@/lib/api/site";
-import { getIcon } from "@/lib/icons";
-import ServiceCard from "../Services/ServiceCard";
+import ServiceCard from "@/components/Services/ServiceCard";
+import { pickSlug } from "@/lib/localized-slug";
+import type { HomeSection, HomeService } from "@/types/homeTypes";
 
-export default async function Services() {
-  const [services, site, t, tServices, locale] = await Promise.all([
-    getServices(),
-    getSiteData(),
+type ServicesProps = {
+  section: HomeSection & { services?: HomeService[] };
+};
+
+export default async function Services({ section }: ServicesProps) {
+  const [t, locale] = await Promise.all([
     getTranslations("home.services"),
-    getTranslations("services"),
     getLocale(),
   ]);
   const isRtl = locale === "ar";
+  const services = section.services ?? [];
 
   return (
     <Section
@@ -26,27 +25,30 @@ export default async function Services() {
       variant="alt"
       className="overflow-x-clip py-[80px] lg:py-[120px]"
       containerClassName="flex flex-col items-center"
-   
     >
-      <HeaderSection subtitle={t("title")} title={t("header")} />
+      <HeaderSection subtitle={section.sub_title} title={section.title} />
 
       <div className="grid w-full grid-cols-12 gap-6">
-        {services.slice(0, 2).map((service, index) => (
-          <ServiceCard
-            key={service.slug}
-            service={service}
-            title={tServices(service.titleKey)}
-            description={tServices(service.descKey)}
-            cta={t("readMore")}
-            index={index}
-            delay={index * 0.08}
-          />
-        ))}
+        {services.map((service, index) => {
+          const slug = pickSlug(service.slug, locale);
+          return (
+            <ServiceCard
+              key={service.id}
+              slug={slug}
+              image={service.image}
+              title={service.title}
+              description={service.short_text}
+              cta={t("readMore")}
+              index={index}
+              delay={index * 0.08}
+            />
+          );
+        })}
       </div>
 
-      <Reveal delay={services.length * 0.08} className="mt-12 md:mt-14">
-        <Button href="/services" size="lg" rtl={isRtl}>
-          {t("viewAll")}
+      <Reveal delay={0.16} className="mt-12 md:mt-14">
+        <Button href={section.button_link_url || "/services"} size="lg" rtl={isRtl}>
+          {section.button_text || t("viewAll")}
         </Button>
       </Reveal>
     </Section>

@@ -4,7 +4,7 @@
 "use client";
 
 import { Sun, Moon, Globe, Menu, X } from "lucide-react";
-import type { Theme } from "@/lib/theme";
+import type { Theme } from "@/components/layout/header/theme";
 
 type HeaderActionsProps = {
   theme: Theme;

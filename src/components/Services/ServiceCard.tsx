@@ -2,10 +2,10 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import Reveal from "@/components/ui/Reveal";
-import type { ServiceItem } from "@/types";
 
 type ServiceCardProps = {
-  service: ServiceItem;
+  slug: string;
+  image: string;
   title: string;
   description: string;
   cta: string;
@@ -14,7 +14,8 @@ type ServiceCardProps = {
 };
 
 export default function ServiceCard({
-  service,
+  slug,
+  image,
   title,
   description,
   cta,
@@ -26,12 +27,12 @@ export default function ServiceCard({
   return (
     <Reveal delay={delay} className="col-span-12 sm:col-span-6 ">
       <Link
-        href={`/services/${service.slug}`}
+        href={`/services/${slug}`}
         className="group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-border/60 bg-bg-primary shadow-[0_16px_48px_rgba(13,59,77,0.12)] outline-none transition-[border-color,box-shadow,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1.5 hover:border-brand/40 hover:shadow-[0_28px_64px_rgba(33,118,149,0.24)] focus-visible:ring-2 focus-visible:ring-brand"
       >
         <div className="relative aspect-[16/11] w-full overflow-hidden">
           <Image
-            src={service.image}
+            src={image || "/img/pattern.png"}
             alt={title}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"

@@ -1,7 +1,7 @@
-import type { ProjectItem } from "@/types";
+import type { ProjectListItem } from "@/components/Projects/types";
 
 export type ProjectCardProps = {
-  project: ProjectItem;
+  project: ProjectListItem;
   title: string;
   description: string;
   location: string;

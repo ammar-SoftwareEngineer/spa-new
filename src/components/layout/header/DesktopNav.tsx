@@ -30,6 +30,8 @@ export default function DesktopNav({
   navLinkIdle,
   navLinkActive,
 }: DesktopNavProps) {
+  const displayLabel = (item: NavItem) => item.label || label(item.key);
+
   return (
     <ul className="hidden list-none items-center gap-6 lg:flex">
       {navItems.map((item) => {
@@ -40,7 +42,7 @@ export default function DesktopNav({
           return (
             <li key={item.key}>
               <NavLink item={item} className={`${navLinkBase} ${navLinkIdle}`}>
-                {label(item.key)}
+                {displayLabel(item)}
               </NavLink>
             </li>
           );
@@ -61,7 +63,7 @@ export default function DesktopNav({
               aria-expanded={isOpen}
               aria-haspopup="true"
             >
-              {label(item.key)}
+              {displayLabel(item)}
               <ChevronDown
                 size={14}
                 className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
@@ -93,7 +95,7 @@ export default function DesktopNav({
                             : "text-text-primary after:origin-end after:scale-x-0 hover:text-brand hover:after:origin-start hover:after:scale-x-100"
                         }`}
                       >
-                        {label(child.key)}
+                        {displayLabel(child)}
                       </NavLink>
                     </li>
                   );

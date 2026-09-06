@@ -1,23 +1,39 @@
-import { getTranslations } from "next-intl/server";
-import { Phone, Mail, MapPin, Printer } from "lucide-react";
+import { getLocale, getTranslations } from "next-intl/server";
+import { Phone, Mail, MapPin } from "lucide-react";
+
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
 import ContactForm from "@/components/ContactUs/ContactForm";
-import { getSiteData } from "@/lib/api/site";
+import { fetchLayoutData } from "@/api/layoutService";
+import {
+  formatLayoutPhone,
+  isApiError,
+  type LayoutApiResponse,
+} from "@/types/layoutTypes";
 
 export default async function ContactMainSection() {
-  const [site, t, tFooter] = await Promise.all([
-    getSiteData(),
+  const [locale, t, tFooter] = await Promise.all([
+    getLocale(),
     getTranslations("contact"),
     getTranslations("footer"),
   ]);
+
+  const layoutResponse = await fetchLayoutData(locale);
+
+  const layout = isApiError(layoutResponse)
+    ? null
+    : (layoutResponse as LayoutApiResponse)?.data ?? null;
+
+  const phone = formatLayoutPhone(layout?.contact);
+  const email = layout?.contact?.email || "";
+  const address = layout?.contact?.address || tFooter("address");
 
   const rows = [
     {
       key: "address",
       icon: MapPin,
       title: t("info.addressTitle"),
-      value: tFooter("address"),
+      value: address,
       href: undefined as string | undefined,
       dir: undefined as "ltr" | undefined,
     },
@@ -25,24 +41,16 @@ export default async function ContactMainSection() {
       key: "phone",
       icon: Phone,
       title: t("info.phoneTitle"),
-      value: site.contact.phone,
-      href: `tel:${site.contact.phone.replace(/[^\d+]/g, "")}`,
-      dir: "ltr" as const,
-    },
-    {
-      key: "fax",
-      icon: Printer,
-      title: t("info.faxTitle"),
-      value: site.contact.fax ?? "",
-      href: undefined as string | undefined,
+      value: phone,
+      href: phone ? `tel:${phone.replace(/[^\d+]/g, "")}` : undefined,
       dir: "ltr" as const,
     },
     {
       key: "email",
       icon: Mail,
       title: t("info.emailTitle"),
-      value: site.contact.email,
-      href: `mailto:${site.contact.email}`,
+      value: email,
+      href: email ? `mailto:${email}` : undefined,
       dir: undefined as "ltr" | undefined,
     },
   ].filter((row) => Boolean(row.value));

@@ -5,13 +5,13 @@ import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import Container from "@/components/ui/Container";
-import { getSiteData } from "@/lib/api/site";
 
 type PageHeroProps = {
   eyebrow: string;
   title: string;
   description?: string;
   currentLabel: string;
+  imageSrc?: string;
 };
 
 export default async function PageHero({
@@ -19,17 +19,15 @@ export default async function PageHero({
   title,
   description,
   currentLabel,
+  imageSrc,
 }: PageHeroProps) {
-  const [t, site] = await Promise.all([
-    getTranslations("nav"),
-    getSiteData(),
-  ]);
+  const t = await getTranslations("nav");
 
   return (
     <section className="relative overflow-hidden border-b border-border pt-[100px] pb-12 sm:pt-[110px] sm:pb-16 md:pt-[140px] md:pb-20">
       <div className="absolute inset-0 z-0">
         <Image
-          src={site.media.pageHeroImage}
+          src={imageSrc || "/img/breadcrumb/hero.jpg"}
           alt="S&PA"
           fill
           priority

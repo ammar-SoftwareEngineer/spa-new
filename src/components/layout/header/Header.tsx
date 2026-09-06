@@ -7,7 +7,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { getTheme, toggleTheme as switchTheme, type Theme } from "@/lib/theme";
+import { getTheme, toggleTheme as switchTheme, type Theme } from "@/components/layout/header/theme";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import Container from "@/components/ui/Container";
 import DesktopNav from "@/components/layout/header/DesktopNav";

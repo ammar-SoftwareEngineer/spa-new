@@ -3,7 +3,7 @@
 import { ArrowRight } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
 import CountUp from "@/components/ui/CountUp";
-import { getIcon } from "@/lib/icons";
+import { getIcon } from "@/components/ui/icons";
 import type { WhyMetric } from "@/types";
 
 const cardBase =

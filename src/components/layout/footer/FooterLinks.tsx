@@ -10,6 +10,10 @@ type FooterLinksProps = {
   label: (key: string) => string;
 };
 
+function linkLabel(item: NavItem, label: (key: string) => string) {
+  return item.label || label(item.key);
+}
+
 export default function FooterLinks({ title, links, label }: FooterLinksProps) {
   return (
     <div className="flex flex-col gap-5">
@@ -23,7 +27,7 @@ export default function FooterLinks({ title, links, label }: FooterLinksProps) {
               item={link}
               className="inline-block opacity-80 transition-all duration-300 hover:translate-x-1 hover:text-brand hover:opacity-100 rtl:hover:-translate-x-1"
             >
-              {label(link.key)}
+              {linkLabel(link, label)}
             </NavLink>
           </li>
         ))}

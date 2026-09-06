@@ -72,7 +72,8 @@
       "emailInvalid": "من فضلك أدخل بريداً إلكترونياً صحيحاً.",
       "phoneInvalid": "من فضلك أدخل رقم هاتف صحيح.",
       "messageRequired": "من فضلك أدخل رسالتك.",
-      "messageMin": "الرسالة يجب أن تكون 10 أحرف على الأقل."
+      "messageMin": "الرسالة يجب أن تكون 10 أحرف على الأقل.",
+      "submitFailed": "تعذر إرسال الاستفسار. حاول مرة أخرى."
     }
   },
   "afcTitle": "American Fire Control",

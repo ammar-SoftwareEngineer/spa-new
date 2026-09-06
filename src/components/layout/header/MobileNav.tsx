@@ -24,6 +24,8 @@ export default function MobileNav({
   onClose,
   label,
 }: MobileNavProps) {
+  const displayLabel = (item: NavItem) => item.label || label(item.key);
+
   return (
     <div
       className={`fixed inset-0 z-[999] flex flex-col items-center justify-center bg-bg-primary p-10 transition-[opacity,transform] duration-500 lg:hidden ${
@@ -46,7 +48,7 @@ export default function MobileNav({
                   className="text-[1.8rem] font-bold text-text-primary transition-colors hover:text-brand ltr:font-[family-name:var(--font-bebas-neue)] ltr:tracking-wider rtl:font-[family-name:var(--font-cairo)]"
                   onClick={onClose}
                 >
-                  {label(item.key)}
+                  {displayLabel(item)}
                 </NavLink>
               </li>
             );
@@ -60,7 +62,7 @@ export default function MobileNav({
                 className="flex items-center gap-2 text-[1.8rem] font-bold text-text-primary transition-colors hover:text-brand ltr:font-[family-name:var(--font-bebas-neue)] ltr:tracking-wider rtl:font-[family-name:var(--font-cairo)]"
                 aria-expanded={dropdownOpen}
               >
-                {label(item.key)}
+                {displayLabel(item)}
                 <ChevronDown
                   size={18}
                   className={`transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
@@ -76,7 +78,7 @@ export default function MobileNav({
                         className="relative block py-2 text-[1.05rem] text-text-secondary transition-all after:absolute after:bottom-0 after:start-0 after:h-0.5 after:w-full after:origin-end after:scale-x-0 after:bg-brand after:transition-transform after:duration-300 hover:text-brand hover:after:origin-start hover:after:scale-x-100"
                         onClick={onClose}
                       >
-                        {label(child.key)}
+                        {displayLabel(child)}
                       </NavLink>
                     </li>
                   ))}

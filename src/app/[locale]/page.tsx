@@ -1,16 +1,12 @@
 /**
- * Home page.
+ * Home page — fetch /home once, pass data to sections.
  */
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import HeroSection from "@/components/home/HeroSection";
-import WhoWeAre from "@/components/about/WhoWeAre";
-import Services from "@/components/home/Services";
-import Why from "@/components/home/Why";
-import TeamBanner from "@/components/home/TeamBanner";
-import Categories from "@/components/home/Categories";
-import Partners from "@/components/home/Partners";
-import Blogs from "@/components/home/Blogs";
+import HomePage from "@/components/home/HomePage";
+import { fetchHomeData } from "@/api/homeService";
+import { isApiError } from "@/types/layoutTypes";
+import type { HomeApiResponse } from "@/types/homeTypes";
 
 export async function generateMetadata({
   params,
@@ -34,16 +30,10 @@ export default async function LocaleHome({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return (
-    <>
-      <HeroSection />
-      <WhoWeAre />
-      <Services />
-      <Why />
-      <TeamBanner />
-      <Categories />
-      <Partners />
-      <Blogs />
-    </>
-  );
+  const homeResponse = await fetchHomeData(locale);
+  const data = isApiError(homeResponse)
+    ? null
+    : (homeResponse as HomeApiResponse).data ?? null;
+
+  return <HomePage data={data} />;
 }

@@ -72,7 +72,8 @@
       "emailInvalid": "Please enter a valid email address.",
       "phoneInvalid": "Please enter a valid phone number.",
       "messageRequired": "Please enter your message.",
-      "messageMin": "Message must be at least 10 characters."
+      "messageMin": "Message must be at least 10 characters.",
+      "submitFailed": "Could not send your inquiry. Please try again."
     }
   },
   "afcTitle": "American Fire Control",
