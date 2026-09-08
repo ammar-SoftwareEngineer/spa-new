@@ -49,13 +49,12 @@ type Props = {
   staggerIndex: number;
   title: string;
   description: string;
-  textValue?: string;
 };
 
-export function WhyMetricCard({ item, staggerIndex, title, description, textValue }: Props) {
+export function WhyMetricCard({ item, staggerIndex, title, description }: Props) {
   const isHighlight = item.isHighlight === true;
   const Icon = item.icon ? getIcon(item.icon) : null;
-
+  const isYearsOfExperience = title.includes("Years of Experience");
   return (
     <Reveal delay={staggerIndex * 0.08} className={isHighlight ? highlightClass : metricClass}>
       <HoverBg variant={isHighlight ? "highlight" : "metric"} />
@@ -65,14 +64,7 @@ export function WhyMetricCard({ item, staggerIndex, title, description, textValu
             isHighlight ? "text-white" : "text-brand group-hover:text-white"
           }`}
         >
-          {item.rawNumber > 0 ? (
-            <>
-              <CountUp value={item.rawNumber} />
-              {item.suffix ?? ""}
-            </>
-          ) : (
-            textValue
-          )}
+          {isYearsOfExperience ? <span>+ <CountUp value={item.rawNumber} duration={2.5} /></span>  : <CountUp value={item.rawNumber} duration={2.5} />} 
         </div>
         {Icon ? (
           <span

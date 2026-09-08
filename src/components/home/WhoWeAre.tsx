@@ -3,6 +3,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
+import CountUp from "@/components/ui/CountUp";
 import type { HomeSection, HomeStat } from "@/types/homeTypes";
 
 type WhoWeAreProps = {
@@ -52,22 +53,26 @@ export default async function WhoWeAre({ section }: WhoWeAreProps) {
 
           {stats.length > 0 ? (
             <div className="mb-8 grid grid-cols-12 gap-4">
-              {stats.map((stat, index) => (
-                <Reveal
-                  key={stat.id}
-                  delay={0.15 + index * 0.08}
-                  className="group col-span-12 flex items-center gap-4 rounded-[22px] border border-border bg-bg-secondary/80 p-5 shadow-[var(--card-shadow)] transition-all duration-500 hover:-translate-y-1 hover:border-brand/35 hover:shadow-[0_14px_32px_rgba(33,118,149,0.12)] md:col-span-6"
-                >
-                  <div className="min-w-0 flex-1">
-                    <div className="text-[1.7rem] font-bold leading-none text-text-primary ltr:font-[family-name:var(--font-bebas-neue)] ltr:text-[1.95rem] rtl:font-[family-name:var(--font-cairo)]">
-                      {stat.title}
+              {stats.map((stat, index) => {
+                const number = Number(String(stat.title).replace(/[^\d.]/g, "")) || 0;
+                const isYearsOfExperience = stat.sub_title.includes("Years of Experience");
+                return (
+                  <Reveal
+                    key={stat.id}
+                    delay={0.15 + index * 0.08}
+                    className="group col-span-12 flex items-center gap-4 rounded-[22px] border border-border bg-bg-secondary/80 p-5 shadow-[var(--card-shadow)] transition-all duration-500 hover:-translate-y-1 hover:border-brand/35 hover:shadow-[0_14px_32px_rgba(33,118,149,0.12)] md:col-span-6"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <div className="text-[1.7rem] font-bold leading-none text-text-primary ltr:font-[family-name:var(--font-bebas-neue)] ltr:text-[1.95rem] rtl:font-[family-name:var(--font-cairo)]">
+                     {isYearsOfExperience ? <span>+ <CountUp value={number} duration={2.5} /></span>  : <CountUp value={number} duration={2.5} />} 
+                      </div>
+                      <p className="mt-1.5 text-[0.88rem] font-medium leading-snug text-text-secondary">
+                        {stat.sub_title}
+                      </p>
                     </div>
-                    <p className="mt-1.5 text-[0.88rem] font-medium leading-snug text-text-secondary">
-                      {stat.sub_title}
-                    </p>
-                  </div>
-                </Reveal>
-              ))}
+                  </Reveal>
+                );
+              })}
             </div>
           ) : null}
 

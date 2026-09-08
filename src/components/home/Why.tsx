@@ -11,23 +11,6 @@ type WhyProps = {
   section: HomeSection & { values?: HomeStat[] };
 };
 
-/** Map API title like "12+" into CountUp number + suffix, or plain text. */
-function parseTopValue(title: string): {
-  rawNumber: number;
-  suffix?: string;
-  textValue?: string;
-} {
-  const trimmed = title.trim();
-  const match = trimmed.match(/^(\d+)(.*)$/);
-  if (match) {
-    return {
-      rawNumber: Number(match[1]),
-      suffix: match[2] || undefined,
-    };
-  }
-  return { rawNumber: 0, textValue: trimmed };
-}
-
 export default async function Why({ section }: WhyProps) {
   const t = await getTranslations("home.whyChooseUs");
   const values = section.values ?? [];
@@ -53,14 +36,13 @@ export default async function Why({ section }: WhyProps) {
 
       <div className="grid grid-cols-12 gap-8">
         {values.map((item, index) => {
-          const { rawNumber, suffix, textValue } = parseTopValue(item.title);
+          const rawNumber = Number(String(item.title).replace(/[^\d.]/g, "")) || 0;
           const isHighlight = index === 0;
           const metric: WhyMetric = {
             id: item.id,
             titleKey: "",
             descKey: "",
             rawNumber,
-            suffix,
             isHighlight,
             icon: isHighlight ? "ShieldCheck" : undefined,
           };
@@ -72,7 +54,6 @@ export default async function Why({ section }: WhyProps) {
                 staggerIndex={index}
                 title={item.sub_title}
                 description={stripHtml(item.text)}
-                textValue={textValue}
               />
             </div>
           );
