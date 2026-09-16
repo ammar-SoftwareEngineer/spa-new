@@ -47,10 +47,18 @@ export default async function WhoWeArePage() {
       <MissionSection section={mission} />
       <VisionSection section={vision} />
       <WhatWeDoSection
-        section={about?.what_we_do_section || about?.what_we_do}
+        section={about?.what_we_do_section}
+        items={
+          about?.what_we_do_values ||
+          (Array.isArray(about?.what_we_do) ? about.what_we_do : null)
+        }
       />
       <IsoSection
-        certifications={about?.certifications_section || about?.certifications}
+        section={about?.certifications_section}
+        certifications={
+          about?.certifications_values ||
+          (Array.isArray(about?.certifications) ? about.certifications : null)
+        }
       />
     </>
   );

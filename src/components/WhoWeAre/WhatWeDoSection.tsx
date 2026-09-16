@@ -1,39 +1,40 @@
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
 import HeaderSection from "@/components/ui/HeaderSection";
 import { CheckCircle2 } from "lucide-react";
 import type { ApiSection } from "@/types/contentTypes";
+import { stripHtml } from "@/lib/utils";
 
 type WhatWeDoSectionProps = {
-  section?: ApiSection[] | ApiSection | null;
+  section?: ApiSection | null;
+  items?: ApiSection[] | null;
 };
 
-function asArray(value: ApiSection[] | ApiSection | null | undefined): ApiSection[] {
-  if (!value) return [];
-  return Array.isArray(value) ? value : [value];
-}
-
-export default async function WhatWeDoSection({ section }: WhatWeDoSectionProps) {
+export default async function WhatWeDoSection({
+  section,
+  items,
+}: WhatWeDoSectionProps) {
   const t = await getTranslations("about");
-  const items = asArray(section);
+  const cards = Array.isArray(items) ? items : [];
 
-  if (!items.length) {
+  if (!cards.length) {
     return null;
   }
 
   return (
     <Section className="overflow-x-clip py-24 md:py-32">
       <HeaderSection
-        subtitle={t("whatWeDo.eyebrow")}
-        title={t("whatWeDo.title")}
-        description={t("whatWeDo.description")}
+        subtitle={section?.sub_title || t("whatWeDo.eyebrow")}
+        title={section?.title || t("whatWeDo.title")}
+        description={stripHtml(section?.text) || t("whatWeDo.description")}
         className="mb-12 md:mb-16"
       />
 
       <div className="relative">
         <div className="grid grid-cols-12 gap-6">
-          {items.map((item, index) => {
+          {cards.map((item, index) => {
             return (
               <Reveal
                 key={item.id ?? index}
@@ -47,8 +48,24 @@ export default async function WhatWeDoSection({ section }: WhatWeDoSectionProps)
 
                   <div className="relative mb-7">
                     <div className="absolute inset-0 scale-125 rounded-[22px] bg-brand/10 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
-                    <div className="relative flex h-[84px] w-[84px] items-center justify-center rounded-[22px] bg-gradient-to-br from-brand to-[#0d3b4d] text-white shadow-[0_14px_30px_rgba(33,118,149,0.28)] transition-transform duration-500 group-hover:rotate-3 group-hover:scale-105">
-                      <CheckCircle2 size={32} strokeWidth={2.1} />
+                    <div
+                      className={`relative flex h-[84px] w-[84px] items-center justify-center overflow-hidden rounded-[22px] shadow-[0_14px_30px_rgba(33,118,149,0.28)] transition-transform duration-500 group-hover:rotate-3 group-hover:scale-105 ${
+                        item.image
+                          ? "border border-border/60  p-3"
+                          : "bg-gradient-to-br from-brand to-[#0d3b4d] text-white"
+                      }`}
+                    >
+                      {item.image ? (
+                        <Image
+                          src={item.image}
+                          alt={item.alt_image || item.title || ""}
+                          width={56}
+                          height={56}
+                          className="h-14 w-14 object-contain"
+                        />
+                      ) : (
+                        <CheckCircle2 size={32} strokeWidth={2.1} />
+                      )}
                     </div>
                   </div>
 
@@ -56,7 +73,7 @@ export default async function WhatWeDoSection({ section }: WhatWeDoSectionProps)
                     {item.title || ""}
                   </h3>
                   <p className="m-0 text-[0.95rem] leading-[1.7] text-text-secondary">
-                    {item.sub_title || item.text || ""}
+                    {item.sub_title || stripHtml(item.text) || ""}
                   </p>
                 </article>
               </Reveal>

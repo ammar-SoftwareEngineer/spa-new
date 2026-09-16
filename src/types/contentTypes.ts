@@ -185,9 +185,11 @@ export type AboutData = {
   statistics_section?: ApiSection[] | ApiSection;
   values_section?: ApiSection[] | ApiSection;
   what_we_do?: ApiSection[] | ApiSection;
-  what_we_do_section?: ApiSection[] | ApiSection;
+  what_we_do_section?: ApiSection;
+  what_we_do_values?: ApiSection[];
   certifications?: ApiCertificate[] | ApiSection;
-  certifications_section?: ApiCertificate[] | ApiSection;
+  certifications_section?: ApiSection;
+  certifications_values?: ApiSection[] | ApiCertificate[];
   mission_section?: ApiSection;
   vision_section?: ApiSection;
 };
