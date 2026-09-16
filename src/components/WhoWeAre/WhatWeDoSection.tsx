@@ -9,17 +9,16 @@ import { stripHtml } from "@/lib/utils";
 
 type WhatWeDoSectionProps = {
   section?: ApiSection | null;
-  items?: ApiSection[] | null;
+  items?: ApiSection[];
 };
 
 export default async function WhatWeDoSection({
   section,
-  items,
+  items = [],
 }: WhatWeDoSectionProps) {
   const t = await getTranslations("about");
-  const cards = Array.isArray(items) ? items : [];
 
-  if (!cards.length) {
+  if (!items.length) {
     return null;
   }
 
@@ -34,7 +33,7 @@ export default async function WhatWeDoSection({
 
       <div className="relative">
         <div className="grid grid-cols-12 gap-6">
-          {cards.map((item, index) => {
+          {items.map((item, index) => {
             return (
               <Reveal
                 key={item.id ?? index}

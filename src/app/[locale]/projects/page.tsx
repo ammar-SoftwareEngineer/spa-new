@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import ProjectsPageView from "@/components/Projects";
-
+import { fetchCategoriesData } from "@/api/categoriesService";
+import { fetchProjectsData } from "@/api/projectsService";
+import { getResponseData } from "@/lib/content";
+import type { ApiCategory, ApiProject } from "@/types/contentTypes";
 
 export async function generateMetadata({
   params,
@@ -25,5 +28,16 @@ export default async function ProjectsPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return <ProjectsPageView />;
+  const [projectsResponse, categoriesResponse] = await Promise.all([
+    fetchProjectsData(locale),
+    fetchCategoriesData(locale),
+  ]);
+
+  return (
+    <ProjectsPageView
+      projects={getResponseData<ApiProject[]>(projectsResponse) ?? []}
+      categories={getResponseData<ApiCategory[]>(categoriesResponse) ?? []}
+      locale={locale}
+    />
+  );
 }

@@ -10,11 +10,8 @@ import "@/styles/globals.css";
 import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
 import { fetchLayoutData } from "@/api/layoutService";
-import {
-  formatLayoutPhone,
-  isApiError,
-  type LayoutApiResponse,
-} from "@/types/layoutTypes";
+import { formatLayoutPhone, type LayoutData } from "@/types/layoutTypes";
+import { getResponseData } from "@/lib/content";
 import { mapFooterLinks, mapLayoutMenu } from "@/components/layout/header/navUtils";
 import { routing } from "@/i18n/routing";
 import { getBaseUrl } from "@/lib/utils";
@@ -115,9 +112,7 @@ export default async function LocaleLayout({ children, params }: Props) {
   const messages = await getMessages();
   const layoutResponse = await fetchLayoutData(locale);
 
-  const layout = isApiError(layoutResponse)
-    ? null
-    : (layoutResponse as LayoutApiResponse)?.data ?? null;
+  const layout = getResponseData<LayoutData>(layoutResponse);
 
   const navItems = mapLayoutMenu(layout?.menu);
   const footerLinks = mapFooterLinks(layout?.footer?.links);

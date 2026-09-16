@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import MeetOurTeamPage from "@/components/MeetOurTeam";
-
+import { fetchTeamsData } from "@/api/teamsService";
+import { getResponseData } from "@/lib/content";
+import type { TeamsData } from "@/types/contentTypes";
 
 export async function generateMetadata({
   params,
@@ -25,5 +27,7 @@ export default async function TeamPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return <MeetOurTeamPage />;
+  const data = getResponseData<TeamsData>(await fetchTeamsData(locale));
+
+  return <MeetOurTeamPage data={data} />;
 }

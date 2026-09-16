@@ -1,36 +1,24 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import PageHero from "@/components/ui/PageHero";
 import TeamIntroSection from "@/components/MeetOurTeam/TeamIntroSection";
 import BoardSection from "@/components/MeetOurTeam/BoardSection";
 import OurTeamSection from "@/components/MeetOurTeam/OurTeamSection";
-import { fetchTeamsData } from "@/api/teamsService";
-import { isApiError } from "@/types/layoutTypes";
-import type { ApiTeamMember, TeamsData } from "@/types/contentTypes";
+import { mapTeamMembers } from "@/components/MeetOurTeam/helpers";
 import { stripHtml } from "@/lib/utils";
+import type { TeamsData } from "@/types/contentTypes";
 
-function mapMember(item: ApiTeamMember, index: number) {
-  return {
-    id: item.id ?? index,
-    name: item.name || "",
-    role: item.job_title || item.role || item.position || item.title || "",
-    image: item.image || item.photo || "",
-  };
-}
+type MeetOurTeamPageProps = {
+  data: TeamsData | null;
+};
 
-export default async function MeetOurTeamPage() {
-  const [t, tNav, locale] = await Promise.all([
+export default async function MeetOurTeamPage({ data }: MeetOurTeamPageProps) {
+  const [t, tNav] = await Promise.all([
     getTranslations("team"),
     getTranslations("nav"),
-    getLocale(),
   ]);
 
-  const response = await fetchTeamsData(locale);
-  const data = isApiError(response)
-    ? null
-    : ((response as { data: TeamsData }).data ?? null);
-
-  const board = (data?.board_members ?? []).map(mapMember);
-  const team = (data?.members ?? []).map(mapMember);
+  const board = mapTeamMembers(data?.board_members);
+  const team = mapTeamMembers(data?.members);
 
   return (
     <>

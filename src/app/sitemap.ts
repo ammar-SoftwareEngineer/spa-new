@@ -9,7 +9,7 @@ import { fetchProductsData } from "@/api/productsService";
 import { fetchProjectsData } from "@/api/projectsService";
 import { fetchServicesData } from "@/api/servicesService";
 import { fetchCategoriesData } from "@/api/categoriesService";
-import { isApiError } from "@/types/layoutTypes";
+import { getResponseData } from "@/lib/content";
 import { pickSlug } from "@/lib/localized-slug";
 import type {
   ApiCategory,
@@ -39,18 +39,10 @@ async function collectSlugs(locale: string) {
       fetchCategoriesData(locale),
     ]);
 
-  const products = isApiError(productsRes)
-    ? []
-    : ((productsRes as { data: ApiProduct[] }).data ?? []);
-  const projects = isApiError(projectsRes)
-    ? []
-    : ((projectsRes as { data: ApiProject[] }).data ?? []);
-  const services = isApiError(servicesRes)
-    ? []
-    : ((servicesRes as { data: ApiService[] }).data ?? []);
-  const categories = isApiError(categoriesRes)
-    ? []
-    : ((categoriesRes as { data: ApiCategory[] }).data ?? []);
+  const products = getResponseData<ApiProduct[]>(productsRes) ?? [];
+  const projects = getResponseData<ApiProject[]>(projectsRes) ?? [];
+  const services = getResponseData<ApiService[]>(servicesRes) ?? [];
+  const categories = getResponseData<ApiCategory[]>(categoriesRes) ?? [];
 
   return {
     productSlugs: products.map((item) => pickSlug(item.slug, locale)).filter(Boolean),

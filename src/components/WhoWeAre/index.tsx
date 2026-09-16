@@ -1,4 +1,4 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import PageHero from "@/components/ui/PageHero";
 import AboutSection from "@/components/WhoWeAre/AboutSection";
 import CountersSection from "@/components/WhoWeAre/CountersSection";
@@ -6,59 +6,52 @@ import IsoSection from "@/components/WhoWeAre/IsoSection";
 import MissionSection from "@/components/WhoWeAre/MissionSection";
 import VisionSection from "@/components/WhoWeAre/VisionSection";
 import WhatWeDoSection from "@/components/WhoWeAre/WhatWeDoSection";
-import { fetchAboutData } from "@/api/aboutService";
-import { isApiError } from "@/types/layoutTypes";
-import type { AboutData, ApiSection } from "@/types/contentTypes";
+import {
+  getCertificationItems,
+  getMissionVision,
+  getStatisticsItems,
+  getWhatWeDoItems,
+} from "@/components/WhoWeAre/helpers";
+import { stripHtml } from "@/lib/utils";
+import type { AboutData } from "@/types/contentTypes";
 
-function asValues(values: AboutData["values_section"]): ApiSection[] {
-  if (!values) return [];
-  return Array.isArray(values) ? values : [values];
-}
+type WhoWeArePageProps = {
+  about: AboutData | null;
+};
 
-export default async function WhoWeArePage() {
-  const [t, tNav, locale] = await Promise.all([
+export default async function WhoWeArePage({ about }: WhoWeArePageProps) {
+  const [t, tNav] = await Promise.all([
     getTranslations("about"),
     getTranslations("nav"),
-    getLocale(),
   ]);
 
-  const aboutResponse = await fetchAboutData(locale);
-  const about = isApiError(aboutResponse)
-    ? null
-    : (aboutResponse as { data: AboutData }).data ?? null;
-
-  const values = asValues(about?.values_section);
-  const mission = about?.mission_section || values[0] || null;
-  const vision = about?.vision_section || values[1] || null;
+  const { mission, vision } = getMissionVision(about);
+  const breadcrumb = about?.breadcrumb_section;
 
   return (
     <>
       <PageHero
-        eyebrow={about?.breadcrumb_section?.sub_title || t("hero.eyebrow")}
-        title={about?.breadcrumb_section?.title || t("hero.title")}
-        description={about?.breadcrumb_section?.text || t("hero.description")}
+        eyebrow={breadcrumb?.sub_title || t("hero.eyebrow")}
+        title={breadcrumb?.title || t("hero.title")}
+        description={
+          stripHtml(breadcrumb?.text) ||
+          breadcrumb?.sub_title ||
+          t("hero.description")
+        }
         currentLabel={tNav("whoWeAre")}
-        imageSrc={about?.breadcrumb_section?.image}
+        imageSrc={breadcrumb?.image}
       />
       <AboutSection section={about?.about_us_section} />
-      <CountersSection
-        statistics={about?.statistics_section || about?.statistics}
-      />
+      <CountersSection items={getStatisticsItems(about)} />
       <MissionSection section={mission} />
       <VisionSection section={vision} />
       <WhatWeDoSection
         section={about?.what_we_do_section}
-        items={
-          about?.what_we_do_values ||
-          (Array.isArray(about?.what_we_do) ? about.what_we_do : null)
-        }
+        items={getWhatWeDoItems(about)}
       />
       <IsoSection
         section={about?.certifications_section}
-        certifications={
-          about?.certifications_values ||
-          (Array.isArray(about?.certifications) ? about.certifications : null)
-        }
+        items={getCertificationItems(about)}
       />
     </>
   );

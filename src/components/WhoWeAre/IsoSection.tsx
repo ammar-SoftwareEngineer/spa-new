@@ -1,103 +1,63 @@
 import Image from "next/image";
-import { getTranslations } from "next-intl/server";
+import Container from "@/components/ui/Container";
 import Reveal from "@/components/ui/Reveal";
-import Section from "@/components/ui/Section";
-import HeaderSection from "@/components/ui/HeaderSection";
-import type { ApiCertificate, ApiSection } from "@/types/contentTypes";
 import { stripHtml } from "@/lib/utils";
+import type { ApiCertificate, ApiSection } from "@/types/contentTypes";
 
 type IsoSectionProps = {
   section?: ApiSection | null;
-  certifications?: Array<ApiCertificate | ApiSection> | null;
+  items?: Array<ApiCertificate | ApiSection>;
 };
 
-function asCerts(
-  value: Array<ApiCertificate | ApiSection> | null | undefined,
-): Array<ApiCertificate | ApiSection> {
-  if (!value) return [];
-  return Array.isArray(value) ? value : [];
-}
-
-export default async function IsoSection({
+export default function IsoSection({
   section,
-  certifications,
+  items = [],
 }: IsoSectionProps) {
-  const t = await getTranslations("about.iso");
-
-  const certificates = asCerts(certifications).map((item, index) => ({
-    id: item.id ?? index,
-    image: item.image || "",
-    title: item.title || "",
-     sub_title: item.sub_title || "",
-  }));
-
-  if (!certificates.length) {
-    return null;
-  }
+  if (!section && !items.length) return null;
 
   return (
-    <Section
-      id="iso"
-      variant="alt"
-      className="relative overflow-x-clip py-24 md:py-32"
-    >
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 z-0 opacity-[0.08] dark:opacity-[0.12]"
-        style={{
-          backgroundImage: "url(/img/pattern.png)",
-          backgroundSize: "contain",
-          backgroundPosition: "top left",
-          backgroundRepeat: "no-repeat",
-        }}
-      />
+    <section className="iso-section">
+      <Container>
+        <Reveal>
+          <div className="iso-header">
+            {section?.sub_title ? (
+              <p className="section-eyebrow">{section.sub_title}</p>
+            ) : null}
+            {section?.title ? (
+              <h2 className="section-title">{section.title}</h2>
+            ) : null}
+            {section?.text ? (
+              <p className="section-description">{stripHtml(section.text)}</p>
+            ) : null}
+          </div>
+        </Reveal>
 
-      <HeaderSection
-        subtitle={section?.sub_title || t("title")}
-        title={section?.title || t("header")}
-        description={stripHtml(section?.text) || t("description")}
-        className="relative z-[1] mb-14 md:mb-16"
-      />
-
-      <div className="relative z-[1] mx-auto grid grid-cols-12 gap-6 md:gap-7 lg:gap-8">
-        {certificates.map((cert, index) => (
-          <Reveal
-            key={cert.id}
-            delay={0.08 + index * 0.1}
-            className="col-span-12 sm:col-span-6 lg:col-span-4"
-          >
-            <article className="group mx-auto flex h-full w-full max-w-[400px] flex-col lg:max-w-none">
-              <div className="relative overflow-hidden rounded-[28px] border border-border/70 bg-bg-primary/80 shadow-[var(--card-shadow)] backdrop-blur-[2px] transition-all duration-500 group-hover:-translate-y-2 group-hover:border-brand/40 group-hover:bg-bg-primary group-hover:shadow-[0_22px_48px_rgba(33,118,149,0.16)]">
-                <div className="absolute inset-x-0 top-0 z-[1] h-[3px] bg-linear-to-r from-brand via-[#4aa3c2] to-[#0d3b4d] opacity-70 transition-opacity duration-500 group-hover:opacity-100" />
-
-                <div className="relative aspect-[16/16] bg-linear-to-b from-white/90 to-[#eef4f7]/80 ">
+        {items.length > 0 ? (
+          <div className="iso-grid">
+            {items.map((cert, index) => (
+              <Reveal key={cert.id ?? index} delay={index * 0.08}>
+                <article className="iso-card">
                   {cert.image ? (
-                    <Image
-                      src={cert.image}
-                      alt={cert.image}
-                      fill
-                      sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
-                      className="h-full w-full object-contain p-6 transition-transform duration-700 group-hover:scale-[1.04] md:p-7"
-                    />
+                    <div className="iso-card-media">
+                      <Image
+                        src={cert.image}
+                        alt={cert.alt_image || cert.title || "ISO"}
+                        fill
+                        className="object-contain"
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    </div>
                   ) : null}
-                </div>
-              </div>
-
-              <div className="mt-5 flex flex-col items-center px-2 text-center">
-                <h3 className="text-[1.35rem] font-bold leading-none text-text-primary transition-colors duration-500 group-hover:text-brand ltr:font-[family-name:var(--font-bebas-neue)] ltr:text-[1.65rem] ltr:tracking-[0.06em]">
-                  {cert.title}
-                </h3>
-
-                <span className="mt-3 h-px w-10 bg-linear-to-r from-transparent via-brand/70 to-transparent transition-all duration-500 group-hover:w-16" />
-
-                <p className="mt-3 text-[0.92rem] font-medium text-text-secondary">
-                  {cert.sub_title}
-                </p>
-              </div>
-            </article>
-          </Reveal>
-        ))}
-      </div>
-    </Section>
+                  <div className="iso-card-body">
+                    {cert.title ? <h3>{cert.title}</h3> : null}
+                    {cert.text ? <p>{stripHtml(cert.text)}</p> : null}
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        ) : null}
+      </Container>
+    </section>
   );
 }

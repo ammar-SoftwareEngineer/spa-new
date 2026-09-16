@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import PartnersPageView from "@/components/partners";
-
+import { mapPartners } from "@/components/partners/helpers";
+import { fetchPartnersData } from "@/api/partnersService";
+import { getResponseData } from "@/lib/content";
+import type { ApiPartner } from "@/types/contentTypes";
 
 export async function generateMetadata({
   params,
@@ -25,5 +28,9 @@ export default async function PartnersPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return <PartnersPageView />;
+  const partners = mapPartners(
+    getResponseData<ApiPartner[]>(await fetchPartnersData(locale)),
+  );
+
+  return <PartnersPageView partners={partners} />;
 }

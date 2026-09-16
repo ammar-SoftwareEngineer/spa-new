@@ -1,59 +1,35 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import PageHero from "@/components/ui/PageHero";
 import Section from "@/components/ui/Section";
 import CategoryCards from "@/components/categories/CategoryCards";
 import ProjectsExplorer from "@/components/Projects/ProjectsExplorer";
-import { toProjectListItems } from "@/components/Projects/toListItem";
-import { fetchCategoriesData } from "@/api/categoriesService";
-import { fetchProjectsData } from "@/api/projectsService";
-import { isApiError } from "@/types/layoutTypes";
-import { pickSlug } from "@/lib/localized-slug";
+import {
+  mapCategoryCards,
+  mapFilterCategories,
+  toProjectListItems,
+} from "@/components/Projects/helpers";
 import type { ApiCategory, ApiProject } from "@/types/contentTypes";
 
-export default async function ProjectsPageView() {
-  const [t, tNav, tHome, locale] = await Promise.all([
+type ProjectsPageViewProps = {
+  projects: ApiProject[];
+  categories: ApiCategory[];
+  locale: string;
+};
+
+export default async function ProjectsPageView({
+  projects,
+  categories,
+  locale,
+}: ProjectsPageViewProps) {
+  const [t, tNav, tHome] = await Promise.all([
     getTranslations("projects"),
     getTranslations("nav"),
     getTranslations("home.projects"),
-    getLocale(),
   ]);
-
-  const [projectsResponse, categoriesResponse] = await Promise.all([
-    fetchProjectsData(locale),
-    fetchCategoriesData(locale),
-  ]);
-
-  const projects = isApiError(projectsResponse)
-    ? []
-    : ((projectsResponse as { data: ApiProject[] }).data ?? []);
-  const categories = isApiError(categoriesResponse)
-    ? []
-    : ((categoriesResponse as { data: ApiCategory[] }).data ?? []);
 
   const listItems = toProjectListItems(projects, locale);
-  const filterCategories = categories.map((category, index) => {
-    const slug = pickSlug(category.slug, locale) || `category-${index}`;
-    return {
-      slug,
-      title: category.title || category.name || "",
-      image: category.image || "",
-      link: category.link || `/projects/${slug}`,
-    };
-  });
-
-  const cards = categories.map((category, index) => {
-    const slug = pickSlug(category.slug, locale);
-    return {
-      title: category.title || category.name || "",
-      description:
-        category.short_text || category.description || category.text || "",
-      badge: category.badge || "",
-      image: category.image || "",
-      link: category.link || (slug ? `/projects/${slug}` : "/projects"),
-      cta: tHome("viewCategory"),
-      index,
-    };
-  });
+  const filterCategories = mapFilterCategories(categories, locale);
+  const cards = mapCategoryCards(categories, locale, tHome("viewCategory"));
 
   return (
     <>

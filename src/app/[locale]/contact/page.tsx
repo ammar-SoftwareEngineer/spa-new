@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import ContactUsPage from "@/components/ContactUs";
-
+import { fetchLayoutData } from "@/api/layoutService";
+import { getResponseData } from "@/lib/content";
+import type { LayoutData } from "@/types/layoutTypes";
 
 export async function generateMetadata({
   params,
@@ -25,5 +27,7 @@ export default async function ContactPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return <ContactUsPage />;
+  const layout = getResponseData<LayoutData>(await fetchLayoutData(locale));
+
+  return <ContactUsPage contact={layout?.contact ?? null} />;
 }

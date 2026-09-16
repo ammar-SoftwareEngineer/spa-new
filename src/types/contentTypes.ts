@@ -163,7 +163,9 @@ export type ApiCertificate = {
   code?: string;
   name?: string;
   image?: string;
+  alt_image?: string | null;
   sub_title?: string;
+  text?: string;
 };
 
 export type HomeData = {

@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import ServicesPageView from "@/components/Services";
-
+import { mapServiceCards } from "@/components/Services/helpers";
+import { fetchServicesData } from "@/api/servicesService";
+import { getResponseData } from "@/lib/content";
+import type { ApiService } from "@/types/contentTypes";
 
 export async function generateMetadata({
   params,
@@ -25,5 +28,10 @@ export default async function ServicesPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return <ServicesPageView />;
+  const services = mapServiceCards(
+    getResponseData<ApiService[]>(await fetchServicesData(locale)) ?? [],
+    locale,
+  );
+
+  return <ServicesPageView services={services} />;
 }

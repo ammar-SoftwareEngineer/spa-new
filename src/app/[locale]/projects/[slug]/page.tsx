@@ -11,7 +11,7 @@ import {
   fetchProjectDetailsData,
   fetchProjectsData,
 } from "@/api/projectsService";
-import { isApiError } from "@/types/layoutTypes";
+import { getResponseData } from "@/lib/content";
 import { matchesLocalizedSlug, pickSlug } from "@/lib/localized-slug";
 import type { ApiCategory, ApiProject } from "@/types/contentTypes";
 
@@ -21,12 +21,8 @@ export async function generateStaticParams() {
     fetchProjectsData("en"),
   ]);
 
-  const categories = isApiError(categoriesResponse)
-    ? []
-    : ((categoriesResponse as { data: ApiCategory[] }).data ?? []);
-  const projects = isApiError(projectsResponse)
-    ? []
-    : ((projectsResponse as { data: ApiProject[] }).data ?? []);
+  const categories = getResponseData<ApiCategory[]>(categoriesResponse) ?? [];
+  const projects = getResponseData<ApiProject[]>(projectsResponse) ?? [];
 
   const slugs = [
     ...categories.map((item) => pickSlug(item.slug, "en")),
@@ -43,10 +39,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, slug } = await params;
 
-  const categoryResponse = await fetchCategoryDetailsData(slug, locale);
-  const category = isApiError(categoryResponse)
-    ? null
-    : (categoryResponse as { data: ApiCategory }).data ?? null;
+  const category = getResponseData<ApiCategory>(
+    await fetchCategoryDetailsData(slug, locale),
+  );
 
   if (category) {
     return {
@@ -55,10 +50,9 @@ export async function generateMetadata({
     };
   }
 
-  const projectResponse = await fetchProjectDetailsData(slug, locale);
-  const project = isApiError(projectResponse)
-    ? null
-    : (projectResponse as { data: ApiProject }).data ?? null;
+  const project = getResponseData<ApiProject>(
+    await fetchProjectDetailsData(slug, locale),
+  );
 
   if (project) {
     return {
@@ -78,34 +72,41 @@ export default async function ProjectsSlugPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
-  const categoryResponse = await fetchCategoryDetailsData(slug, locale);
-  let category = isApiError(categoryResponse)
-    ? null
-    : (categoryResponse as { data: ApiCategory }).data ?? null;
+  let category = getResponseData<ApiCategory>(
+    await fetchCategoryDetailsData(slug, locale),
+  );
 
   if (!category) {
-    const listResponse = await fetchCategoriesData(locale);
-    const categories = isApiError(listResponse)
-      ? []
-      : ((listResponse as { data: ApiCategory[] }).data ?? []);
+    const categories = getResponseData<ApiCategory[]>(
+      await fetchCategoriesData(locale),
+    ) ?? [];
     category =
       categories.find((item) => matchesLocalizedSlug(item.slug, slug)) ?? null;
   }
 
   if (category) {
-    return <ProjectCategoryView category={category} />;
+    const [projectsResponse, categoriesResponse] = await Promise.all([
+      fetchProjectsData(locale),
+      fetchCategoriesData(locale),
+    ]);
+
+    return (
+      <ProjectCategoryView
+        category={category}
+        projects={getResponseData<ApiProject[]>(projectsResponse) ?? []}
+        categories={getResponseData<ApiCategory[]>(categoriesResponse) ?? []}
+        locale={locale}
+      />
+    );
   }
 
-  const projectResponse = await fetchProjectDetailsData(slug, locale);
-  let project = isApiError(projectResponse)
-    ? null
-    : (projectResponse as { data: ApiProject }).data ?? null;
+  let project = getResponseData<ApiProject>(
+    await fetchProjectDetailsData(slug, locale),
+  );
 
   if (!project) {
-    const listResponse = await fetchProjectsData(locale);
-    const projects = isApiError(listResponse)
-      ? []
-      : ((listResponse as { data: ApiProject[] }).data ?? []);
+    const projects =
+      getResponseData<ApiProject[]>(await fetchProjectsData(locale)) ?? [];
     project =
       projects.find((item) => matchesLocalizedSlug(item.slug, slug)) ?? null;
   }

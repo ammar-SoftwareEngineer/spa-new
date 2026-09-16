@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import ProductsPageView from "@/components/Products";
-
+import { mapProductCards } from "@/components/Products/helpers";
+import { fetchProductsData } from "@/api/productsService";
+import { getResponseData } from "@/lib/content";
+import type { ApiProduct } from "@/types/contentTypes";
 
 export async function generateMetadata({
   params,
@@ -25,5 +28,10 @@ export default async function ProductsPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return <ProductsPageView />;
+  const products = mapProductCards(
+    getResponseData<ApiProduct[]>(await fetchProductsData(locale)) ?? [],
+    locale,
+  );
+
+  return <ProductsPageView products={products} />;
 }

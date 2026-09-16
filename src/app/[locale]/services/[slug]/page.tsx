@@ -2,21 +2,19 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import ServiceDetailView from "@/components/Services/ServiceDetailView";
-import { toProjectListItems } from "@/components/Projects/toListItem";
+import { toProjectListItems } from "@/components/Projects/helpers";
 import {
   fetchServiceDetailsData,
   fetchServicesData,
 } from "@/api/servicesService";
 import { fetchProjectsData } from "@/api/projectsService";
-import { isApiError } from "@/types/layoutTypes";
+import { getResponseData } from "@/lib/content";
 import { pickSlug } from "@/lib/localized-slug";
 import type { ApiProject, ApiService } from "@/types/contentTypes";
 
 export async function generateStaticParams() {
-  const response = await fetchServicesData("en");
-  const services = isApiError(response)
-    ? []
-    : ((response as { data: ApiService[] }).data ?? []);
+  const services =
+    getResponseData<ApiService[]>(await fetchServicesData("en")) ?? [];
 
   return services
     .map((service) => pickSlug(service.slug, "en"))
@@ -30,10 +28,9 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const response = await fetchServiceDetailsData(slug, locale);
-  const service = isApiError(response)
-    ? null
-    : (response as { data: ApiService }).data ?? null;
+  const service = getResponseData<ApiService>(
+    await fetchServiceDetailsData(slug, locale),
+  );
 
   if (!service) {
     return { title: "Service Not Found" };
@@ -58,20 +55,15 @@ export default async function ServiceDetailsPage({
     fetchProjectsData(locale),
   ]);
 
-  const service = isApiError(serviceResponse)
-    ? null
-    : (serviceResponse as { data: ApiService }).data ?? null;
-
+  const service = getResponseData<ApiService>(serviceResponse);
   if (!service) {
     notFound();
   }
 
-  const projects = isApiError(projectsResponse)
-    ? []
-    : toProjectListItems(
-        (projectsResponse as { data: ApiProject[] }).data ?? [],
-        locale,
-      ).filter((project) => project.serviceSlugs.includes(slug));
+  const projects = toProjectListItems(
+    getResponseData<ApiProject[]>(projectsResponse) ?? [],
+    locale,
+  ).filter((project) => project.serviceSlugs.includes(slug));
 
   return (
     <ServiceDetailView service={service} projects={projects} locale={locale} />

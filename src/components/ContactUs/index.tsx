@@ -2,8 +2,13 @@ import { getTranslations } from "next-intl/server";
 import PageHero from "@/components/ui/PageHero";
 import ContactMainSection from "@/components/ContactUs/ContactMainSection";
 import ContactMapSection from "@/components/ContactUs/ContactMapSection";
+import type { LayoutContact } from "@/types/layoutTypes";
 
-export default async function ContactUsPage() {
+type ContactUsPageProps = {
+  contact?: LayoutContact | null;
+};
+
+export default async function ContactUsPage({ contact }: ContactUsPageProps) {
   const [t, tNav] = await Promise.all([
     getTranslations("contact"),
     getTranslations("nav"),
@@ -17,8 +22,8 @@ export default async function ContactUsPage() {
         description={t("hero.description")}
         currentLabel={tNav("contact")}
       />
-      <ContactMainSection />
-      <ContactMapSection />
+      <ContactMainSection contact={contact} />
+      <ContactMapSection mapEmbed={contact?.map_embed} />
     </>
   );
 }

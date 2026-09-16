@@ -6,15 +6,13 @@ import {
   fetchProductDetailsData,
   fetchProductsData,
 } from "@/api/productsService";
-import { isApiError } from "@/types/layoutTypes";
+import { getResponseData } from "@/lib/content";
 import { pickSlug } from "@/lib/localized-slug";
 import type { ApiProduct } from "@/types/contentTypes";
 
 export async function generateStaticParams() {
-  const response = await fetchProductsData("en");
-  const products = isApiError(response)
-    ? []
-    : ((response as { data: ApiProduct[] }).data ?? []);
+  const products =
+    getResponseData<ApiProduct[]>(await fetchProductsData("en")) ?? [];
 
   return products
     .map((product) => pickSlug(product.slug, "en"))
@@ -28,10 +26,9 @@ export async function generateMetadata({
   params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
   const { locale, slug } = await params;
-  const response = await fetchProductDetailsData(slug, locale);
-  const product = isApiError(response)
-    ? null
-    : (response as { data: ApiProduct }).data ?? null;
+  const product = getResponseData<ApiProduct>(
+    await fetchProductDetailsData(slug, locale),
+  );
 
   if (!product) {
     return { title: "Product Not Found" };
@@ -58,10 +55,9 @@ export default async function ProductDetailsPage({
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
-  const response = await fetchProductDetailsData(slug, locale);
-  const product = isApiError(response)
-    ? null
-    : (response as { data: ApiProduct }).data ?? null;
+  const product = getResponseData<ApiProduct>(
+    await fetchProductDetailsData(slug, locale),
+  );
 
   if (!product) {
     notFound();

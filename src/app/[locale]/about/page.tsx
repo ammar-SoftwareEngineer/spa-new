@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import WhoWeArePage from "@/components/WhoWeAre";
-
+import { fetchAboutData } from "@/api/aboutService";
+import { getResponseData } from "@/lib/content";
+import type { AboutData } from "@/types/contentTypes";
 
 export async function generateMetadata({
   params,
@@ -25,5 +27,7 @@ export default async function AboutPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return <WhoWeArePage />;
+  const about = getResponseData<AboutData>(await fetchAboutData(locale));
+
+  return <WhoWeArePage about={about} />;
 }

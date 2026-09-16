@@ -2,17 +2,11 @@ import { getTranslations } from "next-intl/server";
 import Section from "@/components/ui/Section";
 import HeaderSection from "@/components/ui/HeaderSection";
 import TeamMemberCard from "@/components/MeetOurTeam/TeamMemberCard";
+import type { TeamMemberCardData } from "@/components/MeetOurTeam/helpers";
 import { stripHtml } from "@/lib/utils";
 
-type Member = {
-  id: number;
-  name: string;
-  role: string;
-  image: string;
-};
-
 type OurTeamSectionProps = {
-  members?: Member[];
+  members?: TeamMemberCardData[];
   eyebrow?: string;
   title?: string;
   description?: string;

@@ -1,32 +1,29 @@
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { Phone, Mail, MapPin } from "lucide-react";
 
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
 import ContactForm from "@/components/ContactUs/ContactForm";
-import { fetchLayoutData } from "@/api/layoutService";
 import {
   formatLayoutPhone,
-  isApiError,
-  type LayoutApiResponse,
+  type LayoutContact,
 } from "@/types/layoutTypes";
 
-export default async function ContactMainSection() {
-  const [locale, t, tFooter] = await Promise.all([
-    getLocale(),
+type ContactMainSectionProps = {
+  contact?: LayoutContact | null;
+};
+
+export default async function ContactMainSection({
+  contact,
+}: ContactMainSectionProps) {
+  const [t, tFooter] = await Promise.all([
     getTranslations("contact"),
     getTranslations("footer"),
   ]);
 
-  const layoutResponse = await fetchLayoutData(locale);
-
-  const layout = isApiError(layoutResponse)
-    ? null
-    : (layoutResponse as LayoutApiResponse)?.data ?? null;
-
-  const phone = formatLayoutPhone(layout?.contact);
-  const email = layout?.contact?.email || "";
-  const address = layout?.contact?.address || tFooter("address");
+  const phone = formatLayoutPhone(contact);
+  const email = contact?.email || "";
+  const address = contact?.address || tFooter("address");
 
   const rows = [
     {

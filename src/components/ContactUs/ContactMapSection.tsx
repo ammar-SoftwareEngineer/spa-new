@@ -2,14 +2,20 @@ import { getTranslations } from "next-intl/server";
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
 
+type ContactMapSectionProps = {
+  mapEmbed?: string | null;
+};
 
-export default async function ContactMapSection() {
+const FALLBACK_MAP =
+  "https://maps.google.com/maps?q=136%20Othman%20Ibn%20Afan%20St.%20Heliopolis%20Cairo%20Egypt&t=&z=15&ie=UTF8&iwloc=&output=embed";
+
+export default async function ContactMapSection({
+  mapEmbed,
+}: ContactMapSectionProps) {
   const t = await getTranslations("contact.map");
 
   return (
     <Section variant="alt" className="px-0">
- 
-
       <Reveal>
         <div className="group relative overflow-hidden rounded-[28px] border border-border/60 shadow-[0_20px_56px_rgba(13,59,77,0.14)] md:rounded-[36px]">
           <div className="pointer-events-none absolute inset-4 z-[2] rounded-[22px] border border-white/0 transition-all duration-500 group-hover:border-white/20 md:inset-5 md:rounded-[26px]" />
@@ -19,7 +25,7 @@ export default async function ContactMapSection() {
           <div className="relative h-[360px] w-full sm:h-[420px] md:h-[500px] lg:h-[560px]">
             <iframe
               title={t("title")}
-              src="https://maps.google.com/maps?q=136%20Othman%20Ibn%20Afan%20St.%20Heliopolis%20Cairo%20Egypt&t=&z=15&ie=UTF8&iwloc=&output=embed"
+              src={mapEmbed || FALLBACK_MAP}
               className="absolute inset-0 h-full w-full border-0 grayscale-[30%] transition-[filter] duration-700 group-hover:grayscale-0"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
