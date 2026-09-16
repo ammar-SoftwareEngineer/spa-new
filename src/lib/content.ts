@@ -1,19 +1,17 @@
-/**
- * Shared content helpers (Fatin-style).
- * Keep section components dumb — normalize API shapes here / in feature helpers.
- */
 import { isApiError } from "@/types/layoutTypes";
 
-/** Normalize API field that may be a single object or an array. */
+/** If the API sends one item or a list, always return a list. */
 export function asArray<T>(value: T | T[] | null | undefined): T[] {
   if (!value) return [];
   return Array.isArray(value) ? value : [value];
 }
 
-/** Unwrap `{ data }` from a successful API response, or null on error. */
+/** Read `data` from an API response. Returns null when the request failed. */
 export function getResponseData<T>(response: unknown): T | null {
   if (isApiError(response)) return null;
   if (!response || typeof response !== "object") return null;
   if (!("data" in response)) return null;
-  return ((response as { data: T }).data ?? null) as T | null;
+
+  const data = (response as { data: T }).data;
+  return data ?? null;
 }

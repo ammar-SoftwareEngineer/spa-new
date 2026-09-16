@@ -7,6 +7,7 @@ export type TeamMemberCardData = {
   image: string;
 };
 
+/** Map API member fields into one simple card shape. */
 export function mapTeamMember(
   item: ApiTeamMember,
   index: number,

@@ -1,0 +1,41 @@
+---
+description: Keep spa-new code simple, readable, mid-level style
+alwaysApply: true
+---
+
+# spa-new coding style
+
+Write professional code that still reads like a careful mid-level engineer wrote it: clear names, short functions, obvious flow. Avoid clever abstractions.
+
+## Architecture
+
+1. **Route / page** — fetch data, unwrap with `getResponseData`, pass props down.
+2. **Feature `helpers.ts`** — map API shapes into simple view data.
+3. **Components** — render props only. No fetch. No API mapping.
+
+## API layer (`src/api`)
+
+- Put shared request logic in `client.ts` (`apiGet` / `apiPost`).
+- Keep each `*Service.ts` file tiny: one path per function.
+- Do not copy-paste try/catch in every service file.
+- Prefer plain comments like `// home page data` over long architecture essays.
+
+## Helpers & content
+
+- Use `asArray` / `getResponseData` from `src/lib/content.ts`.
+- Keep feature helpers next to the feature (`WhoWeAre/helpers.ts`, `Projects/helpers.ts`, …).
+- One helper = one job. Name functions after what they return (`mapPartners`, `getWhatWeDoItems`).
+
+## Components
+
+- Prefer props like `section` + `items` over digging into raw API objects in JSX.
+- Early return when there is nothing to show.
+- Short top-of-file comments only when the file’s role is not obvious.
+
+## Writing style
+
+- Readable > clever.
+- Explicit > abstract.
+- Small files > giant “utils” dumps.
+- Do not add layers “just in case”.
+- Match existing naming in the folder before inventing new patterns.

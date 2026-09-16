@@ -5,7 +5,10 @@ export type PartnerCardData = {
   logo: string;
 };
 
-export function mapPartners(items: ApiPartner[] | null | undefined): PartnerCardData[] {
+/** Keep only partners that have a logo we can show. */
+export function mapPartners(
+  items: ApiPartner[] | null | undefined,
+): PartnerCardData[] {
   return (items ?? [])
     .map((partner) => ({
       name: partner.name || partner.title || "Partner",
