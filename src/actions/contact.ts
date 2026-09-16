@@ -1,23 +1,12 @@
 "use server";
 
-/**
- * Server action for contact / inquiry / newsletter forms.
- * Validates with Zod, then posts via contactService.
- */
 import { sendContactData } from "@/api/contactService";
-import {
-  contactSchema,
-  type ContactFormValues,
-} from "@/lib/validation/contact.schema";
+import { contactSchema, type ContactFormValues } from "@/lib/validation/contact.schema";
 import { isApiError } from "@/types/layoutTypes";
 
-export type ContactActionResult =
-  | { ok: true }
-  | { ok: false; error: string };
+export type ContactActionResult = { ok: true } | { ok: false; error: string };
 
-export async function contactAction(
-  data: ContactFormValues,
-): Promise<ContactActionResult> {
+export async function contactAction(data: ContactFormValues): Promise<ContactActionResult> {
   const parsed = contactSchema.safeParse(data);
 
   if (!parsed.success) {

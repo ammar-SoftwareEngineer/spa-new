@@ -1,6 +1,3 @@
-/**
- * FooterNewsletter — newsletter signup form.
- */
 "use client";
 
 import { useState } from "react";
@@ -11,7 +8,7 @@ import { contactAction } from "@/actions/contact";
 export default function FooterNewsletter() {
   const t = useTranslations("footer");
   const locale = useLocale();
-  const isRtl = locale === "ar";
+  const isAr = locale === "ar";
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -50,7 +47,7 @@ export default function FooterNewsletter() {
           className="rounded-full border border-border bg-white px-5 py-3 text-[0.85rem] text-text-primary outline-none transition-all duration-300 focus:border-brand focus:shadow-[0_0_10px_rgba(33,118,149,0.15)] dark:border-white/10 dark:bg-white/5 dark:text-white"
           required
         />
-        <Button type="submit" className="w-full" rtl={isRtl} disabled={status === "loading"}>
+        <Button type="submit" className="w-full" rtl={isAr} disabled={status === "loading"}>
           {t("subscribeBtn")}
         </Button>
         {status === "done" ? (

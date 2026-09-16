@@ -1,6 +1,3 @@
-/**
- * Section — page section with optional background and inner Container.
- */
 import Container from "@/components/ui/Container";
 
 type SectionProps = React.ComponentPropsWithoutRef<"section"> & {

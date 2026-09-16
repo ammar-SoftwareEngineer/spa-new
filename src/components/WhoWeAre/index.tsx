@@ -20,10 +20,8 @@ type WhoWeArePageProps = {
 };
 
 export default async function WhoWeArePage({ about }: WhoWeArePageProps) {
-  const [t, tNav] = await Promise.all([
-    getTranslations("about"),
-    getTranslations("nav"),
-  ]);
+  const t = await getTranslations("about");
+  const tNav = await getTranslations("nav");
 
   const { mission, vision } = getMissionVision(about);
   const breadcrumb = about?.breadcrumb_section;
@@ -31,13 +29,8 @@ export default async function WhoWeArePage({ about }: WhoWeArePageProps) {
   return (
     <>
       <PageHero
-        eyebrow={breadcrumb?.sub_title || t("hero.eyebrow")}
         title={breadcrumb?.title || t("hero.title")}
-        description={
-          stripHtml(breadcrumb?.text) ||
-          breadcrumb?.sub_title ||
-          t("hero.description")
-        }
+        description={stripHtml(breadcrumb?.text) || breadcrumb?.sub_title || t("hero.description")}
         currentLabel={tNav("whoWeAre")}
         imageSrc={breadcrumb?.image}
       />
@@ -45,14 +38,8 @@ export default async function WhoWeArePage({ about }: WhoWeArePageProps) {
       <CountersSection items={getStatisticsItems(about)} />
       <MissionSection section={mission} />
       <VisionSection section={vision} />
-      <WhatWeDoSection
-        section={about?.what_we_do_section}
-        items={getWhatWeDoItems(about)}
-      />
-      <IsoSection
-        section={about?.certifications_section}
-        items={getCertificationItems(about)}
-      />
+      <WhatWeDoSection section={about?.what_we_do_section} items={getWhatWeDoItems(about)} />
+      <IsoSection section={about?.certifications_section} items={getCertificationItems(about)} />
     </>
   );
 }

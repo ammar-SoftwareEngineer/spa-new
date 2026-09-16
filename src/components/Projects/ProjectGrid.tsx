@@ -28,10 +28,7 @@ export default function ProjectGrid({ projects }: ProjectGridProps) {
           title={project.title}
           description={project.description}
           location={project.location}
-          tags={[
-            ...project.categoryLabels.slice(0, 1),
-            ...project.sectorLabels.slice(0, 1),
-          ]}
+          tags={[...project.categoryLabels.slice(0, 1), ...project.sectorLabels.slice(0, 1)]}
           index={index}
           delay={Math.min(index, 8) * 0.06}
         />

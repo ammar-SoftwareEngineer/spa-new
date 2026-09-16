@@ -12,10 +12,8 @@ type MeetOurTeamPageProps = {
 };
 
 export default async function MeetOurTeamPage({ data }: MeetOurTeamPageProps) {
-  const [t, tNav] = await Promise.all([
-    getTranslations("team"),
-    getTranslations("nav"),
-  ]);
+  const t = await getTranslations("team");
+  const tNav = await getTranslations("nav");
 
   const board = mapTeamMembers(data?.board_members);
   const team = mapTeamMembers(data?.members);
@@ -23,12 +21,9 @@ export default async function MeetOurTeamPage({ data }: MeetOurTeamPageProps) {
   return (
     <>
       <PageHero
-        eyebrow={t("hero.eyebrow")}
         title={data?.breadcrumb?.title || t("hero.title")}
         description={
-          stripHtml(data?.breadcrumb?.text) ||
-          data?.breadcrumb?.sub_title ||
-          t("hero.description")
+          stripHtml(data?.breadcrumb?.text) || data?.breadcrumb?.sub_title || t("hero.description")
         }
         currentLabel={data?.breadcrumb?.title || tNav("meetOurTeam")}
         imageSrc={data?.breadcrumb?.image}

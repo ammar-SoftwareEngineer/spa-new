@@ -5,11 +5,13 @@ import { fetchAboutData } from "@/api/aboutService";
 import { getResponseData } from "@/lib/content";
 import type { AboutData } from "@/types/contentTypes";
 
-export async function generateMetadata({
-  params,
-}: {
+export const revalidate = 60;
+
+type AboutPageProps = {
   params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+};
+
+export async function generateMetadata({ params }: AboutPageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "about" });
 
@@ -19,15 +21,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function AboutPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function AboutPage({ params }: AboutPageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const about = getResponseData<AboutData>(await fetchAboutData(locale));
+  const res = await fetchAboutData(locale);
+  const about = getResponseData<AboutData>(res);
 
   return <WhoWeArePage about={about} />;
 }

@@ -1,6 +1,3 @@
-/**
- * Home page composer — receives GET /home data and renders sections.
- */
 import HeroSection from "@/components/home/HeroSection";
 import WhoWeAre from "@/components/home/WhoWeAre";
 import Services from "@/components/home/Services";

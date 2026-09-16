@@ -12,11 +12,9 @@ type BlogsProps = {
 };
 
 export default async function Blogs({ section }: BlogsProps) {
-  const [t, locale] = await Promise.all([
-    getTranslations("home.articles"),
-    getLocale(),
-  ]);
-  const isRtl = locale === "ar";
+  const t = await getTranslations("home.articles");
+  const locale = await getLocale();
+  const isAr = locale === "ar";
   const posts = section.blogs ?? [];
 
   return (
@@ -26,7 +24,7 @@ export default async function Blogs({ section }: BlogsProps) {
         title={section.title}
         align="start"
         action={
-          <Button href={section.button_link_url || "/articles"} className="shrink-0" rtl={isRtl}>
+          <Button href={section.button_link_url || "/articles"} className="shrink-0" rtl={isAr}>
             {section.button_text || t("viewAll")}
           </Button>
         }
@@ -44,7 +42,10 @@ export default async function Blogs({ section }: BlogsProps) {
               <Reveal key={blog.id} delay={index * 0.08}>
                 <article className="flex flex-col gap-4 sm:flex-row">
                   {blog.image ? (
-                    <a href={href} className="relative h-[160px] w-full shrink-0 overflow-hidden rounded-[22px] sm:w-[200px]">
+                    <a
+                      href={href}
+                      className="relative h-[160px] w-full shrink-0 overflow-hidden rounded-[22px] sm:w-[200px]"
+                    >
                       <Image
                         src={blog.image}
                         alt={title}
@@ -59,7 +60,7 @@ export default async function Blogs({ section }: BlogsProps) {
                     {excerpt ? (
                       <p className="m-0 text-[0.9rem] text-text-secondary">{excerpt}</p>
                     ) : null}
-                    <Button href={href} className="w-fit" rtl={isRtl}>
+                    <Button href={href} className="w-fit" rtl={isAr}>
                       {t("readMore")}
                     </Button>
                   </div>

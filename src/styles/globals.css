@@ -182,8 +182,8 @@
     font-size: 0.9rem;
   }
 
-  .btn-skew>span,
-  .btn.btn-brand>span {
+  .btn-skew > span,
+  .btn.btn-brand > span {
     @apply relative z-10 inline-flex items-center gap-2;
     padding: 0.7em 1.25em;
     transition: color 0.4s;
@@ -220,7 +220,7 @@
     font-size: 0.9rem;
   }
 
-  .btn.btn-navy>span {
+  .btn.btn-navy > span {
     @apply relative z-10 inline-flex items-center gap-2;
     padding: 0.7em 1.25em;
     transition: color 0.4s;
@@ -247,9 +247,9 @@
     transform: scale(0.95);
   }
 
-  .btn-skew-lg>span,
-  .btn-skew.btn-skew-lg>span,
-  .btn.btn-brand.btn-skew-lg>span {
+  .btn-skew-lg > span,
+  .btn-skew.btn-skew-lg > span,
+  .btn.btn-brand.btn-skew-lg > span {
     padding: 0.8em 1.45em;
     font-size: 0.95rem;
   }
@@ -262,7 +262,7 @@
     font-size: 0.9rem;
   }
 
-  .btn.btn-outline>span {
+  .btn.btn-outline > span {
     @apply relative z-10 inline-flex items-center gap-2;
     padding: 0.68em 1.2em;
     transition: color 0.4s;
@@ -286,7 +286,7 @@
     color: var(--btn-skew-text);
   }
 
-  .btn.btn-outline:hover>span {
+  .btn.btn-outline:hover > span {
     color: var(--btn-skew-text);
   }
 
@@ -316,7 +316,6 @@
 }
 
 @keyframes blink {
-
   0%,
   100% {
     opacity: 0;
@@ -401,8 +400,6 @@
   --swiper-navigation-color: #ffffff;
   --swiper-navigation-size: 22px;
 }
-
-
 
 @media (max-width: 639px) {
   .project-gallery-main .swiper-button-prev,

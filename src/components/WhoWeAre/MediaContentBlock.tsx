@@ -1,6 +1,3 @@
-/**
- * MediaContentBlock — side-by-side image + text (About / Mission / Vision).
- */
 import Image from "next/image";
 import Reveal from "@/components/ui/Reveal";
 
@@ -23,9 +20,7 @@ export default function MediaContentBlock({
 }: MediaContentBlockProps) {
   return (
     <div className="grid grid-cols-12 items-center gap-8 lg:gap-16">
-      <Reveal
-        className={`relative col-span-12 md:col-span-6 ${reverse ? "md:order-2" : ""}`}
-      >
+      <Reveal className={`relative col-span-12 md:col-span-6 ${reverse ? "md:order-2" : ""}`}>
         <div className="group relative mx-auto aspect-[4/3] w-full overflow-hidden rounded-[28px] border border-border md:aspect-[5/4]">
           <Image
             src={imageSrc}
@@ -46,9 +41,15 @@ export default function MediaContentBlock({
         <span className="text-[0.85rem] font-bold uppercase tracking-[0.12em] text-brand">
           {eyebrow}
         </span>
-        <h2 className="text-[2rem] font-bold leading-[1.2] text-text-primary md:text-[2.6rem]" dangerouslySetInnerHTML={{ __html: title }} />
-   
-        <p className="max-w-[540px] text-[1.02rem] leading-[1.8] text-text-secondary" dangerouslySetInnerHTML={{ __html: text }} />
+        <h2
+          className="text-[2rem] font-bold leading-[1.2] text-text-primary md:text-[2.6rem]"
+          dangerouslySetInnerHTML={{ __html: title }}
+        />
+
+        <p
+          className="max-w-[540px] text-[1.02rem] leading-[1.8] text-text-secondary"
+          dangerouslySetInnerHTML={{ __html: text }}
+        />
       </Reveal>
     </div>
   );

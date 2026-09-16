@@ -6,11 +6,13 @@ import { fetchProductsData } from "@/api/productsService";
 import { getResponseData } from "@/lib/content";
 import type { ApiProduct } from "@/types/contentTypes";
 
-export async function generateMetadata({
-  params,
-}: {
+export const revalidate = 60;
+
+type ProductsPageProps = {
   params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+};
+
+export async function generateMetadata({ params }: ProductsPageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "products" });
 
@@ -20,18 +22,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProductsPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function ProductsPage({ params }: ProductsPageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const products = mapProductCards(
-    getResponseData<ApiProduct[]>(await fetchProductsData(locale)) ?? [],
-    locale,
-  );
+  const res = await fetchProductsData(locale);
+  const list = getResponseData<ApiProduct[]>(res) ?? [];
+  const products = mapProductCards(list, locale);
 
   return <ProductsPageView products={products} />;
 }

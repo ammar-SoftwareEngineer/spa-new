@@ -1,11 +1,12 @@
 ---
-description: Keep spa-new code simple, readable, mid-level style
+description: Keep spa-new code simple, readable, mid-level style (same voice as arcwood)
 alwaysApply: true
 ---
 
 # spa-new coding style
 
-Write professional code that still reads like a careful mid-level engineer wrote it: clear names, short functions, obvious flow. Avoid clever abstractions.
+Write code the same way it is written in `arcwood-ecommerce`: short, plain, no ceremony.
+A mid-level dev should read any file top to bottom without jumping around.
 
 ## Architecture
 
@@ -13,29 +14,59 @@ Write professional code that still reads like a careful mid-level engineer wrote
 2. **Feature `helpers.ts`** — map API shapes into simple view data.
 3. **Components** — render props only. No fetch. No API mapping.
 
+## Pages (`src/app/[locale]/**/page.tsx`)
+
+- `export const revalidate = 60;` at the top when the page hits the API.
+- Props type above the component: `type AboutPageProps = { params: Promise<{ locale: string }> };`
+  and reuse it in `generateMetadata`. No inline `{ params }: { params: Promise<...> }`.
+- Fetch then unwrap on two lines:
+  ```ts
+  const res = await fetchAboutData(locale);
+  const about = getResponseData<AboutData>(res);
+  ```
+  Not `getResponseData(await fetchX())` nested in one line.
+- Tiny page-only helpers (like `parsePage`) live in the page file, not in `lib`.
+
+## Async in server components
+
+- One `await` per line: `const t = await getTranslations("x"); const locale = await getLocale();`
+- `Promise.all` only for real parallel **API requests**, never for `getTranslations` / `getLocale`.
+- Locale flag is always `const isAr = locale === "ar";` (not `isRtl`).
+
 ## API layer (`src/api`)
 
-- Put shared request logic in `client.ts` (`apiGet` / `apiPost`).
-- Keep each `*Service.ts` file tiny: one path per function.
-- Do not copy-paste try/catch in every service file.
-- Prefer plain comments like `// home page data` over long architecture essays.
+- Shared request logic lives in `client.ts` (`apiGet` / `apiPost`).
+- Each `*Service.ts` is one path per function. No copy-pasted try/catch.
 
 ## Helpers & content
 
 - Use `asArray` / `getResponseData` from `src/lib/content.ts`.
 - Keep feature helpers next to the feature (`WhoWeAre/helpers.ts`, `Projects/helpers.ts`, …).
-- One helper = one job. Name functions after what they return (`mapPartners`, `getWhatWeDoItems`).
+- One helper = one job. Name it after what it returns (`mapPartners`, `getWhatWeDoItems`).
 
 ## Components
 
-- Prefer props like `section` + `items` over digging into raw API objects in JSX.
+- `"use client"` is always line 1. Imports after it. Nothing above it.
+- Props type is `type XProps = { ... }` right above the component.
+- Derive plain consts at the top, then a single `return`.
 - Early return when there is nothing to show.
-- Short top-of-file comments only when the file’s role is not obvious.
+- No unused props renamed with `_`. Remove them from the type and from callers.
+
+## Comments
+
+- Use `// one short line` only. No `/** JSDoc */` blocks.
+- Comment the *why* when it is not obvious. Do not describe what the code already says.
+
+## Before you finish
+
+- `npm run format` then `npm run lint` then `npx tsc --noEmit`. All three must be clean.
+- No unused imports, props, or variables. Delete them, do not rename with `_`.
+- No `setState` directly inside `useEffect`. Reset-on-prop-change → `key` remount or adjust state during render. Browser values (theme, size) → `useSyncExternalStore`.
+- Icons from API strings go through `<DynamicIcon name="..." />`, never `const Icon = getIcon(...)` in render.
 
 ## Writing style
 
-- Readable > clever.
-- Explicit > abstract.
-- Small files > giant “utils” dumps.
-- Do not add layers “just in case”.
+- Readable > clever. Explicit > abstract.
+- Small files > giant "utils" dumps. Do not add layers "just in case".
 - Match existing naming in the folder before inventing new patterns.
+- Never change Tailwind classes / design while restyling code.

@@ -9,15 +9,12 @@ type ContactUsPageProps = {
 };
 
 export default async function ContactUsPage({ contact }: ContactUsPageProps) {
-  const [t, tNav] = await Promise.all([
-    getTranslations("contact"),
-    getTranslations("nav"),
-  ]);
+  const t = await getTranslations("contact");
+  const tNav = await getTranslations("nav");
 
   return (
     <>
       <PageHero
-        eyebrow={t("hero.eyebrow")}
         title={t("hero.title")}
         description={t("hero.description")}
         currentLabel={tNav("contact")}

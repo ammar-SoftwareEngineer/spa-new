@@ -5,11 +5,11 @@ import { motion, useReducedMotion } from "framer-motion";
 type RevealProps = {
   children: React.ReactNode;
   className?: string;
-  /** Delay in seconds, e.g. index * 0.08 */
+  // Delay in seconds, e.g. index * 0.08
   delay?: number;
 };
 
-/** Fade + slide up once when the element enters the viewport. */
+// Fade + slide up once when the element enters the viewport.
 export default function Reveal({ children, className, delay = 0 }: RevealProps) {
   const reduceMotion = useReducedMotion();
 

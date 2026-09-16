@@ -1,7 +1,3 @@
-/**
- * ProductDetailContent — product detail page body.
- * Combines overview (server) with gallery + form (client).
- */
 import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import ProductOverview from "@/components/Products/ProductOverview";
@@ -20,7 +16,6 @@ type ProductDetailContentProps = {
   categoryDetail: string;
   featureLabels: string[];
   lines: LineView[];
-  startIndex?: number;
   productsLabel: string;
   pagination?: ReactNode;
 };
@@ -31,7 +26,6 @@ export default async function ProductDetailContent({
   categoryDetail,
   featureLabels,
   lines,
-  startIndex = 0,
   productsLabel,
   pagination,
 }: ProductDetailContentProps) {
@@ -49,13 +43,7 @@ export default async function ProductDetailContent({
         visitWebsiteLabel={t("detail.visitWebsite")}
       />
 
-      <ProductLinesAndForm
-        productSlug={product.slug}
-        categoryTitle={categoryTitle}
-        lines={lines}
-        startIndex={startIndex}
-        pagination={pagination}
-      />
+      <ProductLinesAndForm categoryTitle={categoryTitle} lines={lines} pagination={pagination} />
     </>
   );
 }

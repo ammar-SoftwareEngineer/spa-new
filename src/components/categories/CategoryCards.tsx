@@ -1,6 +1,3 @@
-/**
- * CategoryCards — category card grid.
- */
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";

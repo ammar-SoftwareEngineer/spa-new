@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 
-/** CSS-only motion — no framer cost on the hero critical path. */
+// CSS-only motion — no framer cost on the hero critical path.
 export default function HeroScroll() {
   const t = useTranslations("home.hero");
 
@@ -19,7 +19,6 @@ export default function HeroScroll() {
           {t("scrollDown")}
         </span>
       </div>
-
     </a>
   );
 }

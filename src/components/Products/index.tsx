@@ -8,18 +8,13 @@ type ProductsPageViewProps = {
   products: ProductCardData[];
 };
 
-export default async function ProductsPageView({
-  products,
-}: ProductsPageViewProps) {
-  const [t, tNav] = await Promise.all([
-    getTranslations("products"),
-    getTranslations("nav"),
-  ]);
+export default async function ProductsPageView({ products }: ProductsPageViewProps) {
+  const t = await getTranslations("products");
+  const tNav = await getTranslations("nav");
 
   return (
     <>
       <PageHero
-        eyebrow={t("hero.eyebrow")}
         title={t("hero.title")}
         description={t("hero.description")}
         currentLabel={tNav("products")}
@@ -27,9 +22,7 @@ export default async function ProductsPageView({
 
       <Section className="overflow-x-clip py-20 md:py-28">
         {products.length === 0 ? (
-          <p className="text-center text-text-secondary">
-            {t("hero.description")}
-          </p>
+          <p className="text-center text-text-secondary">{t("hero.description")}</p>
         ) : (
           <div className="grid grid-cols-1 items-stretch gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 md:gap-7">
             {products.map((product, index) => (

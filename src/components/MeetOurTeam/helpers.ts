@@ -7,11 +7,8 @@ export type TeamMemberCardData = {
   image: string;
 };
 
-/** Map API member fields into one simple card shape. */
-export function mapTeamMember(
-  item: ApiTeamMember,
-  index: number,
-): TeamMemberCardData {
+// Map API member fields into one simple card shape.
+export function mapTeamMember(item: ApiTeamMember, index: number): TeamMemberCardData {
   return {
     id: item.id ?? index,
     name: item.name || "",

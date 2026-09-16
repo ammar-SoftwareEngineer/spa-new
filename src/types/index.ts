@@ -5,9 +5,9 @@ export type LocalizedText = Record<AppLocale, string>;
 export type NavItem = {
   key: string;
   href: string;
-  /** API / CMS title — preferred over i18n when present */
+  // API / CMS title — preferred over i18n when present
   label?: string;
-  /** If true, the link downloads a file instead of opening a page */
+  // If true, the link downloads a file instead of opening a page
   download?: boolean;
   children?: NavItem[];
 };

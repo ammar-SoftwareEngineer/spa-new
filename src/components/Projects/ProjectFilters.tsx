@@ -1,7 +1,3 @@
-/**
- * ProjectFilters — project filter bar (scope / sector / sort / search).
- * Takes one filters object instead of many separate props.
- */
 "use client";
 
 import { useTranslations } from "next-intl";
@@ -38,11 +34,7 @@ type ProjectFiltersProps = {
 const inputClass =
   "w-full min-h-11 appearance-none rounded-xl border border-border bg-bg-primary px-3 py-2.5 pe-10 text-[0.88rem] text-text-primary outline-none transition-[border-color,box-shadow] focus:border-brand focus:shadow-[0_0_0_3px_rgba(33,118,149,0.15)] sm:px-4 sm:py-3 sm:text-[0.92rem]";
 
-export default function ProjectFilters({
-  categories,
-  sectors,
-  filters,
-}: ProjectFiltersProps) {
+export default function ProjectFilters({ categories, sectors, filters }: ProjectFiltersProps) {
   const t = useTranslations("projects");
   const tSectors = useTranslations("home.sectors");
 

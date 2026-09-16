@@ -9,10 +9,7 @@ function apiError(message: string): ApiErrorResult {
   return { success: false, message };
 }
 
-/**
- * Simple GET helper used by all page APIs.
- * Returns JSON on success, or `{ success: false, message }` on failure.
- */
+// GET helper for all page APIs. Returns JSON, or { success: false, message } on failure.
 export async function apiGet(path: string, lang = "en") {
   const base = getApiBase();
   if (!base) {
@@ -41,9 +38,7 @@ export async function apiGet(path: string, lang = "en") {
   }
 }
 
-/**
- * Simple POST helper (used by the contact form).
- */
+// POST helper (contact + inquiry forms)
 export async function apiPost(path: string, body: unknown) {
   const base = getApiBase();
   if (!base) {

@@ -1,6 +1,3 @@
-/**
- * DesktopNav — desktop navigation with dropdowns.
- */
 "use client";
 
 import { ChevronDown } from "lucide-react";
@@ -72,9 +69,7 @@ export default function DesktopNav({
 
             <div
               className={`absolute start-0 top-full z-50 pt-2 transition-opacity duration-200 ${
-                isOpen
-                  ? "pointer-events-auto opacity-100"
-                  : "pointer-events-none opacity-0"
+                isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
               }`}
             >
               <ul className="grid min-w-[200px] list-none gap-2 rounded-[18px] border border-border bg-bg-primary py-2 shadow-[0_8px_24px_rgba(0,0,0,0.08)]">

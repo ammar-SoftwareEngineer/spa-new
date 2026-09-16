@@ -1,6 +1,3 @@
-/**
- * Footer — site footer (brand + links + contact + newsletter).
- */
 import { getTranslations } from "next-intl/server";
 import Container from "@/components/ui/Container";
 import FooterBrand from "@/components/layout/footer/FooterBrand";
@@ -32,16 +29,8 @@ export default async function Footer({ data }: FooterProps) {
     >
       <Container className="relative z-[1] flex flex-col gap-[50px]">
         <div className="grid grid-cols-1 gap-[30px] sm:grid-cols-2 lg:grid-cols-[1.2fr_0.8fr_1fr_1fr] lg:gap-10">
-          <FooterBrand
-            branding={data.branding}
-            social={data.social}
-            about={t("about")}
-          />
-          <FooterLinks
-            title={t("links")}
-            links={data.footerLinks}
-            label={tNav}
-          />
+          <FooterBrand branding={data.branding} social={data.social} about={t("about")} />
+          <FooterLinks title={t("links")} links={data.footerLinks} label={tNav} />
           <FooterContact
             title={t("contact")}
             contact={data.contact}

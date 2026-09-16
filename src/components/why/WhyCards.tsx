@@ -3,7 +3,7 @@
 import { ArrowRight } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
 import CountUp from "@/components/ui/CountUp";
-import { getIcon } from "@/components/ui/icons";
+import { DynamicIcon } from "@/components/ui/icons";
 import type { WhyMetric } from "@/types";
 
 const cardBase =
@@ -22,7 +22,9 @@ function HoverBg({ variant }: { variant: "metric" | "highlight" | "cta" }) {
       <>
         <div className="pointer-events-none absolute inset-0 z-0 origin-top-right scale-0 bg-gradient-to-bl from-white/25 via-white/5 to-transparent transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-100" />
         <div className="pointer-events-none absolute -end-10 -top-10 z-0 h-32 w-32 rounded-full bg-white/0 blur-2xl transition-all duration-700 group-hover:end-2 group-hover:top-2 group-hover:bg-white/20" />
-        <div className={`${dots} z-[2] transition-opacity duration-700 group-hover:opacity-40 [background-image:radial-gradient(rgba(255,255,255,0.12)_1.2px,transparent_1.2px)]`} />
+        <div
+          className={`${dots} z-[2] transition-opacity duration-700 group-hover:opacity-40 [background-image:radial-gradient(rgba(255,255,255,0.12)_1.2px,transparent_1.2px)]`}
+        />
       </>
     );
   }
@@ -53,8 +55,8 @@ type Props = {
 
 export function WhyMetricCard({ item, staggerIndex, title, description }: Props) {
   const isHighlight = item.isHighlight === true;
-  const Icon = item.icon ? getIcon(item.icon) : null;
-  const isYearsOfExperience = title.includes("Years of Experience");
+  const showPlus = title.includes("Years of Experience");
+
   return (
     <Reveal delay={staggerIndex * 0.08} className={isHighlight ? highlightClass : metricClass}>
       <HoverBg variant={isHighlight ? "highlight" : "metric"} />
@@ -64,9 +66,10 @@ export function WhyMetricCard({ item, staggerIndex, title, description }: Props)
             isHighlight ? "text-white" : "text-brand group-hover:text-white"
           }`}
         >
-          {isYearsOfExperience ? <span>+ <CountUp value={item.rawNumber} duration={2.5} /></span>  : <CountUp value={item.rawNumber} duration={2.5} />} 
+          {showPlus ? "+ " : null}
+          <CountUp value={item.rawNumber} duration={2.5} />
         </div>
-        {Icon ? (
+        {item.icon ? (
           <span
             className={`transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:scale-[1.06] ${
               isHighlight
@@ -74,7 +77,7 @@ export function WhyMetricCard({ item, staggerIndex, title, description }: Props)
                 : "text-text-muted opacity-60 group-hover:text-white group-hover:opacity-100"
             }`}
           >
-            <Icon size={26} />
+            <DynamicIcon name={item.icon} size={26} />
           </span>
         ) : null}
       </div>
@@ -87,7 +90,9 @@ export function WhyMetricCard({ item, staggerIndex, title, description }: Props)
       </h3>
       <p
         className={`relative z-[3] text-[0.88rem] leading-[1.6] transition-colors duration-700 ${
-          isHighlight ? "text-white/85 group-hover:text-white" : "text-text-secondary group-hover:text-white/85"
+          isHighlight
+            ? "text-white/85 group-hover:text-white"
+            : "text-text-secondary group-hover:text-white/85"
         }`}
       >
         {description}

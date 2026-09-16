@@ -8,18 +8,13 @@ type ServicesPageViewProps = {
   services: ServiceCardData[];
 };
 
-export default async function ServicesPageView({
-  services,
-}: ServicesPageViewProps) {
-  const [t, tNav] = await Promise.all([
-    getTranslations("services"),
-    getTranslations("nav"),
-  ]);
+export default async function ServicesPageView({ services }: ServicesPageViewProps) {
+  const t = await getTranslations("services");
+  const tNav = await getTranslations("nav");
 
   return (
     <>
       <PageHero
-        eyebrow={t("hero.eyebrow")}
         title={t("hero.title")}
         description={t("hero.description")}
         currentLabel={tNav("services")}

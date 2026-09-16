@@ -1,6 +1,3 @@
-/**
- * InquirySuccess — success state after submitting a product inquiry.
- */
 "use client";
 
 import { CheckCircle2 } from "lucide-react";

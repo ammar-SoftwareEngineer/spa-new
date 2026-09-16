@@ -1,6 +1,3 @@
-/**
- * Locale layout — fonts, header/footer, and base SEO metadata.
- */
 import type { Metadata } from "next";
 import { Cairo, Bebas_Neue, Open_Sans } from "next/font/google";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
@@ -10,14 +7,14 @@ import "@/styles/globals.css";
 import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
 import { fetchLayoutData } from "@/api/layoutService";
-import { formatLayoutPhone, type LayoutData } from "@/types/layoutTypes";
+import { type LayoutData } from "@/types/layoutTypes";
 import { getResponseData } from "@/lib/content";
-import { mapFooterLinks, mapLayoutMenu } from "@/components/layout/header/navUtils";
+import { mapLayoutFooter, mapLayoutMenu } from "@/components/layout/header/navUtils";
 import { routing } from "@/i18n/routing";
 import { getBaseUrl } from "@/lib/utils";
 import type { NavItem } from "@/types";
 
-/** Fallback nav when layout API is unavailable. */
+// Fallback nav when layout API is unavailable.
 const FALLBACK_NAV: NavItem[] = [
   { key: "home", href: "/", label: "Home" },
   { key: "about", href: "/about", label: "About Us" },
@@ -51,11 +48,12 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
+type LocaleLayoutProps = {
+  children: React.ReactNode;
   params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+};
+
+export async function generateMetadata({ params }: LocaleLayoutProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
   const base = getBaseUrl();
@@ -96,12 +94,7 @@ export async function generateMetadata({
   };
 }
 
-type Props = {
-  children: React.ReactNode;
-  params: Promise<{ locale: string }>;
-};
-
-export default async function LocaleLayout({ children, params }: Props) {
+export default async function LocaleLayout({ children, params }: LocaleLayoutProps) {
   const { locale } = await params;
 
   if (!hasLocale(routing.locales, locale)) {
@@ -110,34 +103,14 @@ export default async function LocaleLayout({ children, params }: Props) {
 
   setRequestLocale(locale);
   const messages = await getMessages();
-  const layoutResponse = await fetchLayoutData(locale);
 
-  const layout = getResponseData<LayoutData>(layoutResponse);
+  const res = await fetchLayoutData(locale);
+  const layout = getResponseData<LayoutData>(res);
 
   const navItems = mapLayoutMenu(layout?.menu);
-  const footerLinks = mapFooterLinks(layout?.footer?.links);
-  const logoSrc = layout?.branding?.logo || "/img/logo.png";
-
   const headerNav = navItems.length > 0 ? navItems : FALLBACK_NAV;
-  const footerNav = footerLinks.length > 0 ? footerLinks : FALLBACK_NAV.filter((item) => item.href !== "/");
-
-  const footerData = {
-    branding: {
-      name: layout?.branding?.site_name || "S&PA",
-      logo: logoSrc,
-    },
-    contact: {
-      phone: formatLayoutPhone(layout?.contact) || "",
-      email: layout?.contact?.email || "",
-      address: layout?.contact?.address || undefined,
-    },
-    social: (layout?.social_links ?? []).map((link) => ({
-      name: link.platform,
-      href: link.url,
-    })),
-    footerLinks: footerNav,
-    copyright: layout?.footer?.copyright ?? null,
-  };
+  const logoSrc = layout?.branding?.logo || "/img/logo.png";
+  const footerData = mapLayoutFooter(layout, FALLBACK_NAV);
 
   return (
     <html

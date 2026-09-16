@@ -1,16 +1,12 @@
-/**
- * Layout menu helpers — resolve API links and map to NavItem[].
- */
-import type { LayoutFooterLink, LayoutMenuItem } from "@/types/layoutTypes";
+import type { LayoutFooterLink, LayoutMenuItem, LayoutData } from "@/types/layoutTypes";
+import { formatLayoutPhone } from "@/types/layoutTypes";
 import type { NavItem } from "@/types";
+import type { FooterData } from "@/components/layout/footer/Footer";
 import menuRoutes from "@/lib/data/menu-routes.json";
 
 const routes = menuRoutes as Record<string, string>;
 
-/**
- * Clean one API link into an internal path.
- * Empty link → fallback from menu-routes.json by id.
- */
+// Empty link falls back to menu-routes.json by id.
 export function resolveLink(item: {
   id?: number;
   link?: string | null;
@@ -20,7 +16,7 @@ export function resolveLink(item: {
   const raw = (item.link || item.href || item.url || "").trim();
 
   if (!raw) {
-    return item.id != null ? routes[String(item.id)] ?? "#" : "#";
+    return item.id != null ? (routes[String(item.id)] ?? "#") : "#";
   }
 
   try {
@@ -41,15 +37,12 @@ function hrefToKey(href: string, id?: number): string {
   return cleaned || (id != null ? String(id) : "item");
 }
 
-/** Convert API menu items into NavItem[] for Header / Footer. */
 export function mapLayoutMenu(menu: LayoutMenuItem[] | null | undefined): NavItem[] {
   if (!menu?.length) return [];
 
   return menu.map((item) => {
     const href = resolveLink(item);
-    const children = item.children?.length
-      ? mapLayoutMenu(item.children)
-      : undefined;
+    const children = item.children?.length ? mapLayoutMenu(item.children) : undefined;
 
     return {
       key: hrefToKey(href, item.id),
@@ -60,10 +53,7 @@ export function mapLayoutMenu(menu: LayoutMenuItem[] | null | undefined): NavIte
   });
 }
 
-/** Map footer quick links from layout footer.links. */
-export function mapFooterLinks(
-  links: LayoutFooterLink[] | null | undefined,
-): NavItem[] {
+export function mapFooterLinks(links: LayoutFooterLink[] | null | undefined): NavItem[] {
   if (!links?.length) return [];
 
   return links
@@ -76,4 +66,29 @@ export function mapFooterLinks(
         label: link.title!,
       };
     });
+}
+
+// Build footer props from layout API (+ fallback nav links).
+export function mapLayoutFooter(layout: LayoutData | null, fallbackNav: NavItem[]): FooterData {
+  const footerLinks = mapFooterLinks(layout?.footer?.links);
+  const links =
+    footerLinks.length > 0 ? footerLinks : fallbackNav.filter((item) => item.href !== "/");
+
+  return {
+    branding: {
+      name: layout?.branding?.site_name || "S&PA",
+      logo: layout?.branding?.logo || "/img/logo.png",
+    },
+    contact: {
+      phone: formatLayoutPhone(layout?.contact) || "",
+      email: layout?.contact?.email || "",
+      address: layout?.contact?.address || undefined,
+    },
+    social: (layout?.social_links ?? []).map((link) => ({
+      name: link.platform,
+      href: link.url,
+    })),
+    footerLinks: links,
+    copyright: layout?.footer?.copyright ?? null,
+  };
 }

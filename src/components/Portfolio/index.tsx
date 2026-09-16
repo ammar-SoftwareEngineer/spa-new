@@ -7,15 +7,12 @@ import Reveal from "@/components/ui/Reveal";
 export const PORTFOLIO_PDF_HREF = "/spa-company-profile-2026.pdf";
 
 export default async function PortfolioPageView() {
-  const [t, tNav] = await Promise.all([
-    getTranslations("portfolio"),
-    getTranslations("nav"),
-  ]);
+  const t = await getTranslations("portfolio");
+  const tNav = await getTranslations("nav");
 
   return (
     <>
       <PageHero
-        eyebrow={t("hero.eyebrow")}
         title={t("hero.title")}
         description={t("hero.description")}
         currentLabel={tNav("portfolio")}

@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import Reveal from "@/components/ui/Reveal";
-import { getIcon } from "@/components/ui/icons";
+import { DynamicIcon } from "@/components/ui/icons";
 
 type ProductCardProps = {
   slug: string;
@@ -23,7 +23,6 @@ export default function ProductCard({
   delay = 0,
 }: ProductCardProps) {
   const number = String(index + 1).padStart(2, "0");
-  const Icon = getIcon(icon);
 
   return (
     <Reveal delay={delay} className="h-full w-full">
@@ -53,7 +52,7 @@ export default function ProductCard({
         <span className="pointer-events-none absolute bottom-5 end-5 h-9 w-9 border-e border-b border-white/20 transition-colors duration-500 group-hover:border-white/50" />
 
         <span className="absolute start-5 top-5 z-[1] inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white backdrop-blur-sm transition-colors duration-500 group-hover:bg-brand">
-          <Icon size={18} />
+          <DynamicIcon name={icon} size={18} />
         </span>
 
         <span className="relative z-[1] mt-auto flex flex-col gap-2.5 p-6 sm:p-7">

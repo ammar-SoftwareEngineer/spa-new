@@ -11,11 +11,9 @@ type WhoWeAreProps = {
 };
 
 export default async function WhoWeAre({ section }: WhoWeAreProps) {
-  const [t, locale] = await Promise.all([
-    getTranslations("home.whoWeAre"),
-    getLocale(),
-  ]);
-  const isRtl = locale === "ar";
+  const t = await getTranslations("home.whoWeAre");
+  const locale = await getLocale();
+  const isAr = locale === "ar";
   const stats = section.statistics ?? [];
 
   return (
@@ -65,11 +63,24 @@ export default async function WhoWeAre({ section }: WhoWeAreProps) {
                   >
                     <div className="min-w-0 flex-1">
                       <div className="text-[1.7rem] flex items-center gap-2 font-bold leading-none text-text-primary ltr:font-[family-name:var(--font-bebas-neue)] ltr:text-[1.95rem] rtl:font-[family-name:var(--font-cairo)]">
-                     {isYearsOfExperience || isProjectsCompleted ? <span>+ <CountUp value={number} duration={2.5} /></span>  : <CountUp value={number} duration={2.5} />} 
-                     {stat.image ? <Image src={stat.image} alt={stat.sub_title} width={20} height={20} style={{filter: "brightness(0) invert(1)"}}/> : null}
+                        {isYearsOfExperience || isProjectsCompleted ? (
+                          <span>
+                            + <CountUp value={number} duration={2.5} />
+                          </span>
+                        ) : (
+                          <CountUp value={number} duration={2.5} />
+                        )}
+                        {stat.image ? (
+                          <Image
+                            src={stat.image}
+                            alt={stat.sub_title}
+                            width={20}
+                            height={20}
+                            style={{ filter: "brightness(0) invert(1)" }}
+                          />
+                        ) : null}
                       </div>
 
-                    
                       <p className="mt-1.5 text-[0.88rem] font-medium leading-snug text-text-secondary">
                         {stat.sub_title}
                       </p>
@@ -81,7 +92,7 @@ export default async function WhoWeAre({ section }: WhoWeAreProps) {
           ) : null}
 
           <Reveal delay={0.3}>
-            <Button href={section.button_link_url || "/about"} size="lg" rtl={isRtl}>
+            <Button href={section.button_link_url || "/about"} size="lg" rtl={isAr}>
               {section.button_text || t("readMore")}
             </Button>
           </Reveal>

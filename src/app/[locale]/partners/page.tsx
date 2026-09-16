@@ -6,11 +6,13 @@ import { fetchPartnersData } from "@/api/partnersService";
 import { getResponseData } from "@/lib/content";
 import type { ApiPartner } from "@/types/contentTypes";
 
-export async function generateMetadata({
-  params,
-}: {
+export const revalidate = 60;
+
+type PartnersPageProps = {
   params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+};
+
+export async function generateMetadata({ params }: PartnersPageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "partners" });
 
@@ -20,17 +22,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function PartnersPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function PartnersPage({ params }: PartnersPageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const partners = mapPartners(
-    getResponseData<ApiPartner[]>(await fetchPartnersData(locale)),
-  );
+  const res = await fetchPartnersData(locale);
+  const list = getResponseData<ApiPartner[]>(res);
+  const partners = mapPartners(list);
 
   return <PartnersPageView partners={partners} />;
 }

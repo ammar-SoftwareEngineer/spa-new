@@ -50,9 +50,7 @@ export default async function TeamIntroSection({
         <h2 className="mb-5 text-[2rem] font-bold leading-[1.2] text-text-primary md:text-[2.6rem]">
           {titleText}
         </h2>
-        <p className="m-0 text-[1.02rem] leading-[1.8] text-text-secondary">
-          {bodyText}
-        </p>
+        <p className="m-0 text-[1.02rem] leading-[1.8] text-text-secondary">{bodyText}</p>
       </Reveal>
     </Section>
   );

@@ -2,19 +2,22 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import ServiceDetailView from "@/components/Services/ServiceDetailView";
-import { toProjectListItems } from "@/components/Projects/helpers";
-import {
-  fetchServiceDetailsData,
-  fetchServicesData,
-} from "@/api/servicesService";
+import { getProjectsForService, mapServiceDetail } from "@/components/Services/helpers";
+import { fetchServiceDetailsData, fetchServicesData } from "@/api/servicesService";
 import { fetchProjectsData } from "@/api/projectsService";
 import { getResponseData } from "@/lib/content";
 import { pickSlug } from "@/lib/localized-slug";
 import type { ApiProject, ApiService } from "@/types/contentTypes";
 
+export const revalidate = 60;
+
+type ServicePageProps = {
+  params: Promise<{ locale: string; slug: string }>;
+};
+
 export async function generateStaticParams() {
-  const services =
-    getResponseData<ApiService[]>(await fetchServicesData("en")) ?? [];
+  const res = await fetchServicesData("en");
+  const services = getResponseData<ApiService[]>(res) ?? [];
 
   return services
     .map((service) => pickSlug(service.slug, "en"))
@@ -22,50 +25,40 @@ export async function generateStaticParams() {
     .map((slug) => ({ slug }));
 }
 
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ locale: string; slug: string }>;
-}): Promise<Metadata> {
+export async function generateMetadata({ params }: ServicePageProps): Promise<Metadata> {
   const { locale, slug } = await params;
-  const service = getResponseData<ApiService>(
-    await fetchServiceDetailsData(slug, locale),
-  );
+
+  const res = await fetchServiceDetailsData(slug, locale);
+  const service = getResponseData<ApiService>(res);
 
   if (!service) {
     return { title: "Service Not Found" };
   }
 
+  const data = mapServiceDetail(service);
+
   return {
-    title: `${service.title || service.name || "Service"} | S&PA`,
-    description: service.short_text || service.description || "",
+    title: `${data.title || "Service"} | S&PA`,
+    description: data.description,
   };
 }
 
-export default async function ServiceDetailsPage({
-  params,
-}: {
-  params: Promise<{ locale: string; slug: string }>;
-}) {
+export default async function ServiceDetailsPage({ params }: ServicePageProps) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
 
-  const [serviceResponse, projectsResponse] = await Promise.all([
+  const [serviceRes, projectsRes] = await Promise.all([
     fetchServiceDetailsData(slug, locale),
     fetchProjectsData(locale),
   ]);
 
-  const service = getResponseData<ApiService>(serviceResponse);
+  const service = getResponseData<ApiService>(serviceRes);
   if (!service) {
     notFound();
   }
 
-  const projects = toProjectListItems(
-    getResponseData<ApiProject[]>(projectsResponse) ?? [],
-    locale,
-  ).filter((project) => project.serviceSlugs.includes(slug));
+  const allProjects = getResponseData<ApiProject[]>(projectsRes) ?? [];
+  const projects = getProjectsForService(allProjects, locale, slug);
 
-  return (
-    <ServiceDetailView service={service} projects={projects} locale={locale} />
-  );
+  return <ServiceDetailView service={service} projects={projects} locale={locale} />;
 }

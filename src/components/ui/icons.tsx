@@ -24,6 +24,7 @@ import {
   Wallet,
   Wrench,
   type LucideIcon,
+  type LucideProps,
 } from "lucide-react";
 
 const iconMap = {
@@ -55,6 +56,12 @@ const iconMap = {
 
 export type IconName = keyof typeof iconMap;
 
-export function getIcon(name: string): LucideIcon {
-  return iconMap[name as IconName] ?? Building;
+type DynamicIconProps = LucideProps & {
+  name: string;
+};
+
+// icon name comes from the API as a string, unknown names fall back to Building
+export function DynamicIcon({ name, ...props }: DynamicIconProps) {
+  const Icon = iconMap[name as IconName] ?? Building;
+  return <Icon {...props} />;
 }

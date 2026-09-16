@@ -46,7 +46,9 @@ export default function OverlayCard({
         </span>
         <span className="h-0.5 w-8 origin-start scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100" />
         <span className="text-[1.2rem] font-bold leading-[1.25] text-white">{title}</span>
-        <span className="line-clamp-2 text-[0.9rem] leading-[1.65] text-white/75">{description}</span>
+        <span className="line-clamp-2 text-[0.9rem] leading-[1.65] text-white/75">
+          {description}
+        </span>
         {tags.length > 0 ? (
           <span className="mt-1 flex flex-wrap gap-2">
             {tags.slice(0, 2).map((tag) => (

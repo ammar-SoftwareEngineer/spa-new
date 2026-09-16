@@ -1,7 +1,3 @@
-/**
- * ProjectsExplorer — filters + project grid.
- * On the main page, shows idleContent until the user starts filtering.
- */
 "use client";
 
 import type { ReactNode } from "react";

@@ -1,6 +1,3 @@
-/**
- * Home page — fetch /home once, pass data to sections.
- */
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import HomePage from "@/components/home/HomePage";
@@ -8,11 +5,13 @@ import { fetchHomeData } from "@/api/homeService";
 import { getResponseData } from "@/lib/content";
 import type { HomeData } from "@/types/homeTypes";
 
-export async function generateMetadata({
-  params,
-}: {
+export const revalidate = 60;
+
+type HomePageProps = {
   params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+};
+
+export async function generateMetadata({ params }: HomePageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
 
@@ -22,15 +21,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function LocaleHome({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function LocaleHome({ params }: HomePageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const data = getResponseData<HomeData>(await fetchHomeData(locale));
+  const res = await fetchHomeData(locale);
+  const data = getResponseData<HomeData>(res);
 
   return <HomePage data={data} />;
 }

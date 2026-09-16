@@ -1,16 +1,23 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import ProjectsPageView from "@/components/Projects";
+import {
+  mapCategoryCards,
+  mapFilterCategories,
+  toProjectListItems,
+} from "@/components/Projects/helpers";
 import { fetchCategoriesData } from "@/api/categoriesService";
 import { fetchProjectsData } from "@/api/projectsService";
 import { getResponseData } from "@/lib/content";
 import type { ApiCategory, ApiProject } from "@/types/contentTypes";
 
-export async function generateMetadata({
-  params,
-}: {
+export const revalidate = 60;
+
+type ProjectsPageProps = {
   params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+};
+
+export async function generateMetadata({ params }: ProjectsPageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "projects" });
 
@@ -20,24 +27,26 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProjectsPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function ProjectsPage({ params }: ProjectsPageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const [projectsResponse, categoriesResponse] = await Promise.all([
+  const t = await getTranslations("home.projects");
+
+  // two independent requests, run together
+  const [projectsRes, categoriesRes] = await Promise.all([
     fetchProjectsData(locale),
     fetchCategoriesData(locale),
   ]);
 
+  const projects = getResponseData<ApiProject[]>(projectsRes) ?? [];
+  const categories = getResponseData<ApiCategory[]>(categoriesRes) ?? [];
+
   return (
     <ProjectsPageView
-      projects={getResponseData<ApiProject[]>(projectsResponse) ?? []}
-      categories={getResponseData<ApiCategory[]>(categoriesResponse) ?? []}
-      locale={locale}
+      projects={toProjectListItems(projects, locale)}
+      filterCategories={mapFilterCategories(categories, locale)}
+      categoryCards={mapCategoryCards(categories, locale, t("viewCategory"))}
     />
   );
 }

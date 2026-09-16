@@ -12,10 +12,7 @@ type WhatWeDoSectionProps = {
   items?: ApiSection[];
 };
 
-export default async function WhatWeDoSection({
-  section,
-  items = [],
-}: WhatWeDoSectionProps) {
+export default async function WhatWeDoSection({ section, items = [] }: WhatWeDoSectionProps) {
   const t = await getTranslations("about");
 
   if (!items.length) {

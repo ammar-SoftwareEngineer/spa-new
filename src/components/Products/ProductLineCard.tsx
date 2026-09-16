@@ -1,6 +1,3 @@
-/**
- * ProductLineCard — catalog card style (same layout as American AFC cards).
- */
 "use client";
 
 import Image from "next/image";

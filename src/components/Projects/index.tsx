@@ -3,38 +3,33 @@ import PageHero from "@/components/ui/PageHero";
 import Section from "@/components/ui/Section";
 import CategoryCards from "@/components/categories/CategoryCards";
 import ProjectsExplorer from "@/components/Projects/ProjectsExplorer";
-import {
-  mapCategoryCards,
-  mapFilterCategories,
-  toProjectListItems,
-} from "@/components/Projects/helpers";
-import type { ApiCategory, ApiProject } from "@/types/contentTypes";
+import type { ProjectCategoryCard } from "@/components/Projects/helpers";
+import type { ProjectListItem } from "@/components/Projects/types";
+
+type FilterCategory = {
+  slug: string;
+  title: string;
+  image?: string;
+  link?: string;
+};
 
 type ProjectsPageViewProps = {
-  projects: ApiProject[];
-  categories: ApiCategory[];
-  locale: string;
+  projects: ProjectListItem[];
+  filterCategories: FilterCategory[];
+  categoryCards: ProjectCategoryCard[];
 };
 
 export default async function ProjectsPageView({
   projects,
-  categories,
-  locale,
+  filterCategories,
+  categoryCards,
 }: ProjectsPageViewProps) {
-  const [t, tNav, tHome] = await Promise.all([
-    getTranslations("projects"),
-    getTranslations("nav"),
-    getTranslations("home.projects"),
-  ]);
-
-  const listItems = toProjectListItems(projects, locale);
-  const filterCategories = mapFilterCategories(categories, locale);
-  const cards = mapCategoryCards(categories, locale, tHome("viewCategory"));
+  const t = await getTranslations("projects");
+  const tNav = await getTranslations("nav");
 
   return (
     <>
       <PageHero
-        eyebrow={t("hero.eyebrow")}
         title={t("hero.title")}
         description={t("hero.description")}
         currentLabel={tNav("projects")}
@@ -42,10 +37,10 @@ export default async function ProjectsPageView({
 
       <Section className="overflow-x-clip py-12 sm:py-20 md:py-28">
         <ProjectsExplorer
-          projects={listItems}
+          projects={projects}
           categories={filterCategories}
           sectors={[]}
-          idleContent={<CategoryCards categories={cards} />}
+          idleContent={<CategoryCards categories={categoryCards} />}
         />
       </Section>
     </>

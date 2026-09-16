@@ -1,6 +1,3 @@
-/**
- * InquiryFields — product inquiry form fields (react-hook-form).
- */
 "use client";
 
 import type { FieldErrors, UseFormRegister } from "react-hook-form";

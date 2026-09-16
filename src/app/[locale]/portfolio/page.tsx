@@ -1,11 +1,11 @@
 import { redirect } from "@/i18n/navigation";
 
-/** Old /portfolio route now redirects to the Profile page. */
-export default async function PortfolioRedirectPage({
-  params,
-}: {
+type PortfolioPageProps = {
   params: Promise<{ locale: string }>;
-}) {
+};
+
+// old /portfolio link -> /profile
+export default async function PortfolioRedirectPage({ params }: PortfolioPageProps) {
   const { locale } = await params;
   redirect({ href: "/profile", locale });
 }

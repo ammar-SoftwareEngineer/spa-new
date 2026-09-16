@@ -1,6 +1,3 @@
-/**
- * FooterContact — contact details column.
- */
 import { Phone, Mail, MapPin, type LucideIcon } from "lucide-react";
 
 function ContactRow({
@@ -52,9 +49,7 @@ export default function FooterContact({
             {faxLabel}: {contact.fax}
           </ContactRow>
         ) : null}
-        {contact.email ? (
-          <ContactRow icon={Mail}>{contact.email}</ContactRow>
-        ) : null}
+        {contact.email ? <ContactRow icon={Mail}>{contact.email}</ContactRow> : null}
       </ul>
     </div>
   );

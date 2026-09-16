@@ -1,13 +1,9 @@
-/**
- * PageHero — inner-page hero (background image + title + breadcrumb).
- */
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import Container from "@/components/ui/Container";
 
 type PageHeroProps = {
-  eyebrow: string;
   title: string;
   description?: string;
   currentLabel: string;
@@ -15,7 +11,6 @@ type PageHeroProps = {
 };
 
 export default async function PageHero({
-  eyebrow,
   title,
   description,
   currentLabel,

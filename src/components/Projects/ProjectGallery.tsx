@@ -16,11 +16,6 @@ type ProjectGalleryProps = {
   title: string;
 };
 
-/**
- * Simple project gallery with Swiper:
- * - Big slider on top (arrows to change image)
- * - Small thumbnails under it
- */
 export default function ProjectGallery({ images, title }: ProjectGalleryProps) {
   const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
 
@@ -36,7 +31,6 @@ export default function ProjectGallery({ images, title }: ProjectGalleryProps) {
           <div className="mt-4 h-px w-14 bg-brand/50 sm:w-16" aria-hidden />
         </Reveal>
 
-        {/* Main images */}
         <Reveal>
           <Swiper
             modules={[Navigation, Thumbs]}
@@ -64,7 +58,6 @@ export default function ProjectGallery({ images, title }: ProjectGalleryProps) {
           </Swiper>
         </Reveal>
 
-        {/* Thumbnails */}
         {images.length > 1 ? (
           <Reveal delay={0.08} className="mt-4 sm:mt-5">
             <Swiper
@@ -83,13 +76,7 @@ export default function ProjectGallery({ images, title }: ProjectGalleryProps) {
               {images.map((src, i) => (
                 <SwiperSlide key={`thumb-${src}-${i}`} className="cursor-pointer">
                   <div className="project-gallery-thumb relative aspect-[4/3] overflow-hidden rounded-[12px] border-2 border-transparent bg-bg-secondary sm:rounded-[14px]">
-                    <Image
-                      src={src}
-                      alt=""
-                      fill
-                      sizes="160px"
-                      className="object-cover"
-                    />
+                    <Image src={src} alt="" fill sizes="160px" className="object-cover" />
                   </div>
                 </SwiperSlide>
               ))}

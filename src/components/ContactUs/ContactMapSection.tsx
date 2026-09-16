@@ -9,9 +9,7 @@ type ContactMapSectionProps = {
 const FALLBACK_MAP =
   "https://maps.google.com/maps?q=136%20Othman%20Ibn%20Afan%20St.%20Heliopolis%20Cairo%20Egypt&t=&z=15&ie=UTF8&iwloc=&output=embed";
 
-export default async function ContactMapSection({
-  mapEmbed,
-}: ContactMapSectionProps) {
+export default async function ContactMapSection({ mapEmbed }: ContactMapSectionProps) {
   const t = await getTranslations("contact.map");
 
   return (

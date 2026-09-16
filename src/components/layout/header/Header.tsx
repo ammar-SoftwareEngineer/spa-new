@@ -1,13 +1,14 @@
-/**
- * Header — fixed top bar (logo + nav + theme/locale).
- * Logic lives here; UI is split into DesktopNav / MobileNav / HeaderActions.
- */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
-import { getTheme, toggleTheme as switchTheme, type Theme } from "@/components/layout/header/theme";
+import {
+  getTheme,
+  subscribeTheme,
+  toggleTheme,
+  type Theme,
+} from "@/components/layout/header/theme";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import Container from "@/components/ui/Container";
 import DesktopNav from "@/components/layout/header/DesktopNav";
@@ -26,15 +27,22 @@ export default function Header({ navItems, logoSrc }: HeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const [theme, setTheme] = useState<Theme>("dark");
+  // server always renders "dark", the real value is read on the client
+  const theme = useSyncExternalStore(subscribeTheme, getTheme, (): Theme => "dark");
+
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDesktopDropdown, setOpenDesktopDropdown] = useState<string | null>(null);
   const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
 
-  useEffect(() => {
-    setTheme(getTheme());
-  }, []);
+  // close menus when the route changes (state reset during render, no effect needed)
+  const [menuPath, setMenuPath] = useState(pathname);
+  if (menuPath !== pathname) {
+    setMenuPath(pathname);
+    setIsMobileMenuOpen(false);
+    setOpenDesktopDropdown(null);
+    setOpenMobileDropdown(null);
+  }
 
   // Glass header style after scroll
   useEffect(() => {
@@ -52,13 +60,6 @@ export default function Header({ navItems, logoSrc }: HeaderProps) {
     };
   }, [isMobileMenuOpen]);
 
-  // Close menus on route change
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-    setOpenDesktopDropdown(null);
-    setOpenMobileDropdown(null);
-  }, [pathname]);
-
   const switchLocale = () => {
     router.replace(pathname, { locale: locale === "ar" ? "en" : "ar" });
   };
@@ -66,8 +67,7 @@ export default function Header({ navItems, logoSrc }: HeaderProps) {
   const isChildActive = (item: NavItem) =>
     item.children?.some(
       (child) =>
-        pathname === child.href ||
-        (child.href !== "/" && pathname.startsWith(`${child.href}/`))
+        pathname === child.href || (child.href !== "/" && pathname.startsWith(`${child.href}/`)),
     ) ?? false;
 
   const isItemActive = (item: NavItem) => {
@@ -138,7 +138,7 @@ export default function Header({ navItems, logoSrc }: HeaderProps) {
             useWhiteLinks={useWhiteLinks}
             isMobileMenuOpen={isMobileMenuOpen}
             localeLabel={locale === "ar" ? "EN" : "العربية"}
-            onToggleTheme={() => setTheme(switchTheme())}
+            onToggleTheme={toggleTheme}
             onSwitchLocale={switchLocale}
             onToggleMobileMenu={() => setIsMobileMenuOpen((open) => !open)}
           />

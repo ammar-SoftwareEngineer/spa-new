@@ -1,14 +1,10 @@
 export type LocalizedSlug = {
   en?: string;
   ar?: string;
-
 };
 
-/** Pick a localized slug string for the given locale. */
-export function pickSlug(
-  slug: LocalizedSlug | string | null | undefined,
-  locale = "en",
-): string {
+// Pick a localized slug string for the given locale.
+export function pickSlug(slug: LocalizedSlug | string | null | undefined, locale = "en"): string {
   if (!slug) return "";
   if (typeof slug === "string") return slug;
 
@@ -37,7 +33,5 @@ export function matchesLocalizedSlug(
     decoded = value;
   }
 
-  return [slug.en, slug.ar].some(
-    (entry) => entry === value || entry === decoded,
-  );
+  return [slug.en, slug.ar].some((entry) => entry === value || entry === decoded);
 }

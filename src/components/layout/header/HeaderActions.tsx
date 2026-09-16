@@ -1,6 +1,3 @@
-/**
- * HeaderActions — theme, locale, and mobile menu buttons.
- */
 "use client";
 
 import { Sun, Moon, Globe, Menu, X } from "lucide-react";

@@ -5,11 +5,13 @@ import { fetchLayoutData } from "@/api/layoutService";
 import { getResponseData } from "@/lib/content";
 import type { LayoutData } from "@/types/layoutTypes";
 
-export async function generateMetadata({
-  params,
-}: {
+export const revalidate = 60;
+
+type ContactPageProps = {
   params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+};
+
+export async function generateMetadata({ params }: ContactPageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "contact" });
 
@@ -19,15 +21,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function ContactPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function ContactPage({ params }: ContactPageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const layout = getResponseData<LayoutData>(await fetchLayoutData(locale));
+  const res = await fetchLayoutData(locale);
+  const layout = getResponseData<LayoutData>(res);
 
   return <ContactUsPage contact={layout?.contact ?? null} />;
 }

@@ -4,22 +4,15 @@ import { Phone, Mail, MapPin } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
 import ContactForm from "@/components/ContactUs/ContactForm";
-import {
-  formatLayoutPhone,
-  type LayoutContact,
-} from "@/types/layoutTypes";
+import { formatLayoutPhone, type LayoutContact } from "@/types/layoutTypes";
 
 type ContactMainSectionProps = {
   contact?: LayoutContact | null;
 };
 
-export default async function ContactMainSection({
-  contact,
-}: ContactMainSectionProps) {
-  const [t, tFooter] = await Promise.all([
-    getTranslations("contact"),
-    getTranslations("footer"),
-  ]);
+export default async function ContactMainSection({ contact }: ContactMainSectionProps) {
+  const t = await getTranslations("contact");
+  const tFooter = await getTranslations("footer");
 
   const phone = formatLayoutPhone(contact);
   const email = contact?.email || "";

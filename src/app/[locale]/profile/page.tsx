@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import ProfilePageView from "@/components/Profile";
 
-export async function generateMetadata({
-  params,
-}: {
+type ProfilePageProps = {
   params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+};
+
+export async function generateMetadata({ params }: ProfilePageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "profile" });
 
@@ -16,11 +16,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ProfilePage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function ProfilePage({ params }: ProfilePageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 

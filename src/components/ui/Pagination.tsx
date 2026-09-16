@@ -8,10 +8,10 @@ type PaginationProps = {
   basePath: string;
   className?: string;
   pageParam?: string;
-  /** e.g. `material=wood&isNew=true` — page number is added automatically */
+  // extra query string, page number gets added on top
   filterQuery?: string;
   hash?: string;
-  /** next-intl namespace for labels, e.g. "products.pagination" */
+  // next-intl namespace for labels
   labelsNamespace?: string;
 };
 
@@ -47,19 +47,17 @@ export default async function Pagination({
   hash,
   labelsNamespace = "products.pagination",
 }: PaginationProps) {
-  const [t, locale] = await Promise.all([
-    getTranslations(labelsNamespace),
-    getLocale(),
-  ]);
+  const t = await getTranslations(labelsNamespace);
+  const locale = await getLocale();
 
   if (totalPages < 2) return null;
 
   const pages = getPages(activePage, totalPages);
   const previousPage = activePage - 1;
   const nextPage = activePage + 1;
-  const isRtl = locale === "ar";
-  const PrevIcon = isRtl ? ArrowRight : ArrowLeft;
-  const NextIcon = isRtl ? ArrowLeft : ArrowRight;
+  const isAr = locale === "ar";
+  const PrevIcon = isAr ? ArrowRight : ArrowLeft;
+  const NextIcon = isAr ? ArrowLeft : ArrowRight;
 
   return (
     <nav

@@ -14,7 +14,7 @@ export type LayoutMenuItem = {
 export type LayoutFooterLink = {
   id?: number;
   title?: string;
-  /** Some API responses use url, others use href/link */
+  // Some API responses use url, others use href/link
   url?: string | null;
   href?: string | null;
   link?: string | null;

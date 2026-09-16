@@ -1,7 +1,3 @@
-/**
- * ContactForm — contact page form.
- * Submits through a Server Action (validated with Zod).
- */
 "use client";
 
 import { useState } from "react";
@@ -16,7 +12,7 @@ const fieldClass =
 export default function ContactForm() {
   const t = useTranslations("contact.form");
   const locale = useLocale();
-  const isRtl = locale === "ar";
+  const isAr = locale === "ar";
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
   const [errorKey, setErrorKey] = useState<string | null>(null);
 
@@ -138,7 +134,7 @@ export default function ContactForm() {
         </div>
 
         <div className="relative z-[1] mt-8 flex flex-col gap-3">
-          <Button type="submit" size="lg" rtl={isRtl} disabled={status === "loading"}>
+          <Button type="submit" size="lg" rtl={isAr} disabled={status === "loading"}>
             {status === "loading" ? t("submitting") : t("submit")}
           </Button>
           {status === "done" ? (

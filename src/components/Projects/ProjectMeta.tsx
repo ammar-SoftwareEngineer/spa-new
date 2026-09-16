@@ -1,6 +1,3 @@
-/**
- * ProjectMeta — project meta grid (client, location, consultant, status).
- */
 import Container from "@/components/ui/Container";
 import Reveal from "@/components/ui/Reveal";
 

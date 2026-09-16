@@ -12,11 +12,9 @@ type ServicesProps = {
 };
 
 export default async function Services({ section }: ServicesProps) {
-  const [t, locale] = await Promise.all([
-    getTranslations("home.services"),
-    getLocale(),
-  ]);
-  const isRtl = locale === "ar";
+  const t = await getTranslations("home.services");
+  const locale = await getLocale();
+  const isAr = locale === "ar";
   const services = section.services ?? [];
 
   return (
@@ -47,7 +45,7 @@ export default async function Services({ section }: ServicesProps) {
       </div>
 
       <Reveal delay={0.16} className="mt-12 md:mt-14">
-        <Button href={section.button_link_url || "/services"} size="lg" rtl={isRtl}>
+        <Button href={section.button_link_url || "/services"} size="lg" rtl={isAr}>
           {section.button_text || t("viewAll")}
         </Button>
       </Reveal>

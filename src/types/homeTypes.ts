@@ -1,6 +1,3 @@
-/**
- * Home API types — match GET /home response shape.
- */
 import type { LocalizedSlug } from "@/lib/localized-slug";
 
 export type HomeStat = {

@@ -1,7 +1,3 @@
-/**
- * Loose API content shapes used across spa-new pages.
- * Fields are optional where backends vary between environments.
- */
 import type { LocalizedSlug } from "@/lib/localized-slug";
 
 export type ApiSection = {

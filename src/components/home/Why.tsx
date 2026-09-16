@@ -59,7 +59,6 @@ export default async function Why({ section }: WhyProps) {
           );
         })}
 
-        {/* CTA card — same layout as old design */}
         <div className="col-span-12 md:col-span-6 lg:col-span-4">
           <Link href="/profile" className="block h-full no-underline">
             <WhyCtaCard

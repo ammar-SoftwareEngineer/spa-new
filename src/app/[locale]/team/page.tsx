@@ -5,11 +5,13 @@ import { fetchTeamsData } from "@/api/teamsService";
 import { getResponseData } from "@/lib/content";
 import type { TeamsData } from "@/types/contentTypes";
 
-export async function generateMetadata({
-  params,
-}: {
+export const revalidate = 60;
+
+type TeamPageProps = {
   params: Promise<{ locale: string }>;
-}): Promise<Metadata> {
+};
+
+export async function generateMetadata({ params }: TeamPageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "team" });
 
@@ -19,15 +21,12 @@ export async function generateMetadata({
   };
 }
 
-export default async function TeamPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function TeamPage({ params }: TeamPageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const data = getResponseData<TeamsData>(await fetchTeamsData(locale));
+  const res = await fetchTeamsData(locale);
+  const data = getResponseData<TeamsData>(res);
 
   return <MeetOurTeamPage data={data} />;
 }

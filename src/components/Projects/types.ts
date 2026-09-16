@@ -1,4 +1,4 @@
-/** Project with ready-to-show text (already translated on the server). */
+// Project with ready-to-show text (already translated on the server).
 export type ProjectListItem = {
   slug: string;
   title: string;
@@ -23,9 +23,4 @@ export type ProjectListItem = {
   scopeBody?: string;
 };
 
-export type SortOption =
-  | "recommended"
-  | "newest"
-  | "oldest"
-  | "name-asc"
-  | "name-desc";
+export type SortOption = "recommended" | "newest" | "oldest" | "name-asc" | "name-desc";

@@ -1,6 +1,6 @@
 import HeroScroll from "@/components/hero/HeroScroll";
 
-/** Hero video — home.hero is empty in API for now, so local fallback. */
+// Hero video — home.hero is empty in API for now, so local fallback.
 export default function HeroSection() {
   return (
     <section className="relative flex h-screen w-screen items-end justify-center overflow-hidden px-6 pb-[150px] text-white">

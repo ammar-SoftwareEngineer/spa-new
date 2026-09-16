@@ -1,6 +1,3 @@
-/**
- * FooterLinks — quick links column.
- */
 import NavLink from "@/components/ui/NavLink";
 import type { NavItem } from "@/types";
 

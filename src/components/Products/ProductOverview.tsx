@@ -1,12 +1,8 @@
-/**
- * ProductOverview — product category overview (image + features).
- * Server Component — no interactivity here.
- */
 import Image from "next/image";
 import { CheckCircle2, ExternalLink } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
-import { getIcon } from "@/components/ui/icons";
+import { DynamicIcon } from "@/components/ui/icons";
 import type { ProductItem } from "@/types";
 
 type ProductOverviewProps = {
@@ -28,8 +24,6 @@ export default function ProductOverview({
   featuresTitle,
   visitWebsiteLabel,
 }: ProductOverviewProps) {
-  const Icon = getIcon(product.icon);
-
   return (
     <Section className="overflow-x-clip py-16 md:py-24">
       <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-12">
@@ -52,7 +46,7 @@ export default function ProductOverview({
         <Reveal delay={0.08}>
           <div>
             <span className="mb-3 inline-flex items-center gap-2 text-[0.85rem] font-bold uppercase tracking-[0.12em] text-brand">
-              <Icon size={18} />
+              <DynamicIcon name={product.icon} size={18} />
               {productsLabel}
             </span>
             <h2 className="mb-5 text-[2rem] font-bold leading-[1.2] text-text-primary md:text-[2.5rem]">

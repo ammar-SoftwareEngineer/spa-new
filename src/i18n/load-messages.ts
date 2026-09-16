@@ -46,9 +46,7 @@ const loadOrder: ModuleName[] = [
   "partners",
 ];
 
-export async function loadMessages(
-  locale: string
-): Promise<AbstractIntlMessages> {
+export async function loadMessages(locale: string): Promise<AbstractIntlMessages> {
   const lng: AppLocale = locale === "en" ? "en" : "ar";
   const bundle = loaders[lng];
   const merged: Record<string, unknown> = {};

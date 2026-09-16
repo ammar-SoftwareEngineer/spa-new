@@ -3,14 +3,7 @@
 import { useMemo, useState } from "react";
 import type { ProjectListItem, SortOption } from "@/components/Projects/types";
 
-/**
- * Holds filter state and returns the filtered project list.
- * Used by ProjectsExplorer.
- */
-export function useProjectFilters(
-  projects: ProjectListItem[],
-  initialScope = ""
-) {
+export function useProjectFilters(projects: ProjectListItem[], initialScope = "") {
   const [scope, setScope] = useState(initialScope);
   const [sector, setSector] = useState("");
   const [sort, setSort] = useState<SortOption>("recommended");
@@ -18,10 +11,7 @@ export function useProjectFilters(
 
   // True when the user changed something from the starting values
   const isDirty =
-    scope !== initialScope ||
-    sector !== "" ||
-    query.trim() !== "" ||
-    sort !== "recommended";
+    scope !== initialScope || sector !== "" || query.trim() !== "" || sort !== "recommended";
 
   const filtered = useMemo(() => {
     const search = query.trim().toLowerCase();

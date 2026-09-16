@@ -1,4 +1,4 @@
-import { apiGet, apiPost } from "@/api/client";
+import { apiPost } from "@/api/client";
 
 export type ContactFormData = {
   name: string;
@@ -7,10 +7,6 @@ export type ContactFormData = {
   subject?: string;
   message: string;
 };
-
-export function fetchContactData(lang = "en") {
-  return apiGet("/contact-us", lang);
-}
 
 export function sendContactData(formData: ContactFormData) {
   return apiPost("/contact-us", formData);

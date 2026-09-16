@@ -4,7 +4,7 @@ type HeaderSectionProps = {
   subtitle: string;
   title: React.ReactNode;
   description?: string;
-  /** start = left-aligned with optional action button */
+  // start = left-aligned with optional action button
   align?: "center" | "start";
   className?: string;
   action?: React.ReactNode;

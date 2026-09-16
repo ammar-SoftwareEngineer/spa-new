@@ -57,7 +57,10 @@ export default function ServiceCard({
           </p>
           <span className="mt-2 inline-flex items-center gap-2 text-[0.92rem] font-semibold text-brand transition-colors group-hover:text-brand-hover">
             {cta}
-            <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1" />
+            <ArrowRight
+              size={16}
+              className="transition-transform duration-300 group-hover:translate-x-1 rtl:rotate-180 rtl:group-hover:-translate-x-1"
+            />
           </span>
         </div>
       </Link>

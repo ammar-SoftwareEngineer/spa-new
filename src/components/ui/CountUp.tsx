@@ -11,7 +11,7 @@ function easeOutCubic(t: number) {
   return 1 - Math.pow(1 - t, 3);
 }
 
-/** Native IntersectionObserver — avoids pulling framer into metric counters. */
+// Native IntersectionObserver — avoids pulling framer into metric counters.
 export default function CountUp({ value, duration = 2 }: CountUpProps) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);

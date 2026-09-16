@@ -1,12 +1,12 @@
 import { isApiError } from "@/types/layoutTypes";
 
-/** If the API sends one item or a list, always return a list. */
+// API sometimes sends one item instead of a list
 export function asArray<T>(value: T | T[] | null | undefined): T[] {
   if (!value) return [];
   return Array.isArray(value) ? value : [value];
 }
 
-/** Read `data` from an API response. Returns null when the request failed. */
+// read `data` from an API response, null if the request failed
 export function getResponseData<T>(response: unknown): T | null {
   if (isApiError(response)) return null;
   if (!response || typeof response !== "object") return null;

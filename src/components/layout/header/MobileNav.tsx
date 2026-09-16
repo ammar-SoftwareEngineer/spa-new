@@ -1,6 +1,3 @@
-/**
- * MobileNav — full-screen mobile navigation.
- */
 "use client";
 
 import { ChevronDown } from "lucide-react";

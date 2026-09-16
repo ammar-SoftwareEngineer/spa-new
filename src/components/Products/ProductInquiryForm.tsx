@@ -1,17 +1,11 @@
-/**
- * ProductInquiryForm — product inquiry form.
- * Keeps the selected product in sync when a gallery line is chosen.
- */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Package } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
-import InquiryFields, {
-  type ProductInquiryValues,
-} from "@/components/Products/InquiryFields";
+import InquiryFields, { type ProductInquiryValues } from "@/components/Products/InquiryFields";
 import InquirySuccess from "@/components/Products/InquirySuccess";
 import { contactAction } from "@/actions/contact";
 
@@ -22,7 +16,7 @@ type ProductInquiryFormProps = {
 export default function ProductInquiryForm({ productTitle }: ProductInquiryFormProps) {
   const t = useTranslations("products.form");
   const locale = useLocale();
-  const isRtl = locale === "ar";
+  const isAr = locale === "ar";
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState(false);
 
@@ -30,7 +24,6 @@ export default function ProductInquiryForm({ productTitle }: ProductInquiryFormP
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ProductInquiryValues>({
     defaultValues: {
@@ -42,14 +35,6 @@ export default function ProductInquiryForm({ productTitle }: ProductInquiryFormP
     },
     mode: "onBlur",
   });
-
-  // Sync fields when the user picks another line from the gallery
-  useEffect(() => {
-    setSubmitted(false);
-    setSubmitError(false);
-    setValue("product", productTitle);
-    setValue("message", t("messageDefault", { product: productTitle }));
-  }, [productTitle, setValue, t]);
 
   const onSubmit = handleSubmit(async (data) => {
     setSubmitError(false);
@@ -151,7 +136,7 @@ export default function ProductInquiryForm({ productTitle }: ProductInquiryFormP
       />
 
       <div className="relative z-[1] mt-8 flex flex-col gap-3">
-        <Button type="submit" size="lg" rtl={isRtl} className={isSubmitting ? "opacity-70" : ""}>
+        <Button type="submit" size="lg" rtl={isAr} className={isSubmitting ? "opacity-70" : ""}>
           {isSubmitting ? t("submitting") : t("submit")}
         </Button>
         {submitError ? (

@@ -10,11 +10,9 @@ type TeamBannerProps = {
 };
 
 export default async function TeamBanner({ section }: TeamBannerProps) {
-  const [t, locale] = await Promise.all([
-    getTranslations("home.teamBanner"),
-    getLocale(),
-  ]);
-  const isRtl = locale === "ar";
+  const t = await getTranslations("home.teamBanner");
+  const locale = await getLocale();
+  const isAr = locale === "ar";
 
   return (
     <Section
@@ -54,7 +52,7 @@ export default async function TeamBanner({ section }: TeamBannerProps) {
                 />
               ) : null}
               <div className="mt-1">
-                <Button href={section.button_link_url || "/team"} size="lg" rtl={isRtl}>
+                <Button href={section.button_link_url || "/team"} size="lg" rtl={isAr}>
                   {section.button_text || t("btn")}
                 </Button>
               </div>
