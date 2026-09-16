@@ -3,6 +3,7 @@ import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
 import CountUp from "@/components/ui/CountUp";
 import type { ApiSection } from "@/types/contentTypes";
+import Image from "next/image";
 
 type CountersSectionProps = {
   statistics?: ApiSection[] | ApiSection | null;
@@ -30,9 +31,8 @@ export default async function CountersSection({ statistics }: CountersSectionPro
         <div className="grid grid-cols-12 gap-5 md:gap-6 xl:gap-0">
           {items.map((counter, index) => {
             const isLast = index === items.length - 1;
-            const raw = counter.statistics?.[0]?.value ?? counter.sub_title ?? "0";
-            const numeric = Number(String(raw).replace(/[^\d.]/g, "")) || 0;
-
+            const isYearsOfExperience = counter.title?.includes("Years");
+            const isProjectsCompleted = counter.title?.includes("Projects");
             return (
               <Reveal
                 key={counter.id ?? index}
@@ -52,8 +52,9 @@ export default async function CountersSection({ statistics }: CountersSectionPro
                       </div>
 
                       <div className="flex items-end gap-2">
-                        <div className="text-[2.2rem] font-bold leading-none text-text-primary transition-colors duration-500 group-hover:text-brand ltr:font-[family-name:var(--font-bebas-neue)] ltr:text-[2.7rem] rtl:font-[family-name:var(--font-cairo)]">
-                          <CountUp value={numeric} />
+                        <div className="text-[2.2rem] flex items-center gap-2 font-bold leading-none text-text-primary transition-colors duration-500 group-hover:text-brand ltr:font-[family-name:var(--font-bebas-neue)] ltr:text-[2.7rem] rtl:font-[family-name:var(--font-cairo)]">
+                        {isYearsOfExperience || isProjectsCompleted ? <span>+ <CountUp value={Number(counter.sub_title)} duration={2.5} /></span>  : <CountUp value={Number(counter.sub_title)} duration={2.5} />} 
+                        {counter.image ? <Image src={counter.image} alt={counter.title || ""} width={20} height={20} style={{filter: "brightness(0) invert(1)"}}/> : null}
                         </div>
                       </div>
 

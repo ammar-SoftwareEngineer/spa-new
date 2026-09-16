@@ -56,6 +56,7 @@ export default async function WhoWeAre({ section }: WhoWeAreProps) {
               {stats.map((stat, index) => {
                 const number = Number(String(stat.title).replace(/[^\d.]/g, "")) || 0;
                 const isYearsOfExperience = stat.sub_title.includes("Years of Experience");
+                const isProjectsCompleted = stat.sub_title.includes("Projects");
                 return (
                   <Reveal
                     key={stat.id}
@@ -64,7 +65,7 @@ export default async function WhoWeAre({ section }: WhoWeAreProps) {
                   >
                     <div className="min-w-0 flex-1">
                       <div className="text-[1.7rem] flex items-center gap-2 font-bold leading-none text-text-primary ltr:font-[family-name:var(--font-bebas-neue)] ltr:text-[1.95rem] rtl:font-[family-name:var(--font-cairo)]">
-                     {isYearsOfExperience ? <span>+ <CountUp value={number} duration={2.5} /></span>  : <CountUp value={number} duration={2.5} />} 
+                     {isYearsOfExperience || isProjectsCompleted ? <span>+ <CountUp value={number} duration={2.5} /></span>  : <CountUp value={number} duration={2.5} />} 
                      {stat.image ? <Image src={stat.image} alt={stat.sub_title} width={20} height={20} style={{filter: "brightness(0) invert(1)"}}/> : null}
                       </div>
 
