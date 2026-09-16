@@ -46,10 +46,9 @@ export default function MediaContentBlock({
         <span className="text-[0.85rem] font-bold uppercase tracking-[0.12em] text-brand">
           {eyebrow}
         </span>
-        <h2 className="text-[2rem] font-bold leading-[1.2] text-text-primary md:text-[2.6rem]">
-          {title}
-        </h2>
-        <p className="max-w-[540px] text-[1.02rem] leading-[1.8] text-text-secondary">{text}</p>
+        <h2 className="text-[2rem] font-bold leading-[1.2] text-text-primary md:text-[2.6rem]" dangerouslySetInnerHTML={{ __html: title }} />
+   
+        <p className="max-w-[540px] text-[1.02rem] leading-[1.8] text-text-secondary" dangerouslySetInnerHTML={{ __html: text }} />
       </Reveal>
     </div>
   );
