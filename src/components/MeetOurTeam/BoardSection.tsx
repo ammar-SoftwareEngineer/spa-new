@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import Section from "@/components/ui/Section";
 import HeaderSection from "@/components/ui/HeaderSection";
 import TeamMemberCard from "@/components/MeetOurTeam/TeamMemberCard";
+import { stripHtml } from "@/lib/utils";
 
 type Member = {
   id: number;
@@ -12,9 +13,17 @@ type Member = {
 
 type BoardSectionProps = {
   members?: Member[];
+  eyebrow?: string;
+  title?: string;
+  description?: string;
 };
 
-export default async function BoardSection({ members = [] }: BoardSectionProps) {
+export default async function BoardSection({
+  members = [],
+  eyebrow,
+  title,
+  description,
+}: BoardSectionProps) {
   const t = await getTranslations("team");
 
   if (!members.length) {
@@ -24,9 +33,9 @@ export default async function BoardSection({ members = [] }: BoardSectionProps) 
   return (
     <Section variant="alt" className="overflow-x-clip py-24 md:py-32">
       <HeaderSection
-        subtitle={t("board.eyebrow")}
-        title={t("board.title")}
-        description={t("board.description")}
+        subtitle={eyebrow || t("board.eyebrow")}
+        title={title || t("board.title")}
+        description={stripHtml(description) || t("board.description")}
         className="mb-12 md:mb-16"
       />
 

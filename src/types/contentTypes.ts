@@ -136,10 +136,25 @@ export type ApiTeamMember = {
   role?: string;
   position?: string;
   title?: string;
+  job_title?: string;
   image?: string;
   photo?: string;
+  alt_image?: string | null;
+  email?: string;
+  mobile?: string;
   is_board?: boolean;
   type?: string;
+  order?: number;
+  show_in_home?: boolean;
+};
+
+export type TeamsData = {
+  breadcrumb?: ApiSection;
+  banner?: ApiSection;
+  board_section?: ApiSection;
+  member_section?: ApiSection;
+  board_members?: ApiTeamMember[];
+  members?: ApiTeamMember[];
 };
 
 export type ApiCertificate = {

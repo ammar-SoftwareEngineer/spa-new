@@ -5,7 +5,17 @@ import BoardSection from "@/components/MeetOurTeam/BoardSection";
 import OurTeamSection from "@/components/MeetOurTeam/OurTeamSection";
 import { fetchTeamsData } from "@/api/teamsService";
 import { isApiError } from "@/types/layoutTypes";
-import type { ApiTeamMember } from "@/types/contentTypes";
+import type { ApiTeamMember, TeamsData } from "@/types/contentTypes";
+import { stripHtml } from "@/lib/utils";
+
+function mapMember(item: ApiTeamMember, index: number) {
+  return {
+    id: item.id ?? index,
+    name: item.name || "",
+    role: item.job_title || item.role || item.position || item.title || "",
+    image: item.image || item.photo || "",
+  };
+}
 
 export default async function MeetOurTeamPage() {
   const [t, tNav, locale] = await Promise.all([
@@ -15,36 +25,45 @@ export default async function MeetOurTeamPage() {
   ]);
 
   const response = await fetchTeamsData(locale);
-  const members = isApiError(response)
-    ? []
-    : ((response as { data: ApiTeamMember[] }).data ?? []).map(
-        (item, index) => ({
-          id: item.id ?? index,
-          name: item.name || "",
-          role: item.role || item.position || item.title || "",
-          image: item.image || item.photo || "",
-          isBoard:
-            item.is_board === true ||
-            item.type === "board" ||
-            item.type === "Board",
-        }),
-      );
+  const data = isApiError(response)
+    ? null
+    : ((response as { data: TeamsData }).data ?? null);
 
-  const board = members.filter((member) => member.isBoard);
-  const team = members.filter((member) => !member.isBoard);
-  const teamMembers = team.length ? team : members;
+  const board = (data?.board_members ?? []).map(mapMember);
+  const team = (data?.members ?? []).map(mapMember);
 
   return (
     <>
       <PageHero
         eyebrow={t("hero.eyebrow")}
-        title={t("hero.title")}
-        description={t("hero.description")}
-        currentLabel={tNav("meetOurTeam")}
+        title={data?.breadcrumb?.title || t("hero.title")}
+        description={
+          stripHtml(data?.breadcrumb?.text) ||
+          data?.breadcrumb?.sub_title ||
+          t("hero.description")
+        }
+        currentLabel={data?.breadcrumb?.title || tNav("meetOurTeam")}
+        imageSrc={data?.breadcrumb?.image}
       />
-      <TeamIntroSection />
-      <BoardSection members={board} />
-      <OurTeamSection members={teamMembers} />
+      <TeamIntroSection
+        imageSrc={data?.banner?.image}
+        imageAlt={data?.banner?.alt_image || undefined}
+        eyebrow={data?.banner?.sub_title}
+        title={data?.banner?.title}
+        text={data?.banner?.text}
+      />
+      <BoardSection
+        members={board}
+        eyebrow={data?.board_section?.sub_title}
+        title={data?.board_section?.title}
+        description={data?.board_section?.text}
+      />
+      <OurTeamSection
+        members={team}
+        eyebrow={data?.member_section?.sub_title}
+        title={data?.member_section?.title}
+        description={data?.member_section?.text}
+      />
     </>
   );
 }

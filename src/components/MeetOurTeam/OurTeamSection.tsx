@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import Section from "@/components/ui/Section";
 import HeaderSection from "@/components/ui/HeaderSection";
 import TeamMemberCard from "@/components/MeetOurTeam/TeamMemberCard";
+import { stripHtml } from "@/lib/utils";
 
 type Member = {
   id: number;
@@ -12,21 +13,33 @@ type Member = {
 
 type OurTeamSectionProps = {
   members?: Member[];
+  eyebrow?: string;
+  title?: string;
+  description?: string;
 };
 
-export default async function OurTeamSection({ members = [] }: OurTeamSectionProps) {
+export default async function OurTeamSection({
+  members = [],
+  eyebrow,
+  title,
+  description,
+}: OurTeamSectionProps) {
   const t = await getTranslations("team");
+
+  const sectionEyebrow = eyebrow || t("ourTeam.eyebrow");
+  const sectionTitle = title || t("ourTeam.title");
+  const sectionDescription = stripHtml(description) || t("ourTeam.description");
 
   if (!members.length) {
     return (
       <Section className="overflow-x-clip py-24 md:py-32">
         <HeaderSection
-          subtitle={t("ourTeam.eyebrow")}
-          title={t("ourTeam.title")}
-          description={t("ourTeam.description")}
+          subtitle={sectionEyebrow}
+          title={sectionTitle}
+          description={sectionDescription}
           className="mb-12 md:mb-16"
         />
-        <p className="text-center text-text-secondary">{t("ourTeam.description")}</p>
+        <p className="text-center text-text-secondary">{sectionDescription}</p>
       </Section>
     );
   }
@@ -34,9 +47,9 @@ export default async function OurTeamSection({ members = [] }: OurTeamSectionPro
   return (
     <Section className="overflow-x-clip py-24 md:py-32">
       <HeaderSection
-        subtitle={t("ourTeam.eyebrow")}
-        title={t("ourTeam.title")}
-        description={t("ourTeam.description")}
+        subtitle={sectionEyebrow}
+        title={sectionTitle}
+        description={sectionDescription}
         className="mb-12 md:mb-16"
       />
 
