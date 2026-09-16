@@ -1,10 +1,10 @@
 "use client";
 
 import Reveal from "@/components/ui/Reveal";
-import OverlayCard from "@/components/Projects/ProjectCard/OverlayCard";
-import type { ProjectCardProps } from "@/components/Projects/ProjectCard/types";
+import OverlayCard from "@/components/projects/ProjectCard/OverlayCard";
+import type { ProjectCardProps } from "@/components/projects/ProjectCard/types";
 
-export type { ProjectCardProps } from "@/components/Projects/ProjectCard/types";
+export type { ProjectCardProps } from "@/components/projects/ProjectCard/types";
 
 export default function ProjectCard({
   project,

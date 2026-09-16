@@ -1,7 +1,7 @@
 import type { ApiProject, ApiService } from "@/types/contentTypes";
 import { pickSlug } from "@/lib/localized-slug";
-import { toProjectListItems } from "@/components/Projects/helpers";
-import type { ProjectListItem } from "@/components/Projects/types";
+import { toProjectListItems } from "@/components/projects/helpers";
+import type { ProjectListItem } from "@/components/projects/types";
 
 export type ServiceCardData = {
   slug: string;

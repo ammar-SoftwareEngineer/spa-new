@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import WhoWeArePage from "@/components/WhoWeAre";
+import AboutPageView from "@/components/about";
 import { fetchAboutData } from "@/api/aboutService";
 import { getResponseData } from "@/lib/content";
 import type { AboutData } from "@/types/contentTypes";
@@ -28,5 +28,5 @@ export default async function AboutPage({ params }: AboutPageProps) {
   const res = await fetchAboutData(locale);
   const about = getResponseData<AboutData>(res);
 
-  return <WhoWeArePage about={about} />;
+  return <AboutPageView about={about} />;
 }

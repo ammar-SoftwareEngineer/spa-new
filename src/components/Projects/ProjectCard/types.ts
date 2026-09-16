@@ -1,4 +1,4 @@
-import type { ProjectListItem } from "@/components/Projects/types";
+import type { ProjectListItem } from "@/components/projects/types";
 
 export type ProjectCardProps = {
   project: ProjectListItem;

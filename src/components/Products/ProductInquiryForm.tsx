@@ -5,8 +5,8 @@ import { useForm } from "react-hook-form";
 import { Package } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/Button";
-import InquiryFields, { type ProductInquiryValues } from "@/components/Products/InquiryFields";
-import InquirySuccess from "@/components/Products/InquirySuccess";
+import InquiryFields, { type ProductInquiryValues } from "@/components/products/InquiryFields";
+import InquirySuccess from "@/components/products/InquirySuccess";
 import { contactAction } from "@/actions/contact";
 
 type ProductInquiryFormProps = {

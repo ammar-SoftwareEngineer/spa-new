@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import { WhyCtaCard, WhyMetricCard } from "@/components/why/WhyCards";
+import { WhyCtaCard, WhyMetricCard } from "@/components/home/WhyCards";
 import HeaderSection from "@/components/ui/HeaderSection";
 import Section from "@/components/ui/Section";
 import { Link } from "@/i18n/navigation";

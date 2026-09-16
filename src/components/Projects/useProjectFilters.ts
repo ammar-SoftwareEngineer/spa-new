@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { ProjectListItem, SortOption } from "@/components/Projects/types";
+import type { ProjectListItem, SortOption } from "@/components/projects/types";
 
 export function useProjectFilters(projects: ProjectListItem[], initialScope = "") {
   const [scope, setScope] = useState(initialScope);

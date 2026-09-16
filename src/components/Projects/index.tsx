@@ -1,10 +1,10 @@
 import { getTranslations } from "next-intl/server";
 import PageHero from "@/components/ui/PageHero";
 import Section from "@/components/ui/Section";
-import CategoryCards from "@/components/categories/CategoryCards";
-import ProjectsExplorer from "@/components/Projects/ProjectsExplorer";
-import type { ProjectCategoryCard } from "@/components/Projects/helpers";
-import type { ProjectListItem } from "@/components/Projects/types";
+import CategoryCards from "@/components/shared/CategoryCards";
+import ProjectsExplorer from "@/components/projects/ProjectsExplorer";
+import type { ProjectCategoryCard } from "@/components/projects/helpers";
+import type { ProjectListItem } from "@/components/projects/types";
 
 type FilterCategory = {
   slug: string;

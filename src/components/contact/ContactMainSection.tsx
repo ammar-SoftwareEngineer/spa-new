@@ -3,7 +3,7 @@ import { Phone, Mail, MapPin } from "lucide-react";
 
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
-import ContactForm from "@/components/ContactUs/ContactForm";
+import ContactForm from "@/components/contact/ContactForm";
 import { formatLayoutPhone, type LayoutContact } from "@/types/layoutTypes";
 
 type ContactMainSectionProps = {

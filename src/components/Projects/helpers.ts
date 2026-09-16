@@ -1,6 +1,6 @@
 import { pickSlug } from "@/lib/localized-slug";
 import type { ApiCategory, ApiProject } from "@/types/contentTypes";
-import type { ProjectListItem } from "@/components/Projects/types";
+import type { ProjectListItem } from "@/components/projects/types";
 
 // Turn one API project into a ready-to-render list/detail item.
 export function toProjectListItem(project: ApiProject, locale: string, index = 0): ProjectListItem {

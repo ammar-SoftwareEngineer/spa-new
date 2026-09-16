@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Search, X } from "lucide-react";
 import type { SectorItem } from "@/types";
-import type { SortOption } from "@/components/Projects/types";
+import type { SortOption } from "@/components/projects/types";
 
 type FilterCategory = {
   slug: string;

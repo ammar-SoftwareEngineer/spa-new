@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
-import ProductDetailView from "@/components/Products/ProductDetailView";
+import ProductDetailView from "@/components/products/ProductDetailView";
 import { fetchProductDetailsData, fetchProductsData } from "@/api/productsService";
 import { getResponseData } from "@/lib/content";
 import { pickSlug } from "@/lib/localized-slug";

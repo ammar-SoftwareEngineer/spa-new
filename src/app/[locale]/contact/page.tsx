@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import ContactUsPage from "@/components/ContactUs";
+import ContactPageView from "@/components/contact";
 import { fetchLayoutData } from "@/api/layoutService";
 import { getResponseData } from "@/lib/content";
 import type { LayoutData } from "@/types/layoutTypes";
@@ -28,5 +28,5 @@ export default async function ContactPage({ params }: ContactPageProps) {
   const res = await fetchLayoutData(locale);
   const layout = getResponseData<LayoutData>(res);
 
-  return <ContactUsPage contact={layout?.contact ?? null} />;
+  return <ContactPageView contact={layout?.contact ?? null} />;
 }

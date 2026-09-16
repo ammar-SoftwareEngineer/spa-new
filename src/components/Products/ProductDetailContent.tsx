@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
-import ProductOverview from "@/components/Products/ProductOverview";
-import ProductLinesAndForm from "@/components/Products/ProductLinesAndForm";
+import ProductOverview from "@/components/products/ProductOverview";
+import ProductLinesAndForm from "@/components/products/ProductLinesAndForm";
 import type { ProductItem, ProductLineItem } from "@/types";
 
 type LineView = {

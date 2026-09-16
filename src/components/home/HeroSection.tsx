@@ -1,4 +1,4 @@
-import HeroScroll from "@/components/hero/HeroScroll";
+import HeroScroll from "@/components/home/HeroScroll";
 
 // Hero video — home.hero is empty in API for now, so local fallback.
 export default function HeroSection() {

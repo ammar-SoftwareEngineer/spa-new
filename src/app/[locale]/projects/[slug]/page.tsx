@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
-import ProjectCategoryView from "@/components/Projects/ProjectCategoryView";
-import ProjectDetailView from "@/components/Projects/ProjectDetailView";
+import ProjectCategoryView from "@/components/projects/ProjectCategoryView";
+import ProjectDetailView from "@/components/projects/ProjectDetailView";
 import {
   mapFilterCategories,
   toProjectListItem,
   toProjectListItems,
-} from "@/components/Projects/helpers";
+} from "@/components/projects/helpers";
 import { fetchCategoriesData, fetchCategoryDetailsData } from "@/api/categoriesService";
 import { fetchProjectDetailsData, fetchProjectsData } from "@/api/projectsService";
 import { getResponseData } from "@/lib/content";

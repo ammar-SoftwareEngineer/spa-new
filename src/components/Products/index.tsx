@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import PageHero from "@/components/ui/PageHero";
 import Section from "@/components/ui/Section";
-import ProductCard from "@/components/Products/ProductCard";
-import type { ProductCardData } from "@/components/Products/helpers";
+import ProductCard from "@/components/products/ProductCard";
+import type { ProductCardData } from "@/components/products/helpers";
 
 type ProductsPageViewProps = {
   products: ProductCardData[];

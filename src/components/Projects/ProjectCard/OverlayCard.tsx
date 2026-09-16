@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { MapPin } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import type { ProjectCardBodyProps } from "@/components/Projects/ProjectCard/types";
+import type { ProjectCardBodyProps } from "@/components/projects/ProjectCard/types";
 
 export default function OverlayCard({
   href,

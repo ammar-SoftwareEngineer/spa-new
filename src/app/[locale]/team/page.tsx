@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import MeetOurTeamPage from "@/components/MeetOurTeam";
+import TeamPageView from "@/components/team";
 import { fetchTeamsData } from "@/api/teamsService";
 import { getResponseData } from "@/lib/content";
 import type { TeamsData } from "@/types/contentTypes";
@@ -28,5 +28,5 @@ export default async function TeamPage({ params }: TeamPageProps) {
   const res = await fetchTeamsData(locale);
   const data = getResponseData<TeamsData>(res);
 
-  return <MeetOurTeamPage data={data} />;
+  return <TeamPageView data={data} />;
 }

@@ -1,7 +1,7 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import Section from "@/components/ui/Section";
 import HeaderSection from "@/components/ui/HeaderSection";
-import CategoryCards from "@/components/categories/CategoryCards";
+import CategoryCards from "@/components/shared/CategoryCards";
 import { mapHomeCategoryCards } from "@/components/home/helpers";
 import type { HomeCategory, HomeSection } from "@/types/homeTypes";
 

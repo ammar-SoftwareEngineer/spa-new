@@ -1,8 +1,8 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import ProjectCard from "@/components/Projects/ProjectCard";
-import type { ProjectListItem } from "@/components/Projects/types";
+import ProjectCard from "@/components/projects/ProjectCard";
+import type { ProjectListItem } from "@/components/projects/types";
 
 type ProjectGridProps = {
   projects: ProjectListItem[];

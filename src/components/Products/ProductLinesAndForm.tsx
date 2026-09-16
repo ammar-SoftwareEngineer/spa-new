@@ -5,8 +5,8 @@ import { useTranslations } from "next-intl";
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
 import HeaderSection from "@/components/ui/HeaderSection";
-import ProductInquiryForm from "@/components/Products/ProductInquiryForm";
-import ProductLineCard from "@/components/Products/ProductLineCard";
+import ProductInquiryForm from "@/components/products/ProductInquiryForm";
+import ProductLineCard from "@/components/products/ProductLineCard";
 import type { ProductLineItem } from "@/types";
 
 type LineView = {

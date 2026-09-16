@@ -1,7 +1,7 @@
 import PageHero from "@/components/ui/PageHero";
 import Section from "@/components/ui/Section";
-import ProjectsExplorer from "@/components/Projects/ProjectsExplorer";
-import type { ProjectListItem } from "@/components/Projects/types";
+import ProjectsExplorer from "@/components/projects/ProjectsExplorer";
+import type { ProjectListItem } from "@/components/projects/types";
 
 type FilterCategory = {
   slug: string;

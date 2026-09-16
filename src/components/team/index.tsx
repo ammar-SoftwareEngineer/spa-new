@@ -1,17 +1,17 @@
 import { getTranslations } from "next-intl/server";
 import PageHero from "@/components/ui/PageHero";
-import TeamIntroSection from "@/components/MeetOurTeam/TeamIntroSection";
-import BoardSection from "@/components/MeetOurTeam/BoardSection";
-import OurTeamSection from "@/components/MeetOurTeam/OurTeamSection";
-import { mapTeamMembers } from "@/components/MeetOurTeam/helpers";
+import TeamIntroSection from "@/components/team/TeamIntroSection";
+import BoardSection from "@/components/team/BoardSection";
+import OurTeamSection from "@/components/team/OurTeamSection";
+import { mapTeamMembers } from "@/components/team/helpers";
 import { stripHtml } from "@/lib/utils";
 import type { TeamsData } from "@/types/contentTypes";
 
-type MeetOurTeamPageProps = {
+type TeamPageViewProps = {
   data: TeamsData | null;
 };
 
-export default async function MeetOurTeamPage({ data }: MeetOurTeamPageProps) {
+export default async function TeamPageView({ data }: TeamPageViewProps) {
   const t = await getTranslations("team");
   const tNav = await getTranslations("nav");
 

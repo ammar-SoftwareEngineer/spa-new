@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import Section from "@/components/ui/Section";
 import HeaderSection from "@/components/ui/HeaderSection";
-import TeamMemberCard from "@/components/MeetOurTeam/TeamMemberCard";
-import type { TeamMemberCardData } from "@/components/MeetOurTeam/helpers";
+import TeamMemberCard from "@/components/team/TeamMemberCard";
+import type { TeamMemberCardData } from "@/components/team/helpers";
 import { stripHtml } from "@/lib/utils";
 
 type BoardSectionProps = {

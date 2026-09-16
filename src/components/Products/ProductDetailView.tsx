@@ -2,9 +2,9 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import PageHero from "@/components/ui/PageHero";
 import Pagination from "@/components/ui/Pagination";
-import ProductDetailContent from "@/components/Products/ProductDetailContent";
-import { mapProductDetail } from "@/components/Products/helpers";
-import { paginateItems } from "@/components/Products/paginate";
+import ProductDetailContent from "@/components/products/ProductDetailContent";
+import { mapProductDetail } from "@/components/products/helpers";
+import { paginateItems } from "@/components/products/paginate";
 import type { ApiProduct } from "@/types/contentTypes";
 
 type ProductDetailViewProps = {

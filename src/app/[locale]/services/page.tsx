@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import ServicesPageView from "@/components/Services";
-import { mapServiceCards } from "@/components/Services/helpers";
+import ServicesPageView from "@/components/services";
+import { mapServiceCards } from "@/components/services/helpers";
 import { fetchServicesData } from "@/api/servicesService";
 import { getResponseData } from "@/lib/content";
 import type { ApiService } from "@/types/contentTypes";

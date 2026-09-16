@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import PageHero from "@/components/ui/PageHero";
 import Section from "@/components/ui/Section";
-import ServiceCard from "@/components/Services/ServiceCard";
-import type { ServiceCardData } from "@/components/Services/helpers";
+import ServiceCard from "@/components/services/ServiceCard";
+import type { ServiceCardData } from "@/components/services/helpers";
 
 type ServicesPageViewProps = {
   services: ServiceCardData[];

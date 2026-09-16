@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import ProjectsPageView from "@/components/Projects";
+import ProjectsPageView from "@/components/projects";
 import {
   mapCategoryCards,
   mapFilterCategories,
   toProjectListItems,
-} from "@/components/Projects/helpers";
+} from "@/components/projects/helpers";
 import { fetchCategoriesData } from "@/api/categoriesService";
 import { fetchProjectsData } from "@/api/projectsService";
 import { getResponseData } from "@/lib/content";

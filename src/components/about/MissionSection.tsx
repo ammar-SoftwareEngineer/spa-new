@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 
 import Section from "@/components/ui/Section";
 
-import MediaContentBlock from "@/components/WhoWeAre/MediaContentBlock";
+import MediaContentBlock from "@/components/about/MediaContentBlock";
 
 import type { ApiSection } from "@/types/contentTypes";
 

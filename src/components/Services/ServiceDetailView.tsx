@@ -6,10 +6,10 @@ import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
 import HeaderSection from "@/components/ui/HeaderSection";
 import { Button } from "@/components/ui/Button";
-import ProjectCard from "@/components/Projects/ProjectCard";
-import { mapServiceDetail } from "@/components/Services/helpers";
+import ProjectCard from "@/components/projects/ProjectCard";
+import { mapServiceDetail } from "@/components/services/helpers";
 import type { ApiService } from "@/types/contentTypes";
-import type { ProjectListItem } from "@/components/Projects/types";
+import type { ProjectListItem } from "@/components/projects/types";
 
 type ServiceDetailViewProps = {
   service: ApiService;

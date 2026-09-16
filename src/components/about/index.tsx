@@ -1,25 +1,25 @@
 import { getTranslations } from "next-intl/server";
 import PageHero from "@/components/ui/PageHero";
-import AboutSection from "@/components/WhoWeAre/AboutSection";
-import CountersSection from "@/components/WhoWeAre/CountersSection";
-import IsoSection from "@/components/WhoWeAre/IsoSection";
-import MissionSection from "@/components/WhoWeAre/MissionSection";
-import VisionSection from "@/components/WhoWeAre/VisionSection";
-import WhatWeDoSection from "@/components/WhoWeAre/WhatWeDoSection";
+import AboutSection from "@/components/about/AboutSection";
+import CountersSection from "@/components/about/CountersSection";
+import IsoSection from "@/components/about/IsoSection";
+import MissionSection from "@/components/about/MissionSection";
+import VisionSection from "@/components/about/VisionSection";
+import WhatWeDoSection from "@/components/about/WhatWeDoSection";
 import {
   getCertificationItems,
   getMissionVision,
   getStatisticsItems,
   getWhatWeDoItems,
-} from "@/components/WhoWeAre/helpers";
+} from "@/components/about/helpers";
 import { stripHtml } from "@/lib/utils";
 import type { AboutData } from "@/types/contentTypes";
 
-type WhoWeArePageProps = {
+type AboutPageViewProps = {
   about: AboutData | null;
 };
 
-export default async function WhoWeArePage({ about }: WhoWeArePageProps) {
+export default async function AboutPageView({ about }: AboutPageViewProps) {
   const t = await getTranslations("about");
   const tNav = await getTranslations("nav");
 

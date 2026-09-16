@@ -1,10 +1,10 @@
 "use client";
 
 import type { ReactNode } from "react";
-import ProjectFilters from "@/components/Projects/ProjectFilters";
-import ProjectGrid from "@/components/Projects/ProjectGrid";
-import { useProjectFilters } from "@/components/Projects/useProjectFilters";
-import type { ProjectListItem } from "@/components/Projects/types";
+import ProjectFilters from "@/components/projects/ProjectFilters";
+import ProjectGrid from "@/components/projects/ProjectGrid";
+import { useProjectFilters } from "@/components/projects/useProjectFilters";
+import type { ProjectListItem } from "@/components/projects/types";
 import type { SectorItem } from "@/types";
 
 export type { ProjectListItem };

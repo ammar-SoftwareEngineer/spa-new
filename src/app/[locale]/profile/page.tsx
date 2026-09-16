@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import ProfilePageView from "@/components/Profile";
+import ProfilePageView from "@/components/profile";
 
 type ProfilePageProps = {
   params: Promise<{ locale: string }>;

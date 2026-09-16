@@ -1,14 +1,14 @@
 import { getTranslations } from "next-intl/server";
 import PageHero from "@/components/ui/PageHero";
-import ContactMainSection from "@/components/ContactUs/ContactMainSection";
-import ContactMapSection from "@/components/ContactUs/ContactMapSection";
+import ContactMainSection from "@/components/contact/ContactMainSection";
+import ContactMapSection from "@/components/contact/ContactMapSection";
 import type { LayoutContact } from "@/types/layoutTypes";
 
-type ContactUsPageProps = {
+type ContactPageViewProps = {
   contact?: LayoutContact | null;
 };
 
-export default async function ContactUsPage({ contact }: ContactUsPageProps) {
+export default async function ContactPageView({ contact }: ContactPageViewProps) {
   const t = await getTranslations("contact");
   const tNav = await getTranslations("nav");
 

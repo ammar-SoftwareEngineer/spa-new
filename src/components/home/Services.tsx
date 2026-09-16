@@ -3,7 +3,7 @@ import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
 import HeaderSection from "@/components/ui/HeaderSection";
 import { Button } from "@/components/ui/Button";
-import ServiceCard from "@/components/Services/ServiceCard";
+import ServiceCard from "@/components/services/ServiceCard";
 import { pickSlug } from "@/lib/localized-slug";
 import type { HomeSection, HomeService } from "@/types/homeTypes";
 

@@ -1,10 +1,10 @@
 import { getTranslations } from "next-intl/server";
-import ProjectHero from "@/components/Projects/ProjectHero";
-import ProjectMeta from "@/components/Projects/ProjectMeta";
-import ProjectTextBlock from "@/components/Projects/ProjectTextBlock";
-import ProjectGallery from "@/components/Projects/ProjectGallery";
-import ProjectVideo from "@/components/Projects/ProjectVideo";
-import type { ProjectListItem } from "@/components/Projects/types";
+import ProjectHero from "@/components/projects/ProjectHero";
+import ProjectMeta from "@/components/projects/ProjectMeta";
+import ProjectTextBlock from "@/components/projects/ProjectTextBlock";
+import ProjectGallery from "@/components/projects/ProjectGallery";
+import ProjectVideo from "@/components/projects/ProjectVideo";
+import type { ProjectListItem } from "@/components/projects/types";
 
 type ProjectDetailViewProps = {
   project: ProjectListItem;
