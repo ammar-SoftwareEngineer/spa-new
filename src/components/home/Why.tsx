@@ -5,7 +5,6 @@ import Section from "@/components/ui/Section";
 import { Link } from "@/i18n/navigation";
 import { stripHtml } from "@/lib/utils";
 import type { HomeSection, HomeStat } from "@/types/homeTypes";
-import type { WhyMetric } from "@/types";
 
 type WhyProps = {
   section: HomeSection & { values?: HomeStat[] };
@@ -36,24 +35,14 @@ export default async function Why({ section }: WhyProps) {
 
       <div className="grid grid-cols-12 gap-8">
         {values.map((item, index) => {
-          const rawNumber = Number(String(item.title).replace(/[^\d.]/g, "")) || 0;
+
           const isHighlight = index === 0;
-          const metric: WhyMetric = {
-            id: item.id,
-            titleKey: "",
-            descKey: "",
-            rawNumber,
-            isHighlight,
-            icon: isHighlight ? "ShieldCheck" : undefined,
-          };
+
 
           return (
             <div key={item.id} className="col-span-12 md:col-span-6 lg:col-span-4">
               <WhyMetricCard
-                item={metric}
-                staggerIndex={index}
-                title={item.sub_title}
-                description={stripHtml(item.text)}
+                item={item}
               />
             </div>
           );
@@ -62,9 +51,7 @@ export default async function Why({ section }: WhyProps) {
         <div className="col-span-12 md:col-span-6 lg:col-span-4">
           <Link href="/profile" className="block h-full no-underline">
             <WhyCtaCard
-              staggerIndex={values.length}
-              title={t("metric6Title")}
-              description={t("metric6Desc")}
+              item={values[values.length - 1]}
             />
           </Link>
         </div>

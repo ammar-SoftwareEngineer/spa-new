@@ -3,8 +3,11 @@
 import { ArrowRight } from "lucide-react";
 import Reveal from "@/components/ui/Reveal";
 import CountUp from "@/components/ui/CountUp";
-import { DynamicIcon } from "@/components/ui/icons";
-import type { WhyMetric } from "@/types";
+
+import { HomeStat } from "@/types/homeTypes";
+import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { stripHtml } from "@/lib/utils";
 
 const cardBase =
   "group relative overflow-hidden rounded-[20px] border border-border/70 glass-card interactive-card transition-[border-color,box-shadow] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-brand/45 hover:shadow-[0_18px_42px_rgba(33,118,149,0.22)]";
@@ -47,18 +50,16 @@ function HoverBg({ variant }: { variant: "metric" | "highlight" | "cta" }) {
 }
 
 type Props = {
-  item: WhyMetric;
-  staggerIndex: number;
-  title: string;
-  description: string;
+  item: HomeStat;
+
 };
 
-export function WhyMetricCard({ item, staggerIndex, title, description }: Props) {
-  const isHighlight = item.isHighlight === true;
-  const showPlus = title.includes("Years of Experience");
-
+export function WhyMetricCard({ item }: Props) {
+  const isHighlight = item.is_active === true;
+  const showPlus = item.sub_title.includes("Years of Experience");
+ 
   return (
-    <Reveal delay={staggerIndex * 0.08} className={isHighlight ? highlightClass : metricClass}>
+    <Reveal delay={ (item.order ?? 0) * 0.08} className={isHighlight ? highlightClass : metricClass}>
       <HoverBg variant={isHighlight ? "highlight" : "metric"} />
       <div className="relative z-[3] flex items-center justify-between">
         <div
@@ -66,10 +67,10 @@ export function WhyMetricCard({ item, staggerIndex, title, description }: Props)
             isHighlight ? "text-white" : "text-brand group-hover:text-white"
           }`}
         >
-          {showPlus ? "+ " : null}
-          <CountUp value={item.rawNumber} duration={2.5} />
+          {showPlus ?  <span> + <CountUp value={Number(String(item.title).replace(/[^\d.]/g, "")) || 0} duration={2.5} /></span> : <span>{item.title}</span>}
+
         </div>
-        {item.icon ? (
+        {item.image ? (
           <span
             className={`transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:scale-[1.06] ${
               isHighlight
@@ -77,7 +78,7 @@ export function WhyMetricCard({ item, staggerIndex, title, description }: Props)
                 : "text-text-muted opacity-60 group-hover:text-white group-hover:opacity-100"
             }`}
           >
-            <DynamicIcon name={item.icon} size={26} />
+            <Image src={item.image} alt={item.title} width={26} height={26} />
           </span>
         ) : null}
       </div>
@@ -86,7 +87,7 @@ export function WhyMetricCard({ item, staggerIndex, title, description }: Props)
           isHighlight ? "text-white" : "text-text-primary group-hover:text-white"
         }`}
       >
-        {title}
+        {item.sub_title}
       </h3>
       <p
         className={`relative z-[3] text-[0.88rem] leading-[1.6] transition-colors duration-700 ${
@@ -95,30 +96,25 @@ export function WhyMetricCard({ item, staggerIndex, title, description }: Props)
             : "text-text-secondary group-hover:text-white/85"
         }`}
       >
-        {description}
+        { stripHtml(item.text)}
       </p>
     </Reveal>
   );
 }
 
 export function WhyCtaCard({
-  staggerIndex,
-  title,
-  description,
-}: {
-  staggerIndex: number;
-  title: string;
-  description: string;
-}) {
+    item
+}: Props) {
+  const t = useTranslations("home.whyChooseUs");
   return (
-    <Reveal delay={staggerIndex * 0.08} className={ctaClass}>
+    <Reveal delay={(item.order ?? 0) * 0.08} className={ctaClass}>
       <HoverBg variant="cta" />
       <div className="relative z-[3] flex flex-col gap-3">
         <h3 className="text-[1.25rem] font-bold text-text-primary transition-colors duration-700 group-hover:text-brand">
-          {title}
+          {item.button_text || t("metric6Title")}
         </h3>
         <p className="text-[0.88rem] leading-[1.5] text-text-secondary transition-colors duration-700 group-hover:text-text-primary">
-          {description}
+          {item.button_link_url || t("metric6Desc")}
         </p>
       </div>
       <div className="relative z-[3] flex h-[42px] w-[42px] items-center justify-center rounded-full bg-brand text-white transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-[5px] group-hover:bg-navy group-hover:shadow-[0_8px_20px_rgba(33,118,149,0.4)] rtl:group-hover:-translate-x-[5px]">

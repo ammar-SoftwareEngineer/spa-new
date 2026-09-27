@@ -5,6 +5,7 @@ import Section from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 import CountUp from "@/components/ui/CountUp";
 import type { HomeSection, HomeStat } from "@/types/homeTypes";
+import { span } from "framer-motion/client";
 
 type WhoWeAreProps = {
   section: HomeSection & { statistics?: HomeStat[] };
@@ -55,13 +56,28 @@ export default async function WhoWeAre({ section }: WhoWeAreProps) {
                 const number = Number(String(stat.title).replace(/[^\d.]/g, "")) || 0;
                 const isYearsOfExperience = stat.sub_title.includes("Years of Experience");
                 const isProjectsCompleted = stat.sub_title.includes("Projects");
+     
+             
                 return (
                   <Reveal
                     key={stat.id}
                     delay={0.15 + index * 0.08}
                     className="group col-span-12 flex items-center gap-4 rounded-[22px] border border-border bg-bg-secondary/80 p-5 shadow-[var(--card-shadow)] transition-all duration-500 hover:-translate-y-1 hover:border-brand/35 hover:shadow-[0_14px_32px_rgba(33,118,149,0.12)] md:col-span-6"
                   >
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand/12 text-brand transition-all duration-500 group-hover:bg-brand group-hover:text-white">
+                    {stat.image ? (
+                    <Image
+                      src={stat.image}
+                      alt={stat.sub_title}
+                      width={20}
+                      height={20}
+                   
+                    />
+                  ) : null}
+                    </div>
+                  
                     <div className="min-w-0 flex-1">
+                      
                       <div className="text-[1.7rem] flex items-center gap-2 font-bold leading-none text-text-primary ltr:font-[family-name:var(--font-bebas-neue)] ltr:text-[1.95rem] rtl:font-[family-name:var(--font-cairo)]">
                         {isYearsOfExperience || isProjectsCompleted ? (
                           <span>
@@ -70,15 +86,7 @@ export default async function WhoWeAre({ section }: WhoWeAreProps) {
                         ) : (
                           <CountUp value={number} duration={2.5} />
                         )}
-                        {stat.image ? (
-                          <Image
-                            src={stat.image}
-                            alt={stat.sub_title}
-                            width={20}
-                            height={20}
-                            style={{ filter: "brightness(0) invert(1)" }}
-                          />
-                        ) : null}
+                        
                       </div>
 
                       <p className="mt-1.5 text-[0.88rem] font-medium leading-snug text-text-secondary">

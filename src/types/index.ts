@@ -136,17 +136,7 @@ export type AboutCounter = {
   icon: string;
 };
 
-export type WhyMetric = {
-  id: number;
-  titleKey: string;
-  descKey: string;
-  rawNumber: number;
-  textValKey?: string;
-  suffix?: string;
-  icon?: string;
-  isHighlight?: boolean;
-  isCta?: boolean;
-};
+
 
 export type TeamMember = {
   id: number;
