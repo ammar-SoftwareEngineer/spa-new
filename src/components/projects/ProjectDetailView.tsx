@@ -31,7 +31,7 @@ export default async function ProjectDetailView({ project }: ProjectDetailViewPr
   const scopeBody = project.scopeBody || "";
 
   return (
-    <div className="overflow-x-clip bg-bg-primary">
+    <div className="overflow-x-clip bg-bg-primary ">
       <ProjectHero
         image={project.image}
         title={project.title}

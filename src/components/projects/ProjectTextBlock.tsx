@@ -28,7 +28,7 @@ export default function ProjectTextBlock({
       }`}
     >
       <Container>
-        <div className="grid grid-cols-1 items-center gap-8 md:gap-10 lg:grid-cols-2 lg:gap-16">
+        <div className="grid grid-cols-1 gap-8 md:gap-10 lg:grid-cols-2 lg:gap-16">
           <Reveal className={reverse ? "lg:order-2" : ""}>
             <div className="group relative overflow-hidden rounded-[22px] border border-border shadow-[var(--card-shadow)] sm:rounded-[28px]">
               <div className="relative aspect-[16/11] sm:aspect-[4/3]">
@@ -54,9 +54,8 @@ export default function ProjectTextBlock({
               {title}
             </h2>
             <div className="mb-5 h-px w-14 bg-brand/50 sm:mb-6 sm:w-16" aria-hidden />
-            <p className="m-0 max-w-[540px] whitespace-pre-line text-[0.98rem] leading-[1.8] text-text-secondary sm:text-[1.05rem] sm:leading-[1.85]">
-              {text}
-            </p>
+            <p className="m-0 max-w-[540px] whitespace-pre-line text-[0.98rem] leading-[1.8] text-text-secondary sm:text-[1.05rem] sm:leading-[1.85]" dangerouslySetInnerHTML={{ __html: text }}/>
+            
           </Reveal>
         </div>
       </Container>
