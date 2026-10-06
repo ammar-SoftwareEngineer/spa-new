@@ -27,7 +27,7 @@ export default async function Services({ section }: ServicesProps) {
       <HeaderSection subtitle={section.sub_title} title={section.title} />
 
       <div className="grid w-full grid-cols-12 gap-6">
-        {services.map((service, index) => {
+        {services.slice(0,2).map((service, index) => {
           const slug = pickSlug(service.slug, locale);
           return (
             <ServiceCard
