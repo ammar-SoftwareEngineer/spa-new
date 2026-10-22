@@ -4,20 +4,15 @@ import type { ReactNode } from "react";
 import ProjectFilters from "@/components/projects/ProjectFilters";
 import ProjectGrid from "@/components/projects/ProjectGrid";
 import { useProjectFilters } from "@/components/projects/useProjectFilters";
+import type { ProjectFilterOption } from "@/components/projects/helpers";
 import type { ProjectListItem } from "@/components/projects/types";
-import type { SectorItem } from "@/types";
 
 export type { ProjectListItem };
 
-type FilterCategory = {
-  slug: string;
-  title?: string;
-};
-
 type ProjectsExplorerProps = {
   projects: ProjectListItem[];
-  categories: FilterCategory[];
-  sectors: SectorItem[];
+  scopes: ProjectFilterOption[];
+  sectors: ProjectFilterOption[];
   alwaysShowProjects?: boolean;
   initialScope?: string;
   idleContent?: ReactNode;
@@ -25,7 +20,7 @@ type ProjectsExplorerProps = {
 
 export default function ProjectsExplorer({
   projects,
-  categories,
+  scopes,
   sectors,
   alwaysShowProjects = false,
   initialScope = "",
@@ -37,7 +32,7 @@ export default function ProjectsExplorer({
   return (
     <div className="flex flex-col gap-6 sm:gap-8 md:gap-10">
       <ProjectFilters
-        categories={categories}
+        scopes={scopes}
         sectors={sectors}
         filters={{
           ...filters,

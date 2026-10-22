@@ -2,13 +2,8 @@
 
 import { useTranslations } from "next-intl";
 import { Search, X } from "lucide-react";
-import type { SectorItem } from "@/types";
+import type { ProjectFilterOption } from "@/components/projects/helpers";
 import type { SortOption } from "@/components/projects/types";
-
-type FilterCategory = {
-  slug: string;
-  title?: string;
-};
 
 export type ProjectFiltersState = {
   scope: string;
@@ -26,17 +21,16 @@ export type ProjectFiltersState = {
 };
 
 type ProjectFiltersProps = {
-  categories: FilterCategory[];
-  sectors: SectorItem[];
+  scopes: ProjectFilterOption[];
+  sectors: ProjectFilterOption[];
   filters: ProjectFiltersState;
 };
 
 const inputClass =
   "w-full min-h-11 appearance-none rounded-xl border border-border bg-bg-primary px-3 py-2.5 pe-10 text-[0.88rem] text-text-primary outline-none transition-[border-color,box-shadow] focus:border-brand focus:shadow-[0_0_0_3px_rgba(33,118,149,0.15)] sm:px-4 sm:py-3 sm:text-[0.92rem]";
 
-export default function ProjectFilters({ categories, sectors, filters }: ProjectFiltersProps) {
+export default function ProjectFilters({ scopes, sectors, filters }: ProjectFiltersProps) {
   const t = useTranslations("projects");
-  const tSectors = useTranslations("home.sectors");
 
   return (
     <div className="rounded-[18px] border border-border/70 bg-bg-secondary/60 p-3 shadow-[var(--card-shadow)] sm:rounded-[24px] sm:p-4 md:p-5">
@@ -52,9 +46,9 @@ export default function ProjectFilters({ categories, sectors, filters }: Project
               className={inputClass}
             >
               <option value="">{t("filters.scopeAll")}</option>
-              {categories.map((category) => (
-                <option key={category.slug} value={category.slug}>
-                  {category.title || category.slug}
+              {scopes.map((scope) => (
+                <option key={scope.id} value={scope.id}>
+                  {scope.name}
                 </option>
               ))}
             </select>
@@ -75,9 +69,9 @@ export default function ProjectFilters({ categories, sectors, filters }: Project
               className={inputClass}
             >
               <option value="">{t("filters.sectorAll")}</option>
-              {sectors.map((item) => (
-                <option key={item.slug} value={item.slug}>
-                  {tSectors(item.titleKey)}
+              {sectors.map((sector) => (
+                <option key={sector.id} value={sector.id}>
+                  {sector.name}
                 </option>
               ))}
             </select>

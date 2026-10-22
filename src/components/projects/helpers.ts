@@ -1,17 +1,27 @@
 import { pickSlug } from "@/lib/localized-slug";
-import type { ApiCategory, ApiProject } from "@/types/contentTypes";
+import type { ApiCategory, ApiProject, ApiScope, ApiSector } from "@/types/contentTypes";
 import type { ProjectListItem } from "@/components/projects/types";
 
 // Turn one API project into a ready-to-render list/detail item.
 export function toProjectListItem(project: ApiProject, locale: string, index = 0): ProjectListItem {
   const slug = pickSlug(project.slug, locale) || `project-${index}`;
 
+  const categorySources = project.categories?.length
+    ? project.categories
+    : project.category
+      ? [project.category]
+      : [];
+
   const categorySlugs =
     project.category_slugs ??
-    (project.categories ?? []).map((cat) => pickSlug(cat.slug, locale)).filter(Boolean);
+    categorySources.map((cat) => pickSlug(cat.slug, locale)).filter(Boolean);
 
-  const categoryLabels = (project.categories ?? [])
+  const categoryLabels = categorySources
     .map((cat) => cat.title || cat.name || "")
+    .filter(Boolean);
+
+  const scopeLabels = (project.scopes ?? [])
+    .map((scope) => scope.name?.trim() || "")
     .filter(Boolean);
 
   const gallery = (project.gallery ?? [])
@@ -27,10 +37,15 @@ export function toProjectListItem(project: ApiProject, locale: string, index = 0
     categorySlugs,
     serviceSlugs: (project.services ?? []).map((svc) => pickSlug(svc.slug, locale)).filter(Boolean),
     sectorSlugs: project.sector_slugs ?? [],
-    date: project.date || "",
+    sectorId: project.sector?.id != null ? String(project.sector.id) : "",
+    scopeIds: (project.scopes ?? [])
+      .map((scope) => (scope.id != null ? String(scope.id) : ""))
+      .filter(Boolean),
+    date: project.date || (project.year != null ? String(project.year) : ""),
     featured: Boolean(project.featured),
     categoryLabels,
-    sectorLabels: [],
+    sectorLabels: project.sector?.name ? [project.sector.name] : [],
+    scopeLabels,
     gallery,
     videoUrl: project.video_url || project.videoUrl,
     client: project.client,
@@ -45,6 +60,21 @@ export function toProjectListItem(project: ApiProject, locale: string, index = 0
 
 export function toProjectListItems(projects: ApiProject[], locale: string): ProjectListItem[] {
   return projects.map((project, index) => toProjectListItem(project, locale, index));
+}
+
+export type ProjectFilterOption = {
+  id: string;
+  name: string;
+};
+
+export function mapFilterOptions(items: Array<ApiSector | ApiScope>): ProjectFilterOption[] {
+  return [...items]
+    .filter((item) => item.id != null && item.name?.trim())
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .map((item) => ({
+      id: String(item.id),
+      name: item.name!.trim(),
+    }));
 }
 
 export type ProjectFilterCategory = {

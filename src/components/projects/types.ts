@@ -8,10 +8,13 @@ export type ProjectListItem = {
   categorySlugs: string[];
   serviceSlugs: string[];
   sectorSlugs: string[];
+  sectorId: string;
+  scopeIds: string[];
   date: string;
   featured?: boolean;
   categoryLabels: string[];
   sectorLabels: string[];
+  scopeLabels: string[];
   gallery: string[];
   videoUrl?: string;
   client?: string;

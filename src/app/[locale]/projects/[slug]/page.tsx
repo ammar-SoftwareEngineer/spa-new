@@ -4,15 +4,20 @@ import { setRequestLocale } from "next-intl/server";
 import ProjectCategoryView from "@/components/projects/ProjectCategoryView";
 import ProjectDetailView from "@/components/projects/ProjectDetailView";
 import {
-  mapFilterCategories,
+  mapFilterOptions,
   toProjectListItem,
   toProjectListItems,
 } from "@/components/projects/helpers";
 import { fetchCategoriesData, fetchCategoryDetailsData } from "@/api/categoriesService";
-import { fetchProjectDetailsData, fetchProjectsData } from "@/api/projectsService";
+import {
+  fetchProjectDetailsData,
+  fetchProjectsData,
+  fetchScopesData,
+  fetchSectorsData,
+} from "@/api/projectsService";
 import { getResponseData } from "@/lib/content";
 import { matchesLocalizedSlug, pickSlug } from "@/lib/localized-slug";
-import type { ApiCategory, ApiProject } from "@/types/contentTypes";
+import type { ApiCategory, ApiProject, ApiScope, ApiSector } from "@/types/contentTypes";
 
 export const revalidate = 60;
 
@@ -88,21 +93,26 @@ export default async function ProjectsSlugPage({ params }: ProjectSlugPageProps)
   const category = await findCategory(slug, locale);
 
   if (category) {
-    const [projectsRes, categoriesRes] = await Promise.all([
+    const [projectsRes, sectorsRes, scopesRes] = await Promise.all([
       fetchProjectsData(locale),
-      fetchCategoriesData(locale),
+      fetchSectorsData(locale),
+      fetchScopesData(locale),
     ]);
 
     const projects = getResponseData<ApiProject[]>(projectsRes) ?? [];
-    const categories = getResponseData<ApiCategory[]>(categoriesRes) ?? [];
+    const inCategory = projects.filter((project) =>
+      category.id != null
+        ? project.category?.id === category.id
+        : matchesLocalizedSlug(project.category?.slug, slug),
+    );
 
     return (
       <ProjectCategoryView
         title={category.title || category.name || ""}
         description={category.short_text || category.description || category.text || ""}
-        projects={toProjectListItems(projects, locale)}
-        filterCategories={mapFilterCategories(categories, locale)}
-        initialScope={pickSlug(category.slug, locale)}
+        projects={toProjectListItems(inCategory, locale)}
+        sectors={mapFilterOptions(getResponseData<ApiSector[]>(sectorsRes) ?? [])}
+        scopes={mapFilterOptions(getResponseData<ApiScope[]>(scopesRes) ?? [])}
       />
     );
   }

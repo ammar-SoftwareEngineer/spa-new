@@ -51,18 +51,50 @@ export type ApiProject = {
   video_url?: string;
   videoUrl?: string;
   gallery?: Array<string | { url?: string; image?: string }>;
+  year?: number | string;
   overview_title?: string;
   overview_body?: string;
   scope_title?: string;
   scope_body?: string;
   categories?: Array<{
+    id?: number;
     slug?: LocalizedSlug | string;
     name?: string;
     title?: string;
   }>;
+  category?: {
+    id?: number;
+    slug?: LocalizedSlug | string;
+    name?: string;
+    title?: string;
+  };
   category_slugs?: string[];
   sector_slugs?: string[];
+  sector?: {
+    id?: number;
+    name?: string;
+    slug?: LocalizedSlug | string;
+  } | null;
+  scopes?: Array<{
+    id?: number;
+    name?: string;
+    slug?: LocalizedSlug | string;
+  }>;
   services?: Array<{ slug?: LocalizedSlug | string }>;
+};
+
+export type ApiSector = {
+  id?: number;
+  name?: string;
+  order?: number;
+  slug?: LocalizedSlug | string;
+};
+
+export type ApiScope = {
+  id?: number;
+  name?: string;
+  order?: number;
+  slug?: LocalizedSlug | string;
 };
 
 export type ApiProduct = {

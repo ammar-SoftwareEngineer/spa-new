@@ -3,13 +3,13 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import ProjectsPageView from "@/components/projects";
 import {
   mapCategoryCards,
-  mapFilterCategories,
+  mapFilterOptions,
   toProjectListItems,
 } from "@/components/projects/helpers";
 import { fetchCategoriesData } from "@/api/categoriesService";
-import { fetchProjectsData } from "@/api/projectsService";
+import { fetchProjectsData, fetchScopesData, fetchSectorsData } from "@/api/projectsService";
 import { getResponseData } from "@/lib/content";
-import type { ApiCategory, ApiProject } from "@/types/contentTypes";
+import type { ApiCategory, ApiProject, ApiScope, ApiSector } from "@/types/contentTypes";
 
 export const revalidate = 60;
 
@@ -34,18 +34,23 @@ export default async function ProjectsPage({ params }: ProjectsPageProps) {
   const t = await getTranslations("home.projects");
 
   // two independent requests, run together
-  const [projectsRes, categoriesRes] = await Promise.all([
+  const [projectsRes, categoriesRes, sectorsRes, scopesRes] = await Promise.all([
     fetchProjectsData(locale),
     fetchCategoriesData(locale),
+    fetchSectorsData(locale),
+    fetchScopesData(locale),
   ]);
 
   const projects = getResponseData<ApiProject[]>(projectsRes) ?? [];
   const categories = getResponseData<ApiCategory[]>(categoriesRes) ?? [];
+  const sectors = getResponseData<ApiSector[]>(sectorsRes) ?? [];
+  const scopes = getResponseData<ApiScope[]>(scopesRes) ?? [];
 
   return (
     <ProjectsPageView
       projects={toProjectListItems(projects, locale)}
-      filterCategories={mapFilterCategories(categories, locale)}
+      sectors={mapFilterOptions(sectors)}
+      scopes={mapFilterOptions(scopes)}
       categoryCards={mapCategoryCards(categories, locale, t("viewCategory"))}
     />
   );

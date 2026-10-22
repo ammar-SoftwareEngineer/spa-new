@@ -17,8 +17,8 @@ export function useProjectFilters(projects: ProjectListItem[], initialScope = ""
     const search = query.trim().toLowerCase();
 
     const list = projects.filter((project) => {
-      const matchScope = !scope || project.categorySlugs.includes(scope);
-      const matchSector = !sector || project.sectorSlugs.includes(sector);
+      const matchScope = !scope || project.scopeIds.includes(scope);
+      const matchSector = !sector || project.sectorId === sector;
 
       if (!matchScope || !matchSector) return false;
       if (!search) return true;
@@ -29,6 +29,7 @@ export function useProjectFilters(projects: ProjectListItem[], initialScope = ""
         project.location,
         ...project.categoryLabels,
         ...project.sectorLabels,
+        ...project.scopeLabels,
       ]
         .join(" ")
         .toLowerCase();
