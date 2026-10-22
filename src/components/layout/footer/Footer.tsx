@@ -8,6 +8,7 @@ import type { NavItem, SocialLink } from "@/types";
 
 export type FooterData = {
   branding: { name: string; logo: string };
+  about: string;
   contact: { phone: string; email: string; address?: string; fax?: string };
   social: SocialLink[];
   footerLinks: NavItem[];
@@ -29,7 +30,7 @@ export default async function Footer({ data }: FooterProps) {
     >
       <Container className="relative z-[1] flex flex-col gap-[50px]">
         <div className="grid grid-cols-1 gap-[30px] sm:grid-cols-2 lg:grid-cols-[1.2fr_0.8fr_1fr_1fr] lg:gap-10">
-          <FooterBrand branding={data.branding} social={data.social} about={t("about")} />
+          <FooterBrand branding={data.branding} social={data.social} about={data.about} />
           <FooterLinks title={t("links")} links={data.footerLinks} label={tNav} />
           <FooterContact
             title={t("contact")}
@@ -48,7 +49,7 @@ export default async function Footer({ data }: FooterProps) {
               </>
             )}
           </div>
-          <div>{t("developedBy")}</div>
+          {data.copyright ? null : <div>{t("developedBy")}</div>}
         </div>
       </Container>
     </footer>

@@ -48,14 +48,29 @@ export type ApiProject = {
   consultant?: string;
   status?: string;
   featured?: boolean;
+  video?: string;
   video_url?: string;
   videoUrl?: string;
+  youtube_url?: string | null;
   gallery?: Array<string | { url?: string; image?: string }>;
+  images?: Array<{ id?: number; url?: string }>;
   year?: number | string;
   overview_title?: string;
   overview_body?: string;
   scope_title?: string;
   scope_body?: string;
+  scope_section?: {
+    title?: string;
+    text?: string;
+    image?: string;
+    phases?: Array<{
+      id?: number;
+      title?: string;
+      subtitle?: string;
+      content?: string;
+      order?: number;
+    }>;
+  } | null;
   categories?: Array<{
     id?: number;
     slug?: LocalizedSlug | string;
@@ -127,6 +142,20 @@ export type ApiProduct = {
     image?: string;
   }>;
   images?: Array<{ id?: number; url?: string }>;
+  tabs?: Array<{
+    id?: number;
+    title?: string;
+    content?: string;
+    sort_order?: number;
+    values?: Array<{
+      id?: number;
+      title?: string;
+      label?: string;
+      description?: string;
+      image?: string;
+      sort_order?: number;
+    }>;
+  }>;
 };
 
 export type ApiCategory = {

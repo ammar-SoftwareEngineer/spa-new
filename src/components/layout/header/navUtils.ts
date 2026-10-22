@@ -1,4 +1,4 @@
-import type { LayoutFooterLink, LayoutMenuItem, LayoutData } from "@/types/layoutTypes";
+import type { LayoutMenuItem, LayoutData } from "@/types/layoutTypes";
 import { formatLayoutPhone } from "@/types/layoutTypes";
 import type { NavItem } from "@/types";
 import type { FooterData } from "@/components/layout/footer/Footer";
@@ -72,32 +72,14 @@ export function mapLayoutMenu(menu: LayoutMenuItem[] | null | undefined): NavIte
   });
 }
 
-export function mapFooterLinks(links: LayoutFooterLink[] | null | undefined): NavItem[] {
-  if (!links?.length) return [];
-
-  return links
-    .filter((link) => link.title)
-    .map((link) => {
-      const href = resolveLink(link);
-      return {
-        key: hrefToKey(href, link.id),
-        href,
-        label: link.title!,
-      };
-    });
-}
-
-// Build footer props from layout API (+ fallback nav links).
-export function mapLayoutFooter(layout: LayoutData | null, fallbackNav: NavItem[]): FooterData {
-  const footerLinks = mapFooterLinks(layout?.footer?.links);
-  const links =
-    footerLinks.length > 0 ? footerLinks : fallbackNav.filter((item) => item.href !== "/");
-
+// Footer navigation uses the same links shown in the header.
+export function mapLayoutFooter(layout: LayoutData | null, menuNav: NavItem[]): FooterData {
   return {
     branding: {
       name: layout?.branding?.site_name || "S&PA",
       logo: layout?.branding?.logo || "/img/logo.png",
     },
+    about: layout?.footer?.body?.trim() || "",
     contact: {
       phone: formatLayoutPhone(layout?.contact) || "",
       email: layout?.contact?.email || "",
@@ -107,7 +89,7 @@ export function mapLayoutFooter(layout: LayoutData | null, fallbackNav: NavItem[
       name: link.platform,
       href: link.url,
     })),
-    footerLinks: links,
-    copyright: layout?.footer?.copyright ?? null,
+    footerLinks: menuNav,
+    copyright: layout?.footer?.copyright?.trim() || null,
   };
 }

@@ -9,6 +9,7 @@ type ProjectHeroProps = {
   year: string;
   homeLabel: string;
   projectsLabel: string;
+  categoryCrumb?: { label: string; href: string };
   sectorLabels: string[];
   categoryLabels: string[];
 };
@@ -19,20 +20,23 @@ export default function ProjectHero({
   year,
   homeLabel,
   projectsLabel,
+  categoryCrumb,
   sectorLabels,
   categoryLabels,
 }: ProjectHeroProps) {
   return (
     <section className="relative overflow-hidden border-b border-border pt-[100px] pb-20 sm:pt-[110px] sm:pb-24 md:pt-[140px] md:pb-32">
-      <div className="absolute inset-0 z-0">
-        <Image
-          src={image}
-          alt={title}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-        />
+      <div className="absolute inset-0 z-0 bg-[#0d3b4d]">
+        {image ? (
+          <Image
+            src={image}
+            alt={title}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+        ) : null}
       </div>
       <div className="absolute inset-0 z-[1] bg-gradient-to-r from-[#061018]/94 via-[#0d3b4d]/78 to-[#0d3b4d]/40 rtl:bg-gradient-to-l" />
       <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#061018]/80 via-transparent to-[#061018]/30" />
@@ -48,6 +52,16 @@ export default function ProjectHero({
           <Link href="/projects" className="shrink-0 transition-colors hover:text-brand">
             {projectsLabel}
           </Link>
+          {categoryCrumb ? (
+            <>
+              <span aria-hidden className="shrink-0">
+                /
+              </span>
+              <Link href={categoryCrumb.href} className="shrink-0 transition-colors hover:text-brand">
+                {categoryCrumb.label}
+              </Link>
+            </>
+          ) : null}
           <span aria-hidden className="shrink-0">
             /
           </span>
@@ -56,9 +70,11 @@ export default function ProjectHero({
 
         <Reveal>
           <div className="mb-4 flex flex-wrap items-center gap-2 sm:mb-6">
-            <span className="inline-flex rounded-md bg-brand px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-[0.1em] text-white sm:px-3 sm:py-1.5 sm:text-[0.72rem]">
-              {year}
-            </span>
+            {year ? (
+              <span className="inline-flex rounded-md bg-brand px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-[0.1em] text-white sm:px-3 sm:py-1.5 sm:text-[0.72rem]">
+                {year}
+              </span>
+            ) : null}
             {sectorLabels.map((label) => (
               <span
                 key={label}

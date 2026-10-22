@@ -24,6 +24,15 @@ export type ProjectListItem = {
   overviewBody?: string;
   scopeTitle?: string;
   scopeBody?: string;
+  scopeImage?: string;
+  scopePhases: ProjectScopePhase[];
+};
+
+export type ProjectScopePhase = {
+  id: string;
+  title: string;
+  subtitle: string;
+  content: string;
 };
 
 export type SortOption = "recommended" | "newest" | "oldest" | "name-asc" | "name-desc";

@@ -37,7 +37,12 @@ function toEmbedUrl(url: string): string {
   return url;
 }
 
+function isDirectVideo(url: string) {
+  return /\.(mp4|webm|ogg)(\?|#|$)/i.test(url);
+}
+
 export default function ProjectVideo({ url, title, iframeTitle }: ProjectVideoProps) {
+  const directVideo = isDirectVideo(url);
   const embedUrl = toEmbedUrl(url);
 
   return (
@@ -59,15 +64,26 @@ export default function ProjectVideo({ url, title, iframeTitle }: ProjectVideoPr
             <div className="pointer-events-none absolute bottom-5 end-5 z-[2] h-8 w-8 border-e-2 border-b-2 border-white/0 transition-all duration-500 group-hover:border-white/50 sm:bottom-6 sm:end-6 sm:h-10 sm:w-10" />
 
             <div className="relative aspect-video w-full bg-[#061018]">
-              <iframe
-                title={iframeTitle}
-                src={embedUrl}
-                className="absolute inset-0 h-full w-full border-0"
-                loading="lazy"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-                referrerPolicy="strict-origin-when-cross-origin"
-              />
+              {directVideo ? (
+                <video
+                  src={url}
+                  title={iframeTitle}
+                  className="absolute inset-0 h-full w-full"
+                  controls
+                  playsInline
+                  preload="metadata"
+                />
+              ) : (
+                <iframe
+                  title={iframeTitle}
+                  src={embedUrl}
+                  className="absolute inset-0 h-full w-full border-0"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  referrerPolicy="strict-origin-when-cross-origin"
+                />
+              )}
             </div>
           </div>
         </Reveal>

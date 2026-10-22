@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server";
 import PageHero from "@/components/ui/PageHero";
 import Section from "@/components/ui/Section";
 import ProjectsExplorer from "@/components/projects/ProjectsExplorer";
@@ -12,16 +13,23 @@ type ProjectCategoryViewProps = {
   sectors: ProjectFilterOption[];
 };
 
-export default function ProjectCategoryView({
+export default async function ProjectCategoryView({
   title,
   description,
   projects,
   scopes,
   sectors,
 }: ProjectCategoryViewProps) {
+  const tNav = await getTranslations("nav");
+
   return (
     <>
-      <PageHero title={title} description={description} currentLabel={title} />
+      <PageHero
+        title={title}
+        description={description}
+        currentLabel={title}
+        trail={[{ label: tNav("projects"), href: "/projects" }]}
+      />
 
       <Section className="overflow-x-clip py-12 sm:py-20 md:py-28">
         <ProjectsExplorer

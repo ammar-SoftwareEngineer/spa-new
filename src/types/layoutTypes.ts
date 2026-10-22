@@ -21,7 +21,7 @@ export type LayoutFooterLink = {
 };
 
 export type LayoutFooter = {
-  body: string;
+  body: string | null;
   copyright: string | null;
   links: LayoutFooterLink[];
 };

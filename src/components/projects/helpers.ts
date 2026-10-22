@@ -1,6 +1,32 @@
 import { pickSlug } from "@/lib/localized-slug";
+import { toPlainText } from "@/lib/utils";
 import type { ApiCategory, ApiProject, ApiScope, ApiSector } from "@/types/contentTypes";
-import type { ProjectListItem } from "@/components/projects/types";
+import type { ProjectListItem, ProjectScopePhase } from "@/components/projects/types";
+
+function filled(value?: string | null) {
+  return value?.trim() || "";
+}
+
+function projectGallery(project: ApiProject) {
+  const fromImages = (project.images ?? []).map((image) => filled(image.url));
+  const fromGallery = (project.gallery ?? []).map((entry) =>
+    filled(typeof entry === "string" ? entry : entry.url || entry.image),
+  );
+
+  return [...fromImages, ...fromGallery].filter(Boolean);
+}
+
+function projectPhases(project: ApiProject): ProjectScopePhase[] {
+  return [...(project.scope_section?.phases ?? [])]
+    .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+    .map((phase, index) => ({
+      id: phase.id != null ? String(phase.id) : `phase-${index}`,
+      title: filled(phase.title),
+      subtitle: filled(phase.subtitle),
+      content: filled(phase.content),
+    }))
+    .filter((phase) => phase.title || phase.subtitle || phase.content);
+}
 
 // Turn one API project into a ready-to-render list/detail item.
 export function toProjectListItem(project: ApiProject, locale: string, index = 0): ProjectListItem {
@@ -24,14 +50,14 @@ export function toProjectListItem(project: ApiProject, locale: string, index = 0
     .map((scope) => scope.name?.trim() || "")
     .filter(Boolean);
 
-  const gallery = (project.gallery ?? [])
-    .map((entry) => (typeof entry === "string" ? entry : entry.url || entry.image || ""))
-    .filter(Boolean);
+  const gallery = projectGallery(project);
+  const videoUrl =
+    filled(project.youtube_url) || filled(project.video) || filled(project.video_url) || filled(project.videoUrl);
 
   return {
     slug,
     title: project.title || project.name || "",
-    description: project.short_text || project.description || project.text || "",
+    description: toPlainText(project.short_text || project.description || project.text),
     location: project.location || "",
     image: project.image || project.main_image || "",
     categorySlugs,
@@ -46,15 +72,17 @@ export function toProjectListItem(project: ApiProject, locale: string, index = 0
     categoryLabels,
     sectorLabels: project.sector?.name ? [project.sector.name] : [],
     scopeLabels,
-    gallery,
-    videoUrl: project.video_url || project.videoUrl,
     client: project.client,
     consultant: project.consultant,
     status: project.status,
-    overviewTitle: project.overview_title,
-    overviewBody: project.overview_body,
-    scopeTitle: project.scope_title,
-    scopeBody: project.scope_body,
+    overviewTitle: filled(project.overview_title) || toPlainText(project.short_text),
+    overviewBody: filled(project.overview_body) || filled(project.text),
+    scopeTitle: filled(project.scope_section?.title) || filled(project.scope_title),
+    scopeBody: filled(project.scope_section?.text) || filled(project.scope_body),
+    scopeImage: filled(project.scope_section?.image),
+    scopePhases: projectPhases(project),
+    gallery,
+    videoUrl: videoUrl || undefined,
   };
 }
 

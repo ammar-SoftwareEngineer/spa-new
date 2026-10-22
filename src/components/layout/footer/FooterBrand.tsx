@@ -88,7 +88,16 @@ export default function FooterBrand({ branding, social, about }: FooterBrandProp
         height={45}
         className="h-[45px] w-auto self-start"
       />
-      <p className="text-[0.9rem] leading-relaxed opacity-85">{about}</p>
+      {about ? (
+        /<[a-z][\s\S]*>/i.test(about) ? (
+          <div
+            className="text-[0.9rem] leading-relaxed opacity-85 [&_p]:m-0 [&_p+p]:mt-3"
+            dangerouslySetInnerHTML={{ __html: about }}
+          />
+        ) : (
+          <p className="text-[0.9rem] leading-relaxed opacity-85">{about}</p>
+        )
+      ) : null}
       <div className="mt-2 flex gap-3">
         {social.map((item) => (
           <a

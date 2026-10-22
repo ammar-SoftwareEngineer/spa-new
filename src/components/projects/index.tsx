@@ -2,23 +2,13 @@ import { getTranslations } from "next-intl/server";
 import PageHero from "@/components/ui/PageHero";
 import Section from "@/components/ui/Section";
 import CategoryCards from "@/components/shared/CategoryCards";
-import ProjectsExplorer from "@/components/projects/ProjectsExplorer";
-import type { ProjectCategoryCard, ProjectFilterOption } from "@/components/projects/helpers";
-import type { ProjectListItem } from "@/components/projects/types";
+import type { ProjectCategoryCard } from "@/components/projects/helpers";
 
 type ProjectsPageViewProps = {
-  projects: ProjectListItem[];
-  scopes: ProjectFilterOption[];
-  sectors: ProjectFilterOption[];
   categoryCards: ProjectCategoryCard[];
 };
 
-export default async function ProjectsPageView({
-  projects,
-  scopes,
-  sectors,
-  categoryCards,
-}: ProjectsPageViewProps) {
+export default async function ProjectsPageView({ categoryCards }: ProjectsPageViewProps) {
   const t = await getTranslations("projects");
   const tNav = await getTranslations("nav");
 
@@ -31,12 +21,7 @@ export default async function ProjectsPageView({
       />
 
       <Section className="overflow-x-clip py-12 sm:py-20 md:py-28">
-        <ProjectsExplorer
-          projects={projects}
-          scopes={scopes}
-          sectors={sectors}
-          idleContent={<CategoryCards categories={categoryCards} />}
-        />
+        <CategoryCards categories={categoryCards} />
       </Section>
     </>
   );

@@ -39,15 +39,17 @@ function CategoryCard({ category }: { category: CategoryCardData }) {
       href={category.link}
       className="group relative flex min-h-[300px] aspect-[4/5] items-end overflow-hidden rounded-[22px] border border-border/60 shadow-[0_16px_48px_rgba(13,59,77,0.14)] outline-none transition-[border-color,box-shadow,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-1 hover:border-brand/40 hover:shadow-[0_28px_64px_rgba(33,118,149,0.28)] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 sm:min-h-[360px] sm:rounded-[28px] md:aspect-[3/4] md:rounded-[32px]"
     >
-      <div className="absolute inset-0 z-0">
-        <Image
-          src={category.image}
-          alt={category.title}
-          fill
-          className="object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
-          sizes="(max-width: 1024px) 100vw, 50vw"
-          priority={category.index === 0}
-        />
+      <div className="absolute inset-0 z-0 bg-[#0d3b4d]">
+        {category.image ? (
+          <Image
+            src={category.image}
+            alt={category.title}
+            fill
+            className="object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            priority={category.index === 0}
+          />
+        ) : null}
       </div>
 
       <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#061018] via-[#0d3b4d]/72 to-[#0d3b4d]/15 transition-opacity duration-700 group-hover:via-[#0d3b4d]/78" />
