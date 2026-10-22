@@ -7,12 +7,15 @@ import "@/styles/globals.css";
 import Header from "@/components/layout/header/Header";
 import Footer from "@/components/layout/footer/Footer";
 import { fetchLayoutData } from "@/api/layoutService";
+import { fetchProductsData } from "@/api/productsService";
+import { mapProductCards } from "@/components/products/helpers";
 import { type LayoutData } from "@/types/layoutTypes";
 import { getResponseData } from "@/lib/content";
-import { mapLayoutFooter, mapLayoutMenu } from "@/components/layout/header/navUtils";
+import { mapLayoutFooter, mapLayoutMenu, withProductLinks } from "@/components/layout/header/navUtils";
 import { routing } from "@/i18n/routing";
 import { getBaseUrl } from "@/lib/utils";
 import type { NavItem } from "@/types";
+import type { ApiProduct } from "@/types/contentTypes";
 
 // Fallback nav when layout API is unavailable.
 const FALLBACK_NAV: NavItem[] = [
@@ -104,11 +107,21 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   setRequestLocale(locale);
   const messages = await getMessages();
 
-  const res = await fetchLayoutData(locale);
+  const [res, productsRes] = await Promise.all([
+    fetchLayoutData(locale),
+    fetchProductsData(locale),
+  ]);
   const layout = getResponseData<LayoutData>(res);
+  const products = getResponseData<ApiProduct[]>(productsRes) ?? [];
 
   const navItems = mapLayoutMenu(layout?.menu);
-  const headerNav = navItems.length > 0 ? navItems : FALLBACK_NAV;
+  const headerNav = withProductLinks(
+    navItems.length > 0 ? navItems : FALLBACK_NAV,
+    mapProductCards(products, locale).map((product) => ({
+      slug: product.slug,
+      label: product.title,
+    })),
+  );
   const logoSrc = layout?.branding?.logo || "/img/logo.png";
   const footerData = mapLayoutFooter(layout, FALLBACK_NAV);
 

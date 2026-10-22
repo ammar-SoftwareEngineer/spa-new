@@ -37,6 +37,25 @@ function hrefToKey(href: string, id?: number): string {
   return cleaned || (id != null ? String(id) : "item");
 }
 
+// Products dropdown: only the product names returned by the API.
+export function withProductLinks(
+  items: NavItem[],
+  products: { slug: string; label: string }[],
+): NavItem[] {
+  const links = products.filter((product) => product.slug && product.label);
+  if (!links.length) return items;
+
+  const children: NavItem[] = links.map((product) => ({
+    key: product.slug,
+    href: `/products/${product.slug}`,
+    label: product.label,
+  }));
+
+  return items.map((item) =>
+    item.href === "/products" || item.key === "products" ? { ...item, children } : item,
+  );
+}
+
 export function mapLayoutMenu(menu: LayoutMenuItem[] | null | undefined): NavItem[] {
   if (!menu?.length) return [];
 

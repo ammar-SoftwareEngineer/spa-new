@@ -1,30 +1,17 @@
 import { getTranslations } from "next-intl/server";
-import { notFound } from "next/navigation";
 import PageHero from "@/components/ui/PageHero";
-import Pagination from "@/components/ui/Pagination";
 import ProductDetailContent from "@/components/products/ProductDetailContent";
 import { mapProductDetail } from "@/components/products/helpers";
-import { paginateItems } from "@/components/products/paginate";
 import type { ApiProduct } from "@/types/contentTypes";
 
 type ProductDetailViewProps = {
   product: ApiProduct;
   locale: string;
-  page?: number;
 };
 
-export default async function ProductDetailView({
-  product,
-  locale,
-  page = 1,
-}: ProductDetailViewProps) {
+export default async function ProductDetailView({ product, locale }: ProductDetailViewProps) {
   const tNav = await getTranslations("nav");
   const data = mapProductDetail(product, locale);
-  const paged = paginateItems(data.lines, page);
-
-  if (page > paged.totalPages && paged.totalCount > 0) {
-    notFound();
-  }
 
   return (
     <>
@@ -35,17 +22,8 @@ export default async function ProductDetailView({
         categoryTitle={data.title}
         categoryDetail={data.detail}
         featureLabels={data.features}
-        lines={paged.items}
+        lines={data.lines}
         productsLabel={tNav("products")}
-        pagination={
-          <Pagination
-            basePath={`/products/${data.slug}`}
-            activePage={paged.activePage}
-            totalPages={paged.totalPages}
-            hash="product-gallery"
-            labelsNamespace="products.pagination"
-          />
-        }
       />
     </>
   );

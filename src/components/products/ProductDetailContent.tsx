@@ -1,4 +1,3 @@
-import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import ProductOverview from "@/components/products/ProductOverview";
 import ProductLinesAndForm from "@/components/products/ProductLinesAndForm";
@@ -17,7 +16,6 @@ type ProductDetailContentProps = {
   featureLabels: string[];
   lines: LineView[];
   productsLabel: string;
-  pagination?: ReactNode;
 };
 
 export default async function ProductDetailContent({
@@ -27,7 +25,6 @@ export default async function ProductDetailContent({
   featureLabels,
   lines,
   productsLabel,
-  pagination,
 }: ProductDetailContentProps) {
   const t = await getTranslations("products");
 
@@ -43,7 +40,7 @@ export default async function ProductDetailContent({
         visitWebsiteLabel={t("detail.visitWebsite")}
       />
 
-      <ProductLinesAndForm categoryTitle={categoryTitle} lines={lines} pagination={pagination} />
+      <ProductLinesAndForm categoryTitle={categoryTitle} lines={lines} />
     </>
   );
 }

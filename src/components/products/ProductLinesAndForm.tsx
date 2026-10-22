@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import Reveal from "@/components/ui/Reveal";
 import Section from "@/components/ui/Section";
@@ -18,19 +18,16 @@ type LineView = {
 type ProductLinesAndFormProps = {
   categoryTitle: string;
   lines: LineView[];
-  pagination?: ReactNode;
 };
 
-export default function ProductLinesAndForm({
-  categoryTitle,
-  lines,
-  pagination,
-}: ProductLinesAndFormProps) {
+export default function ProductLinesAndForm({ categoryTitle, lines }: ProductLinesAndFormProps) {
   const t = useTranslations("products");
   const [selectedTitle, setSelectedTitle] = useState(categoryTitle);
+  const [selectedImage, setSelectedImage] = useState("");
 
   function selectLine(line: LineView) {
-    setSelectedTitle(line.title);
+    setSelectedImage(line.line.image);
+    setSelectedTitle(line.title || categoryTitle);
     window.requestAnimationFrame(() => {
       document.getElementById("product-inquiry")?.scrollIntoView({
         behavior: "smooth",
@@ -65,12 +62,10 @@ export default function ProductLinesAndForm({
                   delay={Math.min(index * 0.08, 0.4)}
                   inquireLabel={t("form.inquire")}
                   onInquire={() => selectLine(item)}
-                  active={selectedTitle === item.title}
-                  tag={categoryTitle}
+                  active={selectedImage === item.line.image}
                 />
               ))}
             </div>
-            {pagination}
           </>
         ) : (
           <p className="text-center text-text-secondary">{t("detail.noLines")}</p>
@@ -81,7 +76,7 @@ export default function ProductLinesAndForm({
         <div className="mx-auto max-w-3xl">
           <Reveal>
             {/* key remounts the form with fresh defaults when another line is picked */}
-            <ProductInquiryForm key={selectedTitle} productTitle={selectedTitle} />
+            <ProductInquiryForm key={`${selectedTitle}-${selectedImage}`} productTitle={selectedTitle} />
           </Reveal>
         </div>
       </Section>

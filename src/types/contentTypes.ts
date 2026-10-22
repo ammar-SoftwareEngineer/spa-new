@@ -78,6 +78,12 @@ export type ApiProduct = {
   icon?: string;
   website?: string;
   slug: LocalizedSlug | string;
+  sort_order?: number;
+  category?: {
+    name?: string;
+    title?: string;
+    slug?: LocalizedSlug | string;
+  };
   features?: Array<string | { title?: string; text?: string }>;
   featureKeys?: string[];
   lines?: Array<{

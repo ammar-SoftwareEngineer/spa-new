@@ -18,7 +18,7 @@ export default function ProductCard({
   image,
   title,
   description,
-  icon = "Package",
+  icon,
   index = 0,
   delay = 0,
 }: ProductCardProps) {
@@ -51,9 +51,11 @@ export default function ProductCard({
         <span className="pointer-events-none absolute start-5 top-5 h-9 w-9 border-s border-t border-white/30 transition-colors duration-500 group-hover:border-brand" />
         <span className="pointer-events-none absolute bottom-5 end-5 h-9 w-9 border-e border-b border-white/20 transition-colors duration-500 group-hover:border-white/50" />
 
-        <span className="absolute start-5 top-5 z-[1] inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white backdrop-blur-sm transition-colors duration-500 group-hover:bg-brand">
-          <DynamicIcon name={icon} size={18} />
-        </span>
+        {icon ? (
+          <span className="absolute start-5 top-5 z-[1] inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-white backdrop-blur-sm transition-colors duration-500 group-hover:bg-brand">
+            <DynamicIcon name={icon} size={18} />
+          </span>
+        ) : null}
 
         <span className="relative z-[1] mt-auto flex flex-col gap-2.5 p-6 sm:p-7">
           <span className="h-0.5 w-8 origin-start scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100" />

@@ -32,7 +32,7 @@ export default function ProductLineCard({
       <button
         type="button"
         onClick={onInquire}
-        aria-label={`${inquireLabel}: ${title}`}
+        aria-label={title ? `${inquireLabel}: ${title}` : inquireLabel}
         aria-pressed={active}
         className={`group flex h-full w-full flex-col overflow-hidden rounded-[18px] border bg-bg-primary text-start outline-none transition-all duration-500 hover:-translate-y-1.5 focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 ${
           active
@@ -43,7 +43,7 @@ export default function ProductLineCard({
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-white">
           <Image
             src={line.image}
-            alt={title}
+            alt={title || inquireLabel}
             fill
             unoptimized
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
@@ -51,23 +51,27 @@ export default function ProductLineCard({
           />
         </div>
 
-        <div className="flex flex-col gap-2 px-5 py-5 sm:px-6 sm:py-6">
-          {tag ? (
-            <span className="inline-flex w-fit rounded-sm bg-brand px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-[0.1em] text-white">
-              {tag}
-            </span>
-          ) : null}
-          {category ? (
-            <span className="text-[0.8rem] font-medium text-brand">{category}</span>
-          ) : description ? (
-            <span className="line-clamp-2 text-[0.8rem] font-medium leading-[1.5] text-brand">
-              {description}
-            </span>
-          ) : null}
-          <h3 className="m-0 text-[1.1rem] font-bold leading-[1.35] text-text-primary transition-colors duration-300 group-hover:text-brand sm:text-[1.2rem]">
-            {title}
-          </h3>
-        </div>
+        {tag || category || description || title ? (
+          <div className="flex flex-col gap-2 px-5 py-5 sm:px-6 sm:py-6">
+            {tag ? (
+              <span className="inline-flex w-fit rounded-sm bg-brand px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-[0.1em] text-white">
+                {tag}
+              </span>
+            ) : null}
+            {category ? (
+              <span className="text-[0.8rem] font-medium text-brand">{category}</span>
+            ) : description ? (
+              <span className="line-clamp-2 text-[0.8rem] font-medium leading-[1.5] text-brand">
+                {description}
+              </span>
+            ) : null}
+            {title ? (
+              <h3 className="m-0 text-[1.1rem] font-bold leading-[1.35] text-text-primary transition-colors duration-300 group-hover:text-brand sm:text-[1.2rem]">
+                {title}
+              </h3>
+            ) : null}
+          </div>
+        ) : null}
       </button>
     </Reveal>
   );

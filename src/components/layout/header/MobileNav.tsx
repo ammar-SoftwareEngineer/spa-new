@@ -53,18 +53,27 @@ export default function MobileNav({
 
           return (
             <li key={item.key} className="flex w-full flex-col items-center gap-2">
-              <button
-                type="button"
-                onClick={() => onToggleDropdown(item.key)}
-                className="flex items-center gap-2 text-[1.8rem] font-bold text-text-primary transition-colors hover:text-brand ltr:font-[family-name:var(--font-bebas-neue)] ltr:tracking-wider rtl:font-[family-name:var(--font-cairo)]"
-                aria-expanded={dropdownOpen}
-              >
-                {displayLabel(item)}
-                <ChevronDown
-                  size={18}
-                  className={`transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
-                />
-              </button>
+              <div className="flex items-center gap-2">
+                <NavLink
+                  item={item}
+                  className="text-[1.8rem] font-bold text-text-primary transition-colors hover:text-brand ltr:font-[family-name:var(--font-bebas-neue)] ltr:tracking-wider rtl:font-[family-name:var(--font-cairo)]"
+                  onClick={onClose}
+                >
+                  {displayLabel(item)}
+                </NavLink>
+                <button
+                  type="button"
+                  onClick={() => onToggleDropdown(item.key)}
+                  className="text-text-primary transition-colors hover:text-brand"
+                  aria-expanded={dropdownOpen}
+                  aria-label={displayLabel(item)}
+                >
+                  <ChevronDown
+                    size={18}
+                    className={`transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+              </div>
 
               {dropdownOpen ? (
                 <ul className="flex list-none flex-col items-center gap-1">

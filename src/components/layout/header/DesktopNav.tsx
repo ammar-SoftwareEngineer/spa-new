@@ -52,20 +52,18 @@ export default function DesktopNav({
             onMouseEnter={() => onOpen(item.key)}
             onMouseLeave={() => onOpen(null)}
           >
-            <button
-              type="button"
-              className={`${navLinkBase} flex cursor-pointer items-center gap-1 ${
+            <div
+              className={`${navLinkBase} flex items-center gap-1 ${
                 isOpen || isItemActive(item) ? navLinkActive : navLinkIdle
               }`}
-              aria-expanded={isOpen}
-              aria-haspopup="true"
             >
-              {displayLabel(item)}
+              <NavLink item={item}>{displayLabel(item)}</NavLink>
               <ChevronDown
                 size={14}
+                aria-hidden
                 className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
               />
-            </button>
+            </div>
 
             <div
               className={`absolute start-0 top-full z-50 pt-2 transition-opacity duration-200 ${
