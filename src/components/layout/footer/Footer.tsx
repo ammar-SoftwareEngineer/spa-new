@@ -6,6 +6,8 @@ import FooterContact from "@/components/layout/footer/FooterContact";
 import FooterNewsletter from "@/components/layout/footer/FooterNewsletter";
 import type { NavItem, SocialLink } from "@/types";
 
+const BE_GROUP_URL = "https://be-group.com";
+
 export type FooterData = {
   branding: { name: string; logo: string };
   about: string;
@@ -19,9 +21,31 @@ type FooterProps = {
   data: FooterData;
 };
 
+function withBeGroupLink(text: string) {
+  const parts = text.split(/(Be\s*Group(?:\s+Agency)?)/i);
+
+  return parts.map((part, index) =>
+    /^Be\s*Group/i.test(part) ? (
+      <a
+        key={`${part}-${index}`}
+        href={BE_GROUP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="font-semibold text-text-primary transition-colors hover:text-brand dark:text-white"
+      >
+        {part}
+      </a>
+    ) : (
+      <span key={`${part}-${index}`}>{part}</span>
+    ),
+  );
+}
+
 export default async function Footer({ data }: FooterProps) {
   const tNav = await getTranslations("nav");
   const t = await getTranslations("footer");
+  const copyright = data.copyright?.trim() || "";
+  const hasBeGroupCredit = /Be\s*Group/i.test(copyright);
 
   return (
     <footer
@@ -43,13 +67,15 @@ export default async function Footer({ data }: FooterProps) {
 
         <div className="flex flex-col items-center gap-4 border-t border-border pt-[25px] text-center text-[0.85rem] opacity-80 md:flex-row md:justify-between md:text-start dark:border-white/5">
           <div>
-            {data.copyright || (
+            {copyright ? (
+              withBeGroupLink(copyright)
+            ) : (
               <>
                 &copy; {new Date().getFullYear()} {t("rights")}
               </>
             )}
           </div>
-          {data.copyright ? null : <div>{t("developedBy")}</div>}
+          {hasBeGroupCredit ? null : <div>{withBeGroupLink(t("developedBy"))}</div>}
         </div>
       </Container>
     </footer>

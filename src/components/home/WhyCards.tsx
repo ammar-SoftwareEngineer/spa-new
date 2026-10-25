@@ -78,7 +78,7 @@ export function WhyMetricCard({ item }: Props) {
                 : "text-text-muted opacity-60 group-hover:text-white group-hover:opacity-100"
             }`}
           >
-            <Image src={item.image} alt={item.title} width={26} height={26} />
+            <Image src={item.image} alt={item.title} width={45} height={45} className="transition duration-500 group-hover:brightness-0 group-hover:invert" />
           </span>
         ) : null}
       </div>

@@ -16,12 +16,12 @@
   },
   "detail": {
     "featuresTitle": "ماذا تشمل هذه الفئة",
-    "linesEyebrow": "التفاصيل",
-    "linesTitle": "تفاصيل المنتج",
-    "linesDescription": "اختر تبويباً لعرض عناصره.",
+    "linesEyebrow": "معرض المنتجات",
+    "linesTitle": "المنتجات في هذه الفئة",
+    "linesDescription": "تصفح صور المنتجات.",
     "visitWebsite": "زيارة موقع العلامة",
     "backToProducts": "العودة إلى المنتجات",
-    "noLines": "لا توجد عناصر في هذا التبويب."
+    "noLines": "ستظهر المنتجات هنا قريباً."
   },
   "afcCatValvesTag": "صمامات",
   "afcCatValves": "صمامات الحماية من الحريق",

@@ -64,14 +64,14 @@ export default async function WhoWeAre({ section }: WhoWeAreProps) {
                     delay={0.15 + index * 0.08}
                     className="group col-span-12 flex items-center gap-4 rounded-[22px] border border-border bg-bg-secondary/80 p-5 shadow-[var(--card-shadow)] transition-all duration-500 hover:-translate-y-1 hover:border-brand/35 hover:shadow-[0_14px_32px_rgba(33,118,149,0.12)] md:col-span-6"
                   >
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand/12 text-brand transition-all duration-500 group-hover:bg-brand group-hover:text-white">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand/12 text-brand transition-all duration-500 group-hover:bg-brand ">
                     {stat.image ? (
                     <Image
                       src={stat.image}
                       alt={stat.sub_title}
                       width={20}
                       height={20}
-                   
+                      className="transition duration-500 group-hover:brightness-0 group-hover:invert"
                     />
                   ) : null}
                     </div>

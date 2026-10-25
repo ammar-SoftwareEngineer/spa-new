@@ -1,7 +1,8 @@
+import type { CategoryCardData } from "@/components/categories/CategoryCards";
+import type { ProjectListItem, ProjectScopePhase } from "@/components/projects/types";
 import { pickSlug } from "@/lib/localized-slug";
 import { toPlainText } from "@/lib/utils";
 import type { ApiCategory, ApiProject, ApiScope, ApiSector } from "@/types/contentTypes";
-import type { ProjectListItem, ProjectScopePhase } from "@/components/projects/types";
 
 function filled(value?: string | null) {
   return value?.trim() || "";
@@ -16,7 +17,10 @@ function projectGallery(project: ApiProject) {
   return [...fromImages, ...fromGallery].filter(Boolean);
 }
 
-function projectPhases(project: ApiProject): ProjectScopePhase[] {
+function projectPhases(project: ApiProject, gallery: string[] = []): ProjectScopePhase[] {
+  const images = gallery ?? [];
+  const fallbackImage = filled(project.scope_section?.image) || filled(project.image) || filled(project.main_image);
+
   return [...(project.scope_section?.phases ?? [])]
     .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
     .map((phase, index) => ({
@@ -24,6 +28,7 @@ function projectPhases(project: ApiProject): ProjectScopePhase[] {
       title: filled(phase.title),
       subtitle: filled(phase.subtitle),
       content: filled(phase.content),
+      image: filled(phase.image) || images[index] || fallbackImage,
     }))
     .filter((phase) => phase.title || phase.subtitle || phase.content);
 }
@@ -80,7 +85,7 @@ export function toProjectListItem(project: ApiProject, locale: string, index = 0
     scopeTitle: filled(project.scope_section?.title) || filled(project.scope_title),
     scopeBody: filled(project.scope_section?.text) || filled(project.scope_body),
     scopeImage: filled(project.scope_section?.image),
-    scopePhases: projectPhases(project),
+    scopePhases: projectPhases(project, gallery),
     gallery,
     videoUrl: videoUrl || undefined,
   };
@@ -105,46 +110,12 @@ export function mapFilterOptions(items: Array<ApiSector | ApiScope>): ProjectFil
     }));
 }
 
-export type ProjectFilterCategory = {
-  slug: string;
-  title: string;
-  image?: string;
-  link?: string;
-};
-
-export type ProjectCategoryCard = {
-  title: string;
-  description: string;
-  badge: string;
-  image: string;
-  link: string;
-  cta: string;
-  index: number;
-};
-
-// Categories used by the filter bar.
-export function mapFilterCategories(
-  categories: ApiCategory[],
-  locale: string,
-): ProjectFilterCategory[] {
-  return categories.map((category, index) => {
-    const slug = pickSlug(category.slug, locale) || `category-${index}`;
-
-    return {
-      slug,
-      title: category.title || category.name || "",
-      image: category.image || "",
-      link: category.link || `/projects/${slug}`,
-    };
-  });
-}
-
 // Categories shown as big cards on the projects page.
 export function mapCategoryCards(
   categories: ApiCategory[],
   locale: string,
   cta: string,
-): ProjectCategoryCard[] {
+): CategoryCardData[] {
   return categories.map((category, index) => {
     const slug = pickSlug(category.slug, locale);
 

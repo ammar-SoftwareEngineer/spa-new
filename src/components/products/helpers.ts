@@ -1,7 +1,7 @@
 import type { ApiProduct } from "@/types/contentTypes";
 import { pickSlug } from "@/lib/localized-slug";
 import { toPlainText } from "@/lib/utils";
-import type { ProductItem } from "@/types";
+import type { ProductItem, ProductLineItem } from "@/types";
 
 export type ProductCardData = {
   slug: string;
@@ -11,19 +11,10 @@ export type ProductCardData = {
   icon?: string;
 };
 
-export type ProductTabValue = {
-  id: string;
+export type ProductGalleryLine = {
+  line: ProductLineItem;
   title: string;
-  label: string;
   description: string;
-  image: string;
-};
-
-export type ProductTab = {
-  id: string;
-  title: string;
-  content: string;
-  values: ProductTabValue[];
 };
 
 export type ProductDetailData = {
@@ -33,7 +24,7 @@ export type ProductDetailData = {
   detail: string;
   features: string[];
   product: ProductItem;
-  tabs: ProductTab[];
+  lines: ProductGalleryLine[];
 };
 
 function productImage(product: ApiProduct) {
@@ -46,25 +37,26 @@ function productSummary(product: ApiProduct) {
   );
 }
 
-function productTabs(product: ApiProduct): ProductTab[] {
-  return [...(product.tabs ?? [])]
-    .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
-    .filter((tab) => tab.title?.trim() || (tab.values ?? []).length > 0)
-    .map((tab, index) => ({
-      id: tab.id != null ? String(tab.id) : `tab-${index}`,
-      title: tab.title?.trim() || "",
-      content: tab.content?.trim() || "",
-      values: [...(tab.values ?? [])]
-        .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
-        .map((value, valueIndex) => ({
-          id: value.id != null ? String(value.id) : `value-${valueIndex}`,
-          title: toPlainText(value.title),
-          label: toPlainText(value.label),
-          description: toPlainText(value.description),
-          image: value.image?.trim() || "",
-        }))
-        .filter((value) => value.title || value.label || value.description || value.image),
-    }));
+function galleryUrls(product: ApiProduct) {
+  const extras = [
+    ...new Set((product.images ?? []).map((image) => image.url).filter((url): url is string => Boolean(url))),
+  ];
+  if (extras.length > 0) return extras;
+
+  const cover = product.main_image || product.image;
+  return cover ? [cover] : [];
+}
+
+function galleryLines(product: ApiProduct) {
+  return galleryUrls(product).map((url) => ({
+    line: {
+      titleKey: url,
+      descKey: "",
+      image: url,
+    } as ProductLineItem,
+    title: "",
+    description: "",
+  }));
 }
 
 export function mapProductCard(product: ApiProduct, locale: string, index = 0): ProductCardData {
@@ -95,6 +87,18 @@ export function mapProductDetail(product: ApiProduct, locale: string): ProductDe
     .map((feature) => toPlainText(typeof feature === "string" ? feature : feature.title || feature.text || ""))
     .filter(Boolean);
 
+  const fromLines = (product.lines ?? [])
+    .filter((line) => line.image || line.title)
+    .map((line) => ({
+      line: {
+        titleKey: line.titleKey || line.title || line.image || "",
+        descKey: line.descKey || "",
+        image: line.image || image,
+      } as ProductLineItem,
+      title: toPlainText(line.title) || title,
+      description: toPlainText(line.description || line.text),
+    }));
+
   return {
     slug,
     title,
@@ -112,6 +116,6 @@ export function mapProductDetail(product: ApiProduct, locale: string): ProductDe
       featureKeys: [],
       lines: [],
     },
-    tabs: productTabs(product),
+    lines: fromLines.length > 0 ? fromLines : galleryLines(product),
   };
 }

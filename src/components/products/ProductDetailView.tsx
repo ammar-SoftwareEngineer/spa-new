@@ -22,7 +22,7 @@ export default async function ProductDetailView({ product, locale }: ProductDeta
         categoryTitle={data.title}
         categoryDetail={data.detail}
         featureLabels={data.features}
-        tabs={data.tabs}
+        lines={data.lines}
         productsLabel={tNav("products")}
       />
     </>

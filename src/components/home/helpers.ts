@@ -1,22 +1,13 @@
 import { pickSlug } from "@/lib/localized-slug";
-import type { HomeCategory, HomePartner, HomeSection } from "@/types/homeTypes";
+import type { CategoryCardData } from "@/components/categories/CategoryCards";
 import type { PartnerCardData } from "@/components/partners/helpers";
-
-export type HomeCategoryCard = {
-  title: string;
-  description: string;
-  badge: string;
-  image: string;
-  link: string;
-  cta: string;
-  index: number;
-};
+import type { HomeCategory, HomePartner, HomeSection } from "@/types/homeTypes";
 
 export function mapHomeCategoryCards(
   section: HomeSection & { categories?: HomeCategory[] },
   locale: string,
   cta: string,
-): HomeCategoryCard[] {
+): CategoryCardData[] {
   return (section.categories ?? []).map((category, index) => {
     const slug = pickSlug(category.slug, locale);
 

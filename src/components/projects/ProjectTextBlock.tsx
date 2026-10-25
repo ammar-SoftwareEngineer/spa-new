@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Container from "@/components/ui/Container";
 import Reveal from "@/components/ui/Reveal";
-import type { ProjectScopePhase } from "@/components/projects/types";
 
 type ProjectTextBlockProps = {
   imageSrc: string;
@@ -9,7 +8,6 @@ type ProjectTextBlockProps = {
   eyebrow: string;
   title: string;
   text: string;
-  phases?: ProjectScopePhase[];
   reverse?: boolean;
   altBackground?: boolean;
 };
@@ -37,7 +35,6 @@ export default function ProjectTextBlock({
   eyebrow,
   title,
   text,
-  phases = [],
   reverse = false,
   altBackground = false,
 }: ProjectTextBlockProps) {
@@ -49,20 +46,20 @@ export default function ProjectTextBlock({
     >
       <Container>
         <div
-          className={`grid grid-cols-1 items-stretch gap-8 md:gap-10 ${
+          className={`grid grid-cols-1 items-center gap-8 md:gap-10 ${
             imageSrc ? "lg:grid-cols-2 lg:gap-16" : ""
           }`}
         >
           {imageSrc ? (
-            <Reveal className={reverse ? "h-full lg:order-2" : "h-full"}>
-              <div className="group relative h-full min-h-[260px] overflow-hidden rounded-[22px] border border-border shadow-[var(--card-shadow)] sm:min-h-[340px] sm:rounded-[28px] lg:min-h-full">
-                <div className="absolute inset-0">
+            <Reveal className={reverse ? "lg:order-2" : ""}>
+              <div className="group relative overflow-hidden rounded-[22px] border border-border shadow-[var(--card-shadow)] sm:rounded-[28px]">
+                <div className="relative aspect-[16/11] sm:aspect-[4/3]">
                   <Image
                     src={imageSrc}
                     alt={imageAlt}
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
+                    className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#061018]/45 via-transparent to-transparent" />
                   <div className="pointer-events-none absolute start-4 top-4 h-8 w-8 border-s-2 border-t-2 border-brand sm:start-5 sm:top-5 sm:h-10 sm:w-10" />
@@ -83,25 +80,6 @@ export default function ProjectTextBlock({
             ) : null}
             {title ? <div className="mb-5 h-px w-14 bg-brand/50 sm:mb-6 sm:w-16" aria-hidden /> : null}
             <RichText html={text} />
-            {phases.length > 0 ? (
-              <div className="mt-8 flex max-w-[540px] flex-col gap-6">
-                {phases.map((phase) => (
-                  <div key={phase.id}>
-                    {phase.subtitle ? (
-                      <span className="mb-1 block text-[0.72rem] font-bold uppercase tracking-[0.1em] text-brand">
-                        {phase.subtitle}
-                      </span>
-                    ) : null}
-                    {phase.title ? (
-                      <h3 className="m-0 mb-2 text-[1.15rem] leading-snug text-text-primary sm:text-[1.3rem]">
-                        {phase.title}
-                      </h3>
-                    ) : null}
-                    <RichText html={phase.content} />
-                  </div>
-                ))}
-              </div>
-            ) : null}
           </Reveal>
         </div>
       </Container>

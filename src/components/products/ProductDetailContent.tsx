@@ -1,15 +1,20 @@
 import { getTranslations } from "next-intl/server";
 import ProductOverview from "@/components/products/ProductOverview";
 import ProductLinesAndForm from "@/components/products/ProductLinesAndForm";
-import type { ProductTab } from "@/components/products/helpers";
-import type { ProductItem } from "@/types";
+import type { ProductItem, ProductLineItem } from "@/types";
+
+type LineView = {
+  line: ProductLineItem;
+  title: string;
+  description: string;
+};
 
 type ProductDetailContentProps = {
   product: ProductItem;
   categoryTitle: string;
   categoryDetail: string;
   featureLabels: string[];
-  tabs: ProductTab[];
+  lines: LineView[];
   productsLabel: string;
 };
 
@@ -18,7 +23,7 @@ export default async function ProductDetailContent({
   categoryTitle,
   categoryDetail,
   featureLabels,
-  tabs,
+  lines,
   productsLabel,
 }: ProductDetailContentProps) {
   const t = await getTranslations("products");
@@ -35,7 +40,7 @@ export default async function ProductDetailContent({
         visitWebsiteLabel={t("detail.visitWebsite")}
       />
 
-      <ProductLinesAndForm categoryTitle={categoryTitle} tabs={tabs} />
+      <ProductLinesAndForm categoryTitle={categoryTitle} lines={lines} />
     </>
   );
 }

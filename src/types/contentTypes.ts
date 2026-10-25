@@ -68,6 +68,7 @@ export type ApiProject = {
       title?: string;
       subtitle?: string;
       content?: string;
+      image?: string;
       order?: number;
     }>;
   } | null;
@@ -142,20 +143,6 @@ export type ApiProduct = {
     image?: string;
   }>;
   images?: Array<{ id?: number; url?: string }>;
-  tabs?: Array<{
-    id?: number;
-    title?: string;
-    content?: string;
-    sort_order?: number;
-    values?: Array<{
-      id?: number;
-      title?: string;
-      label?: string;
-      description?: string;
-      image?: string;
-      sort_order?: number;
-    }>;
-  }>;
 };
 
 export type ApiCategory = {

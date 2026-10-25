@@ -33,6 +33,7 @@ export type ProjectScopePhase = {
   title: string;
   subtitle: string;
   content: string;
+  image: string;
 };
 
 export type SortOption = "recommended" | "newest" | "oldest" | "name-asc" | "name-desc";

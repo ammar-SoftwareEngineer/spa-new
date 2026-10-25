@@ -16,7 +16,9 @@ export default async function Blogs({ section }: BlogsProps) {
   const locale = await getLocale();
   const isAr = locale === "ar";
   const posts = section.blogs ?? [];
-
+  if (posts.length === 0) {
+    return null;
+  }
   return (
     <Section id="news" variant="alt" className="py-[70px] md:py-[100px]">
       <HeaderSection
@@ -24,52 +26,58 @@ export default async function Blogs({ section }: BlogsProps) {
         title={section.title}
         align="start"
         action={
-          <Button href={section.button_link_url || "/articles"} className="shrink-0" rtl={isAr}>
+          <Button
+            href={section.button_link_url || "/articles"}
+            className="shrink-0"
+            rtl={isAr}
+          >
             {section.button_text || t("viewAll")}
           </Button>
         }
       />
 
-      {posts.length === 0 ? null : (
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-          {posts.map((blog, index) => {
-            const slug = pickSlug(blog.slug, locale);
-            const href = blog.href || (slug ? `/articles/${slug}` : "#");
-            const title = blog.title || "";
-            const excerpt = blog.excerpt || blog.short_text || "";
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        {posts.map((blog, index) => {
+          const slug = pickSlug(blog.slug, locale);
+          const href = blog.href || (slug ? `/articles/${slug}` : "#");
+          const title = blog.title || "";
+          const excerpt = blog.excerpt || blog.short_text || "";
 
-            return (
-              <Reveal key={blog.id} delay={index * 0.08}>
-                <article className="flex flex-col gap-4 sm:flex-row">
-                  {blog.image ? (
-                    <a
-                      href={href}
-                      className="relative h-[160px] w-full shrink-0 overflow-hidden rounded-[22px] sm:w-[200px]"
-                    >
-                      <Image
-                        src={blog.image}
-                        alt={title}
-                        fill
-                        className="object-cover"
-                        sizes="200px"
-                      />
-                    </a>
+          return (
+            <Reveal key={blog.id} delay={index * 0.08}>
+              <article className="flex flex-col gap-4 sm:flex-row">
+                {blog.image ? (
+                  <a
+                    href={href}
+                    className="relative h-[160px] w-full shrink-0 overflow-hidden rounded-[22px] sm:w-[200px]"
+                  >
+                    <Image
+                      src={blog.image}
+                      alt={title}
+                      fill
+                      className="object-cover"
+                      sizes="200px"
+                    />
+                  </a>
+                ) : null}
+                <div className="flex flex-col gap-2">
+                  <h3 className="m-0 text-[1.05rem] font-bold text-text-primary">
+                    {title}
+                  </h3>
+                  {excerpt ? (
+                    <p className="m-0 text-[0.9rem] text-text-secondary">
+                      {excerpt}
+                    </p>
                   ) : null}
-                  <div className="flex flex-col gap-2">
-                    <h3 className="m-0 text-[1.05rem] font-bold text-text-primary">{title}</h3>
-                    {excerpt ? (
-                      <p className="m-0 text-[0.9rem] text-text-secondary">{excerpt}</p>
-                    ) : null}
-                    <Button href={href} className="w-fit" rtl={isAr}>
-                      {t("readMore")}
-                    </Button>
-                  </div>
-                </article>
-              </Reveal>
-            );
-          })}
-        </div>
-      )}
+                  <Button href={href} className="w-fit" rtl={isAr}>
+                    {t("readMore")}
+                  </Button>
+                </div>
+              </article>
+            </Reveal>
+          );
+        })}
+      </div>
     </Section>
   );
 }

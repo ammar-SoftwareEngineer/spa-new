@@ -8,7 +8,6 @@ type PageHeroProps = {
   description?: string;
   currentLabel: string;
   imageSrc?: string;
-  trail?: { label: string; href: string }[];
 };
 
 export default async function PageHero({
@@ -16,7 +15,6 @@ export default async function PageHero({
   description,
   currentLabel,
   imageSrc,
-  trail = [],
 }: PageHeroProps) {
   const t = await getTranslations("nav");
 
@@ -37,24 +35,12 @@ export default async function PageHero({
       <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#061018]/70 via-transparent to-[#061018]/35" />
 
       <Container className="relative z-[2]">
-        <nav className="mb-4 flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 text-[0.8rem] text-white/65 sm:mb-6 sm:text-[0.85rem]">
-          <Link href="/" className="shrink-0 transition-colors hover:text-brand">
+        <nav className="mb-4 flex flex-wrap items-center gap-2 text-[0.8rem] text-white/65 sm:mb-6 sm:text-[0.85rem]">
+          <Link href="/" className="transition-colors hover:text-brand">
             {t("home")}
           </Link>
-          {trail.map((item) => (
-            <span key={item.href} className="contents">
-              <span aria-hidden className="shrink-0">
-                /
-              </span>
-              <Link href={item.href} className="shrink-0 transition-colors hover:text-brand">
-                {item.label}
-              </Link>
-            </span>
-          ))}
-          <span aria-hidden className="shrink-0">
-            /
-          </span>
-          <span className="min-w-0 break-words font-medium text-white">{currentLabel}</span>
+          <span aria-hidden>/</span>
+          <span className="font-medium text-white">{currentLabel}</span>
         </nav>
         <h1 className="m-0 max-w-[760px] text-[1.9rem] font-bold leading-[1.15] text-white sm:text-[2.4rem] md:text-[3.4rem]">
           {title}

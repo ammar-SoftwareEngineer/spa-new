@@ -17,6 +17,7 @@ export default async function ContactMainSection({ contact }: ContactMainSection
   const phone = formatLayoutPhone(contact);
   const email = contact?.email || "";
   const address = contact?.address || tFooter("address");
+  const mapUrl = contact?.map_url?.trim() || "";
 
   const rows = [
     {
@@ -24,8 +25,9 @@ export default async function ContactMainSection({ contact }: ContactMainSection
       icon: MapPin,
       title: t("info.addressTitle"),
       value: address,
-      href: undefined as string | undefined,
+      href: mapUrl || (address ? `https://maps.google.com/?q=${encodeURIComponent(address)}` : undefined),
       dir: undefined as "ltr" | undefined,
+      external: true,
     },
     {
       key: "phone",
@@ -34,6 +36,7 @@ export default async function ContactMainSection({ contact }: ContactMainSection
       value: phone,
       href: phone ? `tel:${phone.replace(/[^\d+]/g, "")}` : undefined,
       dir: "ltr" as const,
+      external: false,
     },
     {
       key: "email",
@@ -42,6 +45,7 @@ export default async function ContactMainSection({ contact }: ContactMainSection
       value: email,
       href: email ? `mailto:${email}` : undefined,
       dir: undefined as "ltr" | undefined,
+      external: false,
     },
   ].filter((row) => Boolean(row.value));
 
@@ -94,7 +98,12 @@ export default async function ContactMainSection({ contact }: ContactMainSection
                 return (
                   <li key={row.key}>
                     {row.href ? (
-                      <a href={row.href} className={className}>
+                      <a
+                        href={row.href}
+                        className={className}
+                        target={row.external ? "_blank" : undefined}
+                        rel={row.external ? "noopener noreferrer" : undefined}
+                      >
                         {inner}
                       </a>
                     ) : (

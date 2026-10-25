@@ -123,7 +123,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     })),
   );
   const logoSrc = layout?.branding?.logo || "/img/logo.png";
-  const footerData = mapLayoutFooter(layout, headerNav);
+  const footerData = mapLayoutFooter(layout, FALLBACK_NAV);
 
   return (
     <html

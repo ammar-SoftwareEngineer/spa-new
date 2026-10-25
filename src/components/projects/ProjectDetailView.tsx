@@ -15,12 +15,6 @@ export default async function ProjectDetailView({ project }: ProjectDetailViewPr
   const tNav = await getTranslations("nav");
 
   const year = /^\d{4}/.test(project.date) ? project.date.slice(0, 4) : "";
-  const categoryLabel = project.categoryLabels[0];
-  const categorySlug = project.categorySlugs[0];
-  const categoryCrumb =
-    categoryLabel && categorySlug
-      ? { label: categoryLabel, href: `/projects/${categorySlug}` }
-      : undefined;
   const overviewImage = project.image || project.gallery[0] || "";
   const scopeImage = project.scopeImage || project.gallery[0] || project.image || "";
 
@@ -36,7 +30,26 @@ export default async function ProjectDetailView({ project }: ProjectDetailViewPr
   const scopeTitle = project.scopeTitle || "";
   const scopeBody = project.scopeBody || "";
   const hasOverview = Boolean(overviewTitle || overviewBody);
-  const hasScope = Boolean(scopeTitle || scopeBody || project.scopePhases.length);
+  const scopeBlocks =
+    project.scopePhases.length > 0
+      ? project.scopePhases.map((phase) => ({
+          id: phase.id,
+          eyebrow: phase.subtitle || t("detail.scope"),
+          title: phase.title,
+          text: phase.content,
+          imageSrc: phase.image || scopeImage,
+        }))
+      : scopeTitle || scopeBody
+        ? [
+            {
+              id: "scope",
+              eyebrow: t("detail.scope"),
+              title: scopeTitle,
+              text: scopeBody,
+              imageSrc: scopeImage,
+            },
+          ]
+        : [];
 
   return (
     <div className="overflow-x-clip bg-bg-primary ">
@@ -45,8 +58,7 @@ export default async function ProjectDetailView({ project }: ProjectDetailViewPr
         title={project.title}
         year={year}
         homeLabel={tNav("home")}
-        projectsLabel={tNav("projects")}
-        categoryCrumb={categoryCrumb}
+        projectsLabel={t("detail.breadcrumbProjects")}
         sectorLabels={project.sectorLabels}
         categoryLabels={project.categoryLabels}
       />
@@ -63,18 +75,23 @@ export default async function ProjectDetailView({ project }: ProjectDetailViewPr
         />
       ) : null}
 
-      {hasScope ? (
-        <ProjectTextBlock
-          imageSrc={scopeImage}
-          imageAlt={scopeTitle || project.title}
-          eyebrow={t("detail.scope")}
-          title={scopeTitle}
-          text={scopeBody}
-          phases={project.scopePhases}
-          reverse
-          altBackground
-        />
-      ) : null}
+      {scopeBlocks.map((block, index) => {
+        // After overview, first scope flips; without overview, first stays normal.
+        const flip = hasOverview ? index % 2 === 0 : index % 2 === 1;
+
+        return (
+          <ProjectTextBlock
+            key={block.id}
+            imageSrc={block.imageSrc}
+            imageAlt={block.title || project.title}
+            eyebrow={block.eyebrow}
+            title={block.title}
+            text={block.text}
+            reverse={flip}
+            altBackground={flip}
+          />
+        );
+      })}
 
       {project.videoUrl ? (
         <ProjectVideo

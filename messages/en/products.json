@@ -16,12 +16,12 @@
   },
   "detail": {
     "featuresTitle": "What This Category Includes",
-    "linesEyebrow": "Details",
-    "linesTitle": "Product details",
-    "linesDescription": "Choose a tab to see its items.",
+    "linesEyebrow": "Product Gallery",
+    "linesTitle": "Products in this category",
+    "linesDescription": "Browse the product images.",
     "visitWebsite": "Visit Brand Website",
     "backToProducts": "Back to Products",
-    "noLines": "This tab has no items yet."
+    "noLines": "Products will appear here soon."
   },
   "afcCatValvesTag": "Valves",
   "afcCatValves": "Fire Protection Valves",
