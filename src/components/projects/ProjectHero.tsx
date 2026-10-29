@@ -9,6 +9,8 @@ type ProjectHeroProps = {
   year: string;
   homeLabel: string;
   projectsLabel: string;
+  categoryLabel?: string;
+  categoryHref?: string;
   sectorLabels: string[];
   categoryLabels: string[];
 };
@@ -19,6 +21,8 @@ export default function ProjectHero({
   year,
   homeLabel,
   projectsLabel,
+  categoryLabel,
+  categoryHref,
   sectorLabels,
   categoryLabels,
 }: ProjectHeroProps) {
@@ -50,6 +54,20 @@ export default function ProjectHero({
           <Link href="/projects" className="shrink-0 transition-colors hover:text-brand">
             {projectsLabel}
           </Link>
+          {categoryLabel ? (
+            <>
+              <span aria-hidden className="shrink-0">
+                /
+              </span>
+              {categoryHref ? (
+                <Link href={categoryHref} className="shrink-0 transition-colors hover:text-brand">
+                  {categoryLabel}
+                </Link>
+              ) : (
+                <span className="shrink-0">{categoryLabel}</span>
+              )}
+            </>
+          ) : null}
           <span aria-hidden className="shrink-0">
             /
           </span>

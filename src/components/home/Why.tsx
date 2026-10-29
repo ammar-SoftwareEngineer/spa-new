@@ -34,19 +34,11 @@ export default async function Why({ section }: WhyProps) {
       />
 
       <div className="grid grid-cols-12 gap-8">
-        {values.map((item, index) => {
-
-          const isHighlight = index === 0;
-
-
-          return (
-            <div key={item.id} className="col-span-12 md:col-span-6 lg:col-span-4">
-              <WhyMetricCard
-                item={item}
-              />
-            </div>
-          );
-        })}
+        {values.map((item, index) => (
+          <div key={item.id} className="col-span-12 md:col-span-6 lg:col-span-4">
+            <WhyMetricCard item={item} isHighlight={index === 0} />
+          </div>
+        ))}
 
         <div className="col-span-12 md:col-span-6 lg:col-span-4">
           <Link href="/profile" className="block h-full no-underline">

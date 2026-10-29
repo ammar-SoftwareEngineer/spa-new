@@ -5,7 +5,6 @@ import Reveal from "@/components/ui/Reveal";
 import CountUp from "@/components/ui/CountUp";
 
 import { HomeStat } from "@/types/homeTypes";
-import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { stripHtml } from "@/lib/utils";
 
@@ -51,15 +50,14 @@ function HoverBg({ variant }: { variant: "metric" | "highlight" | "cta" }) {
 
 type Props = {
   item: HomeStat;
-
+  isHighlight?: boolean;
 };
 
-export function WhyMetricCard({ item }: Props) {
-  const isHighlight = item.is_active === true;
+export function WhyMetricCard({ item, isHighlight = false }: Props) {
   const showPlus = item.sub_title.includes("Years of Experience");
- 
+
   return (
-    <Reveal delay={ (item.order ?? 0) * 0.08} className={isHighlight ? highlightClass : metricClass}>
+    <Reveal delay={(item.order ?? 0) * 0.08} className={isHighlight ? highlightClass : metricClass}>
       <HoverBg variant={isHighlight ? "highlight" : "metric"} />
       <div className="relative z-[3] flex items-center justify-between">
         <div
@@ -67,19 +65,26 @@ export function WhyMetricCard({ item }: Props) {
             isHighlight ? "text-white" : "text-brand group-hover:text-white"
           }`}
         >
-          {showPlus ?  <span> + <CountUp value={Number(String(item.title).replace(/[^\d.]/g, "")) || 0} duration={2.5} /></span> : <span>{item.title}</span>}
-
+          {showPlus ? (
+            <span>
+              {" "}
+              + <CountUp value={Number(String(item.title).replace(/[^\d.]/g, "")) || 0} duration={2.5} />
+            </span>
+          ) : (
+            <span>{item.title}</span>
+          )}
         </div>
         {item.image ? (
-          <span
-            className={`transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:scale-[1.06] ${
-              isHighlight
-                ? "text-white/80 group-hover:text-white"
-                : "text-text-muted opacity-60 group-hover:text-white group-hover:opacity-100"
+          // eslint-disable-next-line @next/next/no-img-element -- remote API icon tinted with CSS filter
+          <img
+            src={item.image}
+            alt=""
+            aria-hidden
+            title={item.title}
+            className={`why-philosophy-icon h-[45px] w-[45px] shrink-0 object-contain transition-[filter,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-0.5 group-hover:scale-[1.06] ${
+              isHighlight ? "why-philosophy-icon--light" : ""
             }`}
-          >
-            <Image src={item.image} alt={item.title} width={45} height={45} className="transition duration-500 group-hover:brightness-0 group-hover:invert" />
-          </span>
+          />
         ) : null}
       </div>
       <h3

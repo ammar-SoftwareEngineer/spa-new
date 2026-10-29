@@ -4,6 +4,7 @@ import { setRequestLocale } from "next-intl/server";
 import ProjectCategoryView from "@/components/projects/ProjectCategoryView";
 import ProjectDetailView from "@/components/projects/ProjectDetailView";
 import {
+  getProjectsForCategory,
   mapFilterOptions,
   toProjectListItem,
   toProjectListItems,
@@ -99,12 +100,8 @@ export default async function ProjectsSlugPage({ params }: ProjectSlugPageProps)
       fetchScopesData(locale),
     ]);
 
-    const projects = getResponseData<ApiProject[]>(projectsRes) ?? [];
-    const inCategory = projects.filter((project) =>
-      category.id != null
-        ? project.category?.id === category.id
-        : matchesLocalizedSlug(project.category?.slug, slug),
-    );
+    const allProjects = getResponseData<ApiProject[]>(projectsRes) ?? [];
+    const inCategory = getProjectsForCategory(category, allProjects, slug, locale);
 
     return (
       <ProjectCategoryView
@@ -113,6 +110,7 @@ export default async function ProjectsSlugPage({ params }: ProjectSlugPageProps)
         projects={toProjectListItems(inCategory, locale)}
         sectors={mapFilterOptions(getResponseData<ApiSector[]>(sectorsRes) ?? [])}
         scopes={mapFilterOptions(getResponseData<ApiScope[]>(scopesRes) ?? [])}
+        imageSrc={category.image || undefined}
       />
     );
   }

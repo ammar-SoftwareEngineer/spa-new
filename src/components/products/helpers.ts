@@ -15,6 +15,14 @@ export type ProductGalleryLine = {
   line: ProductLineItem;
   title: string;
   description: string;
+  tag?: string;
+};
+
+export type ProductGalleryTab = {
+  id: string;
+  title: string;
+  content: string;
+  lines: ProductGalleryLine[];
 };
 
 export type ProductDetailData = {
@@ -24,6 +32,7 @@ export type ProductDetailData = {
   detail: string;
   features: string[];
   product: ProductItem;
+  tabs: ProductGalleryTab[];
   lines: ProductGalleryLine[];
 };
 
@@ -57,6 +66,47 @@ function galleryLines(product: ApiProduct) {
     title: "",
     description: "",
   }));
+}
+
+function mapTabValues(
+  values: NonNullable<NonNullable<ApiProduct["tabs"]>[number]["values"]>,
+  fallbackTitle: string,
+  fallbackImage: string,
+): ProductGalleryLine[] {
+  return [...values]
+    .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+    .filter((value) => value.image || value.title || value.label)
+    .map((value) => {
+      const title = toPlainText(value.title) || fallbackTitle;
+      const description = toPlainText(value.label || value.description);
+      const tag = value.label && value.description ? toPlainText(value.description) : "";
+
+      return {
+        line: {
+          titleKey: value.id != null ? String(value.id) : value.image || title,
+          descKey: "",
+          image: value.image || fallbackImage,
+        } as ProductLineItem,
+        title,
+        description,
+        tag: tag || undefined,
+      };
+    });
+}
+
+function mapProductTabs(product: ApiProduct, fallbackTitle: string, fallbackImage: string) {
+  return [...(product.tabs ?? [])]
+    .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0))
+    .map((tab, index) => {
+      const title = toPlainText(tab.title) || `Tab ${index + 1}`;
+      return {
+        id: tab.id != null ? String(tab.id) : `tab-${index}`,
+        title,
+        content: tab.content?.trim() || "",
+        lines: mapTabValues(tab.values ?? [], fallbackTitle, fallbackImage),
+      };
+    })
+    .filter((tab) => tab.lines.length > 0 || tab.content);
 }
 
 export function mapProductCard(product: ApiProduct, locale: string, index = 0): ProductCardData {
@@ -99,6 +149,14 @@ export function mapProductDetail(product: ApiProduct, locale: string): ProductDe
       description: toPlainText(line.description || line.text),
     }));
 
+  const tabs = mapProductTabs(product, title, image);
+  const lines =
+    tabs.length > 0
+      ? tabs.flatMap((tab) => tab.lines)
+      : fromLines.length > 0
+        ? fromLines
+        : galleryLines(product);
+
   return {
     slug,
     title,
@@ -116,6 +174,7 @@ export function mapProductDetail(product: ApiProduct, locale: string): ProductDe
       featureKeys: [],
       lines: [],
     },
-    lines: fromLines.length > 0 ? fromLines : galleryLines(product),
+    tabs,
+    lines,
   };
 }

@@ -59,6 +59,10 @@ export default async function ProjectDetailView({ project }: ProjectDetailViewPr
         year={year}
         homeLabel={tNav("home")}
         projectsLabel={t("detail.breadcrumbProjects")}
+        categoryLabel={project.categoryLabels[0]}
+        categoryHref={
+          project.categorySlugs[0] ? `/projects/${project.categorySlugs[0]}` : undefined
+        }
         sectorLabels={project.sectorLabels}
         categoryLabels={project.categoryLabels}
       />

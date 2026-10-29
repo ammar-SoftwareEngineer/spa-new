@@ -3,10 +3,17 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import Container from "@/components/ui/Container";
 
+export type PageHeroCrumb = {
+  label: string;
+  href?: string;
+};
+
 type PageHeroProps = {
   title: string;
   description?: string;
   currentLabel: string;
+  /** Middle crumbs between Home and the current page (e.g. Projects). */
+  parents?: PageHeroCrumb[];
   imageSrc?: string;
 };
 
@@ -14,6 +21,7 @@ export default async function PageHero({
   title,
   description,
   currentLabel,
+  parents = [],
   imageSrc,
 }: PageHeroProps) {
   const t = await getTranslations("nav");
@@ -35,12 +43,28 @@ export default async function PageHero({
       <div className="absolute inset-0 z-[1] bg-gradient-to-t from-[#061018]/70 via-transparent to-[#061018]/35" />
 
       <Container className="relative z-[2]">
-        <nav className="mb-4 flex flex-wrap items-center gap-2 text-[0.8rem] text-white/65 sm:mb-6 sm:text-[0.85rem]">
-          <Link href="/" className="transition-colors hover:text-brand">
+        <nav className="mb-4 flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 text-[0.8rem] text-white/65 sm:mb-6 sm:text-[0.85rem]">
+          <Link href="/" className="shrink-0 transition-colors hover:text-brand">
             {t("home")}
           </Link>
-          <span aria-hidden>/</span>
-          <span className="font-medium text-white">{currentLabel}</span>
+          {parents.map((crumb) => (
+            <span key={`${crumb.href ?? ""}-${crumb.label}`} className="contents">
+              <span aria-hidden className="shrink-0">
+                /
+              </span>
+              {crumb.href ? (
+                <Link href={crumb.href} className="shrink-0 transition-colors hover:text-brand">
+                  {crumb.label}
+                </Link>
+              ) : (
+                <span className="shrink-0">{crumb.label}</span>
+              )}
+            </span>
+          ))}
+          <span aria-hidden className="shrink-0">
+            /
+          </span>
+          <span className="min-w-0 break-words font-medium text-white">{currentLabel}</span>
         </nav>
         <h1 className="m-0 max-w-[760px] text-[1.9rem] font-bold leading-[1.15] text-white sm:text-[2.4rem] md:text-[3.4rem]">
           {title}

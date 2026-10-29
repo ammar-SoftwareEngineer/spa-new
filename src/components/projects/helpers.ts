@@ -1,6 +1,6 @@
 import type { CategoryCardData } from "@/components/categories/CategoryCards";
 import type { ProjectListItem, ProjectScopePhase } from "@/components/projects/types";
-import { pickSlug } from "@/lib/localized-slug";
+import { matchesLocalizedSlug, pickSlug } from "@/lib/localized-slug";
 import { toPlainText } from "@/lib/utils";
 import type { ApiCategory, ApiProject, ApiScope, ApiSector } from "@/types/contentTypes";
 
@@ -129,4 +129,66 @@ export function mapCategoryCards(
       index,
     };
   });
+}
+
+function projectKey(project: ApiProject, locale: string) {
+  if (project.id != null) return `id:${project.id}`;
+  const slug = pickSlug(project.slug, locale);
+  return slug ? `slug:${slug}` : "";
+}
+
+function projectBelongsToCategory(
+  project: ApiProject,
+  category: ApiCategory,
+  slug: string,
+): boolean {
+  if (category.id != null) {
+    if (project.category?.id === category.id) return true;
+    if (project.categories?.some((item) => item.id === category.id)) return true;
+  }
+
+  if (matchesLocalizedSlug(project.category?.slug, slug)) return true;
+  if (project.categories?.some((item) => matchesLocalizedSlug(item.slug, slug))) return true;
+
+  const categorySlug = pickSlug(category.slug, "en") || slug;
+  return Boolean(
+    project.category_slugs?.includes(slug) || project.category_slugs?.includes(categorySlug),
+  );
+}
+
+/** Projects for a category: nested API list + full list matches, preferring richer records. */
+export function getProjectsForCategory(
+  category: ApiCategory,
+  allProjects: ApiProject[],
+  slug: string,
+  locale: string,
+): ApiProject[] {
+  const byKey = new Map<string, ApiProject>();
+  const categoryRef = {
+    id: category.id,
+    slug: category.slug,
+    name: category.name || category.title,
+    title: category.title || category.name,
+  };
+
+  for (const project of category.projects ?? []) {
+    const key = projectKey(project, locale);
+    if (key) byKey.set(key, project);
+  }
+
+  for (const project of allProjects) {
+    const key = projectKey(project, locale);
+    if (!key) continue;
+
+    const nestedMatch = byKey.has(key);
+    if (!nestedMatch && !projectBelongsToCategory(project, category, slug)) continue;
+
+    const existing = byKey.get(key);
+    byKey.set(key, existing ? { ...existing, ...project } : project);
+  }
+
+  return Array.from(byKey.values()).map((project) => ({
+    ...project,
+    category: project.category ?? categoryRef,
+  }));
 }
