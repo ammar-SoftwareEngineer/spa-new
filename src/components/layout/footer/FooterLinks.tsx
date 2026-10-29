@@ -17,7 +17,7 @@ export default function FooterLinks({ title, links, label }: FooterLinksProps) {
       <h3 className="relative pb-3 text-[1.15rem] font-bold text-text-primary after:absolute after:bottom-0 after:start-0 after:h-0.5 after:w-10 after:bg-brand dark:text-white">
         {title}
       </h3>
-      <ul className="flex list-none flex-col gap-3">
+      <ul className="grid list-none grid-cols-2 gap-x-4 gap-y-3">
         {links.map((link) => (
           <li key={link.key}>
             <NavLink
