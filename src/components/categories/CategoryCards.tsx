@@ -22,7 +22,7 @@ export default function CategoryCards({ categories }: Props) {
     <Reveal>
       <div className="grid w-full grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-2 lg:gap-8">
         {categories.map((category, index) => (
-          <div key={category.title} className={index === 1 ? "lg:mt-12" : undefined}>
+          <div key={category.title} className={index === 1 ? "md:mt-40" : undefined}>
             <CategoryCard category={category} />
           </div>
         ))}
